@@ -1,0 +1,299 @@
+/*	microScheme Compiler version 0.8
+	by Ryan Suchocki.
+	University of Warwick, UK
+	November 2013
+	www.ryansuchocki.co.uk	
+	microscheme.org                */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <unistd.h>
+
+#include "lexer.h"
+#include "parser.h"
+#include "scoper.h"
+#include "common.h"
+#include "treeshaker.h"
+#include "microscheme_hex.h"
+//#include "codegen.h"
+
+int opt_includeonce = true, opt_assemble = false, 
+	opt_upload = false, opt_cleanup = false, 
+	opt_primitives = true, opt_stdlib = true, 
+	opt_aggressive = true, opt_verbose = false, 
+	opt_verify = false;
+
+char* model = "MEGA";
+char* device = "";
+
+int treeshaker_max_rounds = 10;
+
+char **globalIncludeList = NULL;
+int globalIncludeListN = 0;
+
+Environment *globalEnv;
+
+void try_execute(char *command) {
+	int result = system(command);
+
+	if (result < 0) {
+		fprintf(stderr, ">> Command failed.\n");
+		exit(EXIT_FAILURE);
+	}
+	#ifdef WEXITSTATUS
+	if (WEXITSTATUS(result) == 127) {
+		fprintf(stderr, ">> Command failed!\nIt appears the required program is not available.\n");
+		exit(EXIT_FAILURE);
+	}
+	#endif
+}
+
+int main(int argc, char *argv[]) {
+
+	// First, we process the user's command-line arguments, which dictate the input file
+	// and target processor.
+
+	char* fname, *inname, *outname;
+	int c;
+
+	opterr = 0;
+	while ((c = getopt (argc, argv, "iaucpsovrm:d:t:")) != -1)
+	switch (c)	{
+		case 'i':	opt_includeonce = false;	break;
+		case 'u':	opt_upload = true;			
+		case 'a':	opt_assemble = true;		break;
+		case 'c':	opt_cleanup = true;			break;
+		case 'p':	opt_primitives = false;		break;
+		case 's':	opt_stdlib = false;			break;
+		case 'o':	opt_aggressive = false;		break;
+		case 'v':	opt_verbose = true;			break;
+		case 'r':	opt_verify = true;			break;
+		case 'm':	model = optarg;				break;
+		case 'd':	device = optarg;			break;
+		case 't':	treeshaker_max_rounds = atoi(optarg);	break;
+		case '?':
+			if (optopt == 'm')
+				fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+			else if (isprint (optopt))
+				fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+			else
+				fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
+			return 1;
+		default:
+			abort ();
+	}
+
+	fprintf(stdout, "Microscheme 0.8, (C) Ryan Suchocki\n");
+
+	if (argc < 2) {
+		fprintf(stdout, "usage: microscheme [-iaucpsov] [-m model] [-d device] [-t treeshaker-rounds] program[.ms]\n");
+		return(EXIT_FAILURE);
+	}
+
+	fname=argv[optind];
+
+	if (strncmp(fname + strlen(fname) - 3, ".ms", 3) == 0)
+		fname[strlen(fname) - 3] = 0;
+
+	inname=str_clone_more(fname, 3);
+	outname=str_clone_more(fname, 2);
+	strcat(inname, ".ms");
+	strcat(outname, ".s");
+
+	if (argc == optind) {
+		fprintf(stderr, "No input file.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (argc > optind + 1) {
+		fprintf(stderr, "Multiple input files not yet supported.\n");
+		exit(EXIT_FAILURE);
+	}
+
+
+
+
+
+
+
+
+	// This function controls the overall compilation process, which is implemented
+	// as four seperate phases, invoked in order.
+
+	// 1) Lex the file
+	lexer_tokenNode *root = NULL;
+
+	if (opt_primitives)
+		root = lexer_lexBlob(src_primitives_ms, src_primitives_ms_len, root);
+
+	if (opt_stdlib)
+		root = lexer_lexBlob(src_stdlib_ms, src_stdlib_ms_len, root);
+
+	root = lexer_lexFile(inname, root, opt_verbose);
+
+	globalIncludeList = try_malloc(sizeof(char*));
+	globalIncludeList[0] = str_clone(inname);
+	globalIncludeListN = 1;
+
+	// 2) Parse the file
+	AST_expr *ASTroot = parser_parseFile(root->children, root->numChildren, true);
+
+	// (We can free the memory used by the lexer once the parser has finished)...
+	lexer_freeTokenTree(root);
+
+	// We set up a global environment:
+	globalEnv = try_malloc(sizeof(Environment));
+	scoper_initEnv(globalEnv);
+
+	// And hand it tot he scoper...
+	currentEnvironment = globalEnv;
+
+	// At the top level, there is no 'current closure', and hence no 'current closure environment'
+	currentClosureEnvironment = NULL;
+
+	// 3) Scope the file:
+	ASTroot = scoper_scopeExpr(ASTroot);
+
+	numPurgedGlobals = -1;
+	int latestpurge = -2;
+	int rounds = 0;
+
+	if (opt_aggressive) {
+		globalEnv->realAddress = try_malloc(sizeof(int) * globalEnv->numBinds);
+		int i;
+		for (i = 0; i < globalEnv->numBinds; i++) {
+			globalEnv->realAddress[i] = 0;
+		}
+
+		while ((numPurgedGlobals > latestpurge) && (rounds < treeshaker_max_rounds)) {
+			//fprintf(stderr, ">> ROUND %i\n", roundi);
+			rounds++;
+			latestpurge = numPurgedGlobals;
+
+			treeshaker_shakeExpr(ASTroot);
+
+			treeshaker_purge(globalEnv);
+
+			//fprintf(stderr, ">> Aggressive: %i globals purged!\n", numPurgedGlobals);
+		} 
+
+		fprintf(stdout, ">> Treeshaker: After %i rounds: %i globals purged!\n", rounds, numPurgedGlobals);
+
+		if (opt_verbose) {
+			fprintf(stdout, ">> Remaining globals: [");
+			int i;
+			for (i = 0; i < globalEnv->numBinds; i++) {
+				if (globalEnv->references[i] > 0)
+					fprintf(stdout, "%s ", globalEnv->binding[i]);
+			}
+			fprintf(stdout, "]\n");
+		}
+
+		
+	} else {
+		numUsedGlobals = globalEnv->numBinds;
+	}
+
+	// 4) Generate code. (Starting with some preamble)
+
+	FILE *outputFile;
+	outputFile = fopen(outname, "w");
+
+		codegen_emitModelHeader(model, outputFile);
+		codegen_emitPreamble(outputFile, numUsedGlobals);
+
+		// Next, we recursively emit code for the actual program body:
+		codegen_emit(ASTroot, 0, outputFile, model, NULL, opt_aggressive, globalEnv);
+
+		// Finally, we emit some postamble code
+		codegen_emitPostamble(outputFile);
+
+	fclose(outputFile);
+
+	// Finally, the memory allocated during parsing can be freed.
+	parser_freeAST(ASTroot);
+	freeEnvironment(globalEnv);
+
+	try_free(globalIncludeList);
+
+	// If we've reached this stage, then everything has gone OK:
+	fprintf(stdout, ">> %i lines compiled OK\n", fileLine);
+
+
+
+
+
+
+	char cmd[100];
+	char *STR_LEVEL, *STR_TARGET, *STR_PROG, *STR_BAUD;
+
+	if (strcmp(model, "MEGA") == 0) {
+		STR_LEVEL  = str_clone("avr6");
+		STR_TARGET = str_clone("atmega2560");
+		STR_PROG   = str_clone("wiring");
+		STR_BAUD   = str_clone("115200");
+	} else if (strcmp(model, "UNO") == 0) {
+		STR_LEVEL  = str_clone("avr5");
+		STR_TARGET = str_clone("atmega328p");
+		STR_PROG   = str_clone("arduino");
+		STR_BAUD   = str_clone("115200");
+	} else {
+		fprintf(stderr, "Device not supported.");
+		return EXIT_FAILURE;
+	}
+
+
+
+
+	if (opt_assemble) {
+		if (strcmp(model, "") == 0) {
+			fprintf(stderr, "Model Not Set. Cannot assemble.\n");
+			return EXIT_FAILURE;
+		}
+
+		fprintf(stderr, ">> Assembling...\n");
+		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s", STR_LEVEL, fname, fname);
+
+		try_execute(cmd);
+
+		sprintf(cmd, "avr-objcopy --output-target=ihex %s.elf %s.hex", fname, fname);
+		
+		try_execute(cmd);
+	}
+
+	if (opt_upload) {
+
+		if (strcmp(device, "") == 0) {
+			fprintf(stderr, "Device Not Set. Cannot upload.\n");
+			return EXIT_FAILURE;
+		}
+
+		fprintf(stderr, ">> Uploading...\n");
+
+		char *opt1, *opt2;
+		if (opt_verbose) opt1 = "-v"; else opt1 = "";
+		if (opt_verify) opt2 = ""; else opt2 = "-V";
+
+		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, STR_TARGET, STR_PROG, device, STR_BAUD, fname);
+		
+		try_execute(cmd);
+	}
+
+	if (opt_cleanup) {
+		fprintf(stdout, ">> Cleaning Up...\n");
+
+		#ifdef __WIN32 // Defined for both 32 and 64 bit environments
+			sprintf(cmd, "del %s.s %s.elf %s.hex", fname, fname, fname);
+		#else
+			sprintf(cmd, "rm -f %s.s %s.elf %s.hex", fname, fname, fname);
+		#endif
+
+		try_execute(cmd);
+	}
+
+	fprintf(stdout, ">> Finished.\n");
+
+	return EXIT_SUCCESS;
+}
