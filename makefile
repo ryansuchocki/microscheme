@@ -13,7 +13,6 @@ hexify:
 	xxd -i src/stdlib.ms >> src/microscheme_hex.c
 
 build: 
-	make hexify
 	gcc -ggdb -o microscheme src/*.c
 
 install:

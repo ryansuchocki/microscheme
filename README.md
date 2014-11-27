@@ -6,6 +6,16 @@ Microscheme is a Scheme subset/variant designed for the Atmel microcontrollers, 
 Compiling
 ---------
 
+### Quick-Start
+
+`$ make hexify`
+
+`$ make build`
+
+`$ ./microscheme examples/BLINK.ms`
+
+### Detail
+
 The microscheme source code is located in src/, and includes files written in C (.c, .h), assembly (.s)
 and in microscheme (.ms). 
 
