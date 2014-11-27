@@ -12,6 +12,10 @@ Compiling
 
 `$ make build`
 
+`$ ./microscheme examples/BLINK.ms`
+
+If you have an arduino *on hand*:
+
 `$ ./microscheme -m [MODEL] -d [/dev/WHATEVER] -auc examples/BLINK.ms`
 
 ### Detail
