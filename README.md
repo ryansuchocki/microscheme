@@ -1,7 +1,7 @@
-microscheme
+Microscheme
 ===========
 
-Microscheme is a Scheme subset/variant designed for the Atmel microcontrollers, especially as found on Arduino boards.
+Microscheme is a Scheme subset/variant designed for Atmel microcontrollers, especially as found on Arduino boards.
 
 Compiling
 ---------
