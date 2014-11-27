@@ -216,8 +216,6 @@ int main(int argc, char *argv[]) {
 	parser_freeAST(ASTroot);
 	freeEnvironment(globalEnv);
 
-	try_free(globalIncludeList);
-
 	// If we've reached this stage, then everything has gone OK:
 	fprintf(stdout, ">> %i lines compiled OK\n", fileLine);
 
@@ -230,15 +228,15 @@ int main(int argc, char *argv[]) {
 	char *STR_LEVEL, *STR_TARGET, *STR_PROG, *STR_BAUD;
 
 	if (strcmp(model, "MEGA") == 0) {
-		STR_LEVEL  = str_clone("avr6");
-		STR_TARGET = str_clone("atmega2560");
-		STR_PROG   = str_clone("wiring");
-		STR_BAUD   = str_clone("115200");
+		STR_LEVEL  = "avr6";
+		STR_TARGET = "atmega2560";
+		STR_PROG   = "wiring";
+		STR_BAUD   = "115200";
 	} else if (strcmp(model, "UNO") == 0) {
-		STR_LEVEL  = str_clone("avr5");
-		STR_TARGET = str_clone("atmega328p");
-		STR_PROG   = str_clone("arduino");
-		STR_BAUD   = str_clone("115200");
+		STR_LEVEL  = "avr5";
+		STR_TARGET = "atmega328p";
+		STR_PROG   = "arduino";
+		STR_BAUD   = "115200";
 	} else {
 		fprintf(stderr, "Device not supported.");
 		return EXIT_FAILURE;
@@ -294,6 +292,15 @@ int main(int argc, char *argv[]) {
 	}
 
 	fprintf(stdout, ">> Finished.\n");
+
+	try_free(inname);
+	try_free(outname);
+
+	int i;
+	for (i=0; i<globalIncludeListN; i++)
+		try_free(globalIncludeList[i]);
+
+	try_free(globalIncludeList);
 
 	return EXIT_SUCCESS;
 }

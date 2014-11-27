@@ -28,7 +28,7 @@ void* try_realloc (void *ptr, size_t size) {
 }
 
 void try_free(void* ptr) {
-	if (ptr != NULL) free(ptr);
+	if (ptr) free(ptr);
 }
 
 char* str_clone (char *src) {
