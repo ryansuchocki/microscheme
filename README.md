@@ -12,7 +12,7 @@ Compiling
 
 `$ make build`
 
-`$ ./microscheme examples/BLINK.ms`
+`$ ./microscheme -m [MODEL] -d [/dev/WHATEVER] -auc examples/BLINK.ms`
 
 ### Detail
 
