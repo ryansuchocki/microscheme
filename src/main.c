@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
 	if (opt_stdlib)
 		root = lexer_lexBlob(src_stdlib_ms, src_stdlib_ms_len, root);
 
-	root = lexer_lexFile(inname, root, opt_verbose);
+	root = lexer_lexFile(inname, root);
 
 	globalIncludeList = try_malloc(sizeof(char*));
 	globalIncludeList[0] = str_clone(inname);
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
 	globalEnv = try_malloc(sizeof(Environment));
 	scoper_initEnv(globalEnv);
 
-	// And hand it tot he scoper...
+	// And hand it to the scoper...
 	currentEnvironment = globalEnv;
 
 	// At the top level, there is no 'current closure', and hence no 'current closure environment'
@@ -173,8 +173,7 @@ int main(int argc, char *argv[]) {
 			latestpurge = numPurgedGlobals;
 
 			treeshaker_shakeExpr(ASTroot);
-
-			treeshaker_purge(globalEnv);
+			treeshaker_purge();
 
 			//fprintf(stderr, ">> Aggressive: %i globals purged!\n", numPurgedGlobals);
 		} 
@@ -185,7 +184,7 @@ int main(int argc, char *argv[]) {
 			fprintf(stdout, ">> Remaining globals: [");
 			int i;
 			for (i = 0; i < globalEnv->numBinds; i++) {
-				if (globalEnv->references[i] > 0)
+				if (globalEnv->realAddress[i] >= 0)
 					fprintf(stdout, "%s ", globalEnv->binding[i]);
 			}
 			fprintf(stdout, "]\n");

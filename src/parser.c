@@ -384,7 +384,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 
 										if (opt_verbose) fprintf(stderr, ">> Including file '%s' ", innerTokens[1]->raw);
 										fileLine++;
-										innerFile = lexer_lexFile(innerTokens[1]->raw, NULL, opt_verbose);
+										innerFile = lexer_lexFile(innerTokens[1]->raw, NULL);
 										free(result);
 										result = parser_parseFile(innerFile->children, innerFile->numChildren, topLevel);
 										// Pass on topLevel. So if an (include x) is at the top level, then defines are allowed within it.s

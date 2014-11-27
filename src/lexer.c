@@ -10,6 +10,8 @@
 #include "common.h"
 
 
+extern bool opt_verbose;
+
 int fileLine = 1;
 
 char** keywords = (char *[]){	"lambda", "if", "let", "set!", "define", "begin", "and", "or", "include"};
@@ -246,7 +248,7 @@ void lexer_freeTokenTree(lexer_tokenNode* tree) {
 	try_free(tree);
 }
 
-lexer_tokenNode *lexer_lexFile(char *filename, lexer_tokenNode *root, bool opt_verbose) {
+lexer_tokenNode *lexer_lexFile(char *filename, lexer_tokenNode *root) {
 	char ch;
 	FILE *fp;
 	int err = 0;

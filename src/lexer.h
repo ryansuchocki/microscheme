@@ -16,7 +16,7 @@
 // Shared function declarations
 	extern void lexer_lex(char ch);
 	extern void lexer_freeTokenTree(lexer_tokenNode* tree);
-	extern lexer_tokenNode *lexer_lexFile(char *filename, lexer_tokenNode *root, bool opt_verbose);
+	extern lexer_tokenNode *lexer_lexFile(char *filename, lexer_tokenNode *root);
 	extern lexer_tokenNode *lexer_lexBlob(unsigned char *blob, unsigned int length, lexer_tokenNode *root);
 
 #endif

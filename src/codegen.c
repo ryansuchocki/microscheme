@@ -151,7 +151,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 
 				case Global: 
 					if (opt_aggressive) {
-						if (globalEnv->references[expr->varRefIndex] > 0) {
+						if (globalEnv->realAddress[expr->varRefIndex] >= 0) {
 							int realAddress = globalEnv->realAddress[expr->varRefIndex];
 							codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
 							fprintf(outputFile, "\tSTS RAM + %i, CRSh\n\tSTS RAM + %i, CRSl\n", (2 * realAddress), 1 + (2 * realAddress));

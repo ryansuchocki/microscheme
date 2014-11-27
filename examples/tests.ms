@@ -2,18 +2,22 @@
 (define mleft	(list 29 31 33 35))
 (for-each output mleft)
 
-(define (cycle m1 x)
-	(or (null? m1)
-		(begin
-			(high (car m1))
-			(micropause x)
-			(low (car m1))
-			(cycle (cdr m1) x))))
+(define (pulse s1 s2 s3 s4)
+	(set-pin 29 s1)
+	(set-pin 31 s3)
+	(set-pin 33 s2)
+	(set-pin 35 s4)
+	(pause 20))
 			
 (define (loop)
-	(cycle mleft 3000))
+	(pulse #f #t #f #t)
+	(pulse #f #t #t #f)
+	(pulse #t #f #t #f)
+	(pulse #t #f #f #t))
 
 (forever loop)
+
+(serial-send +)
 
 
 

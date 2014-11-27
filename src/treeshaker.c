@@ -14,6 +14,8 @@ char *currentDefinition = NULL;
 
 int numUsedGlobals = 0, numPurgedGlobals = 0;
 
+extern Environment *globalEnv;
+
 void treeshaker_shakeExpr(AST_expr *expr) {
 
 	int i;
@@ -33,7 +35,7 @@ void treeshaker_shakeExpr(AST_expr *expr) {
 
 		case Definition: // Nothing to do;
 			if (expr->numBody == 1) {
-				if (currentEnvironment->realAddress[expr->varRefIndex] >= 0) {
+				if (globalEnv->realAddress[expr->varRefIndex] >= 0) {
 					currentDefinition = expr->variable;
 						expr->type = Assignment;
 							treeshaker_shakeExpr(expr->body[0]);
@@ -47,7 +49,7 @@ void treeshaker_shakeExpr(AST_expr *expr) {
 		case Variable:
 			if (expr->varRefType == Global)
 				if (!currentDefinition || (strcmp(expr->variable, currentDefinition) != 0))
-					currentEnvironment->references[expr->varRefIndex] = currentEnvironment->references[expr->varRefIndex] + 1;
+					globalEnv->references[expr->varRefIndex] = globalEnv->references[expr->varRefIndex] + 1;
 
 			break;
 
@@ -55,7 +57,7 @@ void treeshaker_shakeExpr(AST_expr *expr) {
 
 }
 
-void treeshaker_purge(Environment *globalEnv) {
+void treeshaker_purge() {
 	numUsedGlobals = 0;
 	numPurgedGlobals = 0;
 
