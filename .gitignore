@@ -21,5 +21,7 @@ src/*_hex.c
 bin/
 release/
 examples/*.s
+examples/*.elf
+examples/*.hex
 
 microscheme
