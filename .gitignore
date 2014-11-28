@@ -20,5 +20,6 @@
 src/*_hex.c
 bin/
 release/
+examples/*.s
 
 microscheme

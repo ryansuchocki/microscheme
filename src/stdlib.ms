@@ -4,7 +4,7 @@
 
 ;; Compose : Up to 3 g-args.
 
-(define ($ f g)
+(define (compose f g)
 	(if (= (arity g) 1)
 		(lambda (x) (f (g x)))
 		(if (= (arity g) 2)
@@ -95,29 +95,27 @@
 		(set! arduino-ports	(vector 41 41 41 41 41 41 41 41 35 35 35 35 35 35))
 		(set! arduino-pins	(vector 1  2  4  8  16 32 64 128 1 2  4  8  16 32))))
 
-(define set-ddr (lambda (apin val)
+(define (set-ddr apin val)
 	(set-digital-state (+ 1 (vector-ref arduino-ports apin)) (vector-ref arduino-pins apin) val)
-	apin))
+	apin)
 
-(define set-pin (lambda (apin val)
+(define (set-pin apin val)
 	(set-digital-state (+ 2 (vector-ref arduino-ports apin)) (vector-ref arduino-pins apin) val)
-	apin))
+	apin)
 
-(define get-ddr (lambda (apin)
-	(digital-state (+ 1 (vector-ref arduino-ports apin)) (vector-ref arduino-pins apin))))
+(define (output? apin)
+	(digital-state (+ 1 (vector-ref arduino-ports apin)) (vector-ref arduino-pins apin)))
 	
-(define get-pin (lambda (apin)
-	(digital-state (vector-ref arduino-ports apin) (vector-ref arduino-pins apin))))
+(define (high? apin)
+	(digital-state (vector-ref arduino-ports apin) (vector-ref arduino-pins apin)))
 
 (define (input p)	(set-ddr p #f))
 (define (output p)	(set-ddr p #t))
 (define (high p)	(set-pin p #t))
 (define (low p)		(set-pin p #f))
 
-(define (input? p)	(¬ (get-ddr p)))
-(define (output? p)	(get-ddr p))
-(define (high? p)	(get-pin p))
-(define (low? p)	(¬ (get-pin p)))
+(define input?	(compose ¬ output?))
+(define low?	(compose ¬ high?))
 
 (define (toggle p)	(set-pin p (low? p)))
 

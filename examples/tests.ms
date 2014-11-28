@@ -7,7 +7,7 @@
 	(set-pin 31 s3)
 	(set-pin 33 s2)
 	(set-pin 35 s4)
-	(pause 20))
+	(pause 100))
 			
 (define (loop)
 	(pulse #f #t #f #t)
