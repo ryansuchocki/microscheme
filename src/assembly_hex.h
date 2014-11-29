@@ -11,4 +11,7 @@ extern unsigned int src_MEGA_s_len;
 extern unsigned char src_UNO_s[];
 extern unsigned int src_UNO_s_len;
 
+extern unsigned char src_LEO_s[];
+extern unsigned int src_LEO_s_len;
+
 #endif

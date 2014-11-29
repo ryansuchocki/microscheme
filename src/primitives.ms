@@ -7,7 +7,8 @@
 ;"free!",
 ;"vector"
 ;"@if-model-mega", 
-;"@if-model-uno"
+;"@if-model-uno",
+;"@if-model-leo"
 
 ;; Primitives
 

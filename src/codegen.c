@@ -544,6 +544,12 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				fprintf(outputFile, ".endif\n");
 			}
 
+			else if (strcmp(expr->primproc, "@if-model-leo") == 0 && expr->numBody == 1) {
+				fprintf(outputFile, ".if IS_MODEL_LEO\n");
+				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				fprintf(outputFile, ".endif\n");
+			}
+
 			else if (strcmp(expr->primproc, "arity") == 0 && expr->numBody == 1) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
 				fprintf(outputFile, "\tMOV GP1, CRSh\n\tANDI GP1, 224\n\tLDI GP2, 192\n\tCPSE GP1, GP2\n\tJMP error_notproc\n\tANDI CRSh, 31\n\tLD GP1, Y;CRS\n\tMOV CRSl, GP1\n\tMOV CRSh, zeroReg\n");
@@ -622,6 +628,8 @@ void codegen_emitModelHeader(char *model, FILE *outputFile) {
 		copyHex(src_MEGA_s, src_MEGA_s_len, outputFile);
 	} else if (strcmp(model, "UNO") == 0) {
 		copyHex(src_UNO_s, src_UNO_s_len, outputFile);
+	} else if (strcmp(model, "LEO") == 0) {
+		copyHex(src_LEO_s, src_LEO_s_len, outputFile);
 	}
 }
 

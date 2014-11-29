@@ -236,6 +236,11 @@ int main(int argc, char *argv[]) {
 		STR_TARGET = "atmega328p";
 		STR_PROG   = "arduino";
 		STR_BAUD   = "115200";
+	} else if (strcmp(model, "LEO") == 0) {
+		STR_LEVEL  = "avr5";
+		STR_TARGET = "atmega32u4";
+		STR_PROG   = "arduino";
+		STR_BAUD   = "115200";
 	} else {
 		fprintf(stderr, "Device not supported.");
 		return EXIT_FAILURE;
