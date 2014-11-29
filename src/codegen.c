@@ -550,7 +550,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 			}
 
 
-			else if (strcmp(expr->primproc, "free-current-closure!!") == 0 && expr->numBody == 0) {
+			/*else if (strcmp(expr->primproc, "free-current-closure!!") == 0 && expr->numBody == 0) {
 				//... current closure in CCP...
 				if (parent->type != Lambda) {
 					fprintf(stderr, ">> (free-current-closure!!) Not allowed here!!!");
@@ -559,6 +559,11 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 
 				fprintf(outputFile, "\tLDI GP1, %i\n\tCALL free_current_closure\n", 5 + (parent->closure->numBinds * 2));
 			}
+
+			else if (strcmp(expr->primproc, "free-pair!!") == 0 && expr->numBody == 1) {
+				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				fprintf(outputFile, "\tCALL free_pair\n");
+			}*/
 
 			else {
 				fprintf(stderr, "ERROR 26: No primitive '%s' taking %i arguments.\n", expr->primproc, expr->numBody);

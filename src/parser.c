@@ -333,19 +333,19 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 									}
 
 									// build result->proc->body
-									result->proc->numBody = innerNumTokens-1;
-									result->proc->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-1));
-									for (i=2; i<innerNumTokens; i++) {
-										result->proc->body[i-2] = parser_parseExpr(&innerTokens[i], 1, false, false);
+									result->proc->numBody = innerNumTokens-2;
+									result->proc->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-2));
+									for (i=0; i<innerNumTokens - 2; i++) {
+										result->proc->body[i] = parser_parseExpr(&innerTokens[i+2], 1, false, false);
 									}
 
 									// Add the (free-current-closure!)
-									result->proc->body[innerNumTokens-2] = try_malloc(sizeof(AST_expr));
+									/*result->proc->body[innerNumTokens-2] = try_malloc(sizeof(AST_expr));
 									parser_initExpr(result->proc->body[innerNumTokens-2]);
 									result->proc->body[innerNumTokens-2]->type = PrimCall;
 									result->proc->body[innerNumTokens-2]->primproc = str_clone("free-current-closure!!");
 									result->proc->body[innerNumTokens-2]->numBody = 0;
-									result->proc->body[innerNumTokens-2]->body = NULL;
+									result->proc->body[innerNumTokens-2]->body = NULL;*/
 										
 
 								} else {

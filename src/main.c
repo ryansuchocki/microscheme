@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
 			//fprintf(stderr, ">> Aggressive: %i globals purged!\n", numPurgedGlobals);
 		} 
 
-		fprintf(stdout, ">> Treeshaker: After %i rounds: %i globals purged!\n", rounds, numPurgedGlobals);
+		fprintf(stdout, ">> Treeshaker: After %i rounds: %i globals purged! %i bytes will be reserved.\n", rounds, numPurgedGlobals, numUsedGlobals * 2);
 
 		if (opt_verbose) {
 			fprintf(stdout, ">> Remaining globals: [");

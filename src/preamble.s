@@ -109,6 +109,26 @@ free_current_closure_out:
 	POP CRSl
 	RET
 
+free_pair:
+	MOV GP1, CRSh
+	ANDI GP1, 224
+	LDI GP2, 128
+	CPSE GP1, GP2
+	RJMP error_notpair
+	ANDI CRSh, 31
+	MOVW GP1, HFPl
+	MOVW HFPl, CRSl
+	ADIW CRSl, 4
+free_pair_loop:
+	CP CRSl, GP1
+	CPC CRSh, GP2
+	BREQ free_pair_out
+	LD GP3, Y+
+	ST X+, GP3
+	RJMP free_pair_loop
+free_pair_out:
+	RET
+
 inline_cons:
 	ST X+, GP1;HFP
 	ST X+, GP2
