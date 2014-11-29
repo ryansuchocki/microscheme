@@ -3,7 +3,7 @@
 
 .EQU	IS_MODEL_MEGA,	1
 .EQU	IS_MODEL_UNO,	0
-
+.EQU	IS_MODEL_LEO,	0
 
 ;; Stack Pointers:
 
