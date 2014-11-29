@@ -52,18 +52,16 @@ For example, on Arch linux:
 
 `$ sudo pacman -S avrdude`
 
-Or, on Ubuntu:
+Or, on Ubuntu or Debian:
 
-`$ sudo apt-get install gcc-avr`
-
-`$ sudo apt-get install avrdude`
+`$ sudo apt-get install gcc-avr avrdude`
 
 The [winavr](http://winavr.sourceforge.net/) project provides implementations of these tools for Windows.
 
 Targets
 -------
 
-Microscheme currently supports the ATMega168/328 (used on the Arduino UNO), and the ATMega2560 (used on most Arduino MEGA boards). The target controller is set using the command line argument `-m` follwed by `MEGA` or `UNO` (not required if you're just compiling).
+Microscheme currently supports the ATMega168/328 (used on the Arduino UNO), the ATMega2560 (used on most Arduino MEGA boards), and the ATMega32u4. The target controller is set using the command line argument `-m` follwed by `MEGA`, `UNO`, or `LEO` (not required if you're just compiling).
 
 Note: An Arduino Pro Mini with a 168/328 chip (programmed via an UNO board with its chip removed) can be treated as an UNO, because it uses the same chip.
 

@@ -1,9 +1,9 @@
-;; Boilerplate stuff for the Arduino Uno
-;; CPU: ATMega168/328
+;; Boilerplate stuff for the Arduino Leonardo
+;; CPU: ATMega32u4
 
-.EQU	IS_MODEL_UNO,	1
+.EQU	IS_MODEL_UNO,	0
 .EQU	IS_MODEL_MEGA,	0
-.EQU	IS_MODEL_LEO,	0
+.EQU	IS_MODEL_LEO,	1
 
 ;; Stack Pointers:
 
@@ -38,7 +38,7 @@
 .EQU	mPORTD,	0x2B
 
 
-;; 16-bit counting registers, of wich XYZ are 
+;; 16-bit counting registers, of which XYZ are
 ;; are memory address registers.
 .EQU	WL,	0x18
 .EQU	WH,	0x19
