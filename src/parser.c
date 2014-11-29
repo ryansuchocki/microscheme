@@ -42,8 +42,15 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 		switch(token[0]->type) {
 			case Numerictoken:
 				c = try_malloc(sizeof(AST_const)); 
-				c->type = Numconst; 
-				c->value = atoi(token[0]->raw); 
+				c->type = Numconst; 	 
+
+				// We support hex and decimal notations:
+				if (strncmp(token[0]->raw, "#x", 2) == 0) {
+					c->value = (int) strtol(token[0]->raw + 2, NULL, 16); // Bit of naughty pointer arithmetic...
+				} else {
+					c->value = atoi(token[0]->raw);
+				}				
+
 				c->strvalue = NULL;
 				result->value = c; //DEBUG printf("Numeric"); 
 				break;

@@ -1,6 +1,4 @@
-(define mutual)
-(define mutualb mutual)
-(define mutual mutualb)
+(define it #x1B)
 
 (serial-send (heapsize))
 
