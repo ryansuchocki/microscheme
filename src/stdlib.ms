@@ -93,12 +93,12 @@
 (@if-model-uno
 	(begin
 		(set! arduino-ports	(vector 41 41 41 41 41 41 41 41 35 35 35 35 35 35))
-		(set! arduino-pins	(vector 1  2  4  8  16 32 64 128 1 2  4  8  16 32))))
+		(set! arduino-pins	(vector 1 2 4 8 16 32 64 128 1 2 4 8 16 32))))
 
 (@if-model-leo
 	(begin
-        (set! arduino-ports	(vector 11 11 11 11 11 8  11  14 9  9  9  9   11 8))
-		(set! arduino-pins	(vector 4  8  2  1  16 64 128 64 16 32 64 128 64 128))))
+        (set! arduino-ports	(vector 44 44 44 44 44 41 44 47 38 38 38 38 44 41))
+		(set! arduino-pins	(vector 4 8 2 1 16 64 128 64 16 32 64 128 64 128))))
 
 (define (set-ddr apin val)
 	(set-digital-state (+ 1 (vector-ref arduino-ports apin)) (vector-ref arduino-pins apin) val)
