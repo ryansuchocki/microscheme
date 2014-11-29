@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) {
 		STR_PROG   = "arduino";
 		STR_BAUD   = "115200";
 	} else {
-		fprintf(stderr, "Device not supported.");
+		fprintf(stderr, "Device not supported.\n");
 		return EXIT_FAILURE;
 	}
 
