@@ -38,7 +38,7 @@
 .EQU	mPORTD,	0x2B
 
 
-;; 16-bit counting registers, of wich XYZ are 
+;; 16-bit counting registers, of which XYZ are 
 ;; are memory address registers.
 .EQU	WL,	0x18
 .EQU	WH,	0x19
