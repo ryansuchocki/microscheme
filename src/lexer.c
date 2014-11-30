@@ -100,6 +100,11 @@ void classify(char *acc, int acci, lexer_tokenNode *parent) {
 			matched = 1;
 		}
 
+		else if (strncmp(newRaw, "#b", 2) == 0) {
+			new->type = Numerictoken;
+			matched = 1;
+		}
+
 	}
 
 	for (i = 0; i < keywordsi; i++) {

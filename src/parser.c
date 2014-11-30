@@ -47,6 +47,9 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 				// We support hex and decimal notations:
 				if (strncmp(token[0]->raw, "#x", 2) == 0) {
 					c->value = (int) strtol(token[0]->raw + 2, NULL, 16); // Bit of naughty pointer arithmetic...
+				} else if (strncmp(token[0]->raw, "#b", 2) == 0) {
+					c->value = (int) strtol(token[0]->raw + 2, NULL, 2);
+					fprintf(stderr, "%i", c->value);
 				} else {
 					c->value = atoi(token[0]->raw);
 				}				
