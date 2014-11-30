@@ -85,20 +85,20 @@
 
 (@if-model-mega
 	(begin
-		(set! arduino-ports	(vector 44 44 44 44 50 44 256 256 256 256 35 35 35 35 265 265 256 256 38 38 38 38 32 32 32 32 32 
-										32 32 32 38 38 38 38 38 38 38 38 38 50 50 50 265 265 265 265 265 265 265 265 35 35 35 35))
+		(set! arduino-ports	(vector #x2C #x2C #x2C #x2C #x32 #x2C #x100 #x100 #x100 #x100 #x23 #x23 #x23 #x23 #x109 #x109 #x100 #x100 #x26 #x26 #x26 #x26 #x20 #x20 #x20 #x20 #x20 
+										#x20 #x20 32 #x26 #x26 #x26 #x26 #x26 #x26 #x26 #x26 #x26 #x32 #x32 #x32 #x109 #x109 #x109 #x109 #x109 #x109 #x109 #x109 #x23 #x23 #x23 #x23))
 		(set! arduino-pins	(vector 1 2 16 32 32 8 8 16 32 64 16 32 64 128 2 1 2 1 8 4 2 1 1 2 4 8 16 32 64 128 128 64 32 16 
 	  									8 4 2 1 128 4 2 1 128 64 32 16 8 4 2 1 8 4 2 1 1 2 4 8 16 32 64 128 1 2 4 8 16 32 64 128))))
 
 (@if-model-uno
 	(begin
-		(set! arduino-ports	(vector 41 41 41 41 41 41 41 41 35 35 35 35 35 35))
+		(set! arduino-ports	(vector #x29 #x29 #x29 #x29 #x29 #x29 #x29 #x29 #x23 #x23 #x23 #x23 #x23 #x23))
 		(set! arduino-pins	(vector 1 2 4 8 16 32 64 128 1 2 4 8 16 32))))
 
 (@if-model-leo
 	(begin
 		; D2 D3 D1 D0 D4 C6 D7 E6 B4 B5 B6 B7 D6 C7
-        (set! arduino-ports	(vector 41 41 41 41 41 38 41 44 35 35 35 35 41 38))
+        (set! arduino-ports	(vector #x29 #x29 #x29 #x29 #x29 #x26 #x29 #x2C #x23 #x23 #x23 #x23 #x29 #x26))
 		(set! arduino-pins	(vector 4 8 2 1 16 64 128 64 16 32 64 128 64 128))))
 
 (define (set-ddr apin val)

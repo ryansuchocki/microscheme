@@ -24,4 +24,7 @@ examples/*.s
 examples/*.elf
 examples/*.hex
 
+working
+working/*
+
 microscheme
