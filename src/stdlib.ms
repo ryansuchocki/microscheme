@@ -97,7 +97,8 @@
 
 (@if-model-leo
 	(begin
-        (set! arduino-ports	(vector 44 44 44 44 44 41 44 47 38 38 38 38 44 41))
+		; D2 D3 D1 D0 D4 C6 D7 E6 B4 B5 B6 B7 D6 C7
+        (set! arduino-ports	(vector 41 41 41 41 41 38 41 44 35 35 35 35 41 38))
 		(set! arduino-pins	(vector 4 8 2 1 16 64 128 64 16 32 64 128 64 128))))
 
 (define (set-ddr apin val)

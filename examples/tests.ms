@@ -1,5 +1,3 @@
-(define it #x1B)
-
 (serial-send (heapsize))
 
 (define thelist (list 1 2 3 4))
