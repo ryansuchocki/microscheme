@@ -247,7 +247,7 @@
 		(set! index (+ index 1))))
 
 (define (vector-concat left right)
-	(let ((destination (make-vector! (+ (vector-length left) (vector-length right)))))
+	(let ((destination (make-vector (+ (vector-length left) (vector-length right)))))
 		(free!
 		(let ((writer (make-writer destination 0)))
 			(for-each-vector writer left)
@@ -262,7 +262,7 @@
 			(vector-copy src dest (+ src-start 1) src-finish (+ dest-start 1)))))
 
 (define (sub-vector vect start finish)
-	(vector-copy vect (make-vector! (+ (- finish start) 1)) start finish 0))
+	(vector-copy vect (make-vector (+ (- finish start) 1)) start finish 0))
 
 (define (vector-first-step vect test start)
 	(if (or (>= start (vector-length vect)) (test (vector-ref vect start))) 
@@ -284,6 +284,6 @@
 	(reverse (vlstep vect 0 (vector-length vect) ())))
 
 (define (list->vector lst)
-	(let ((vect (make-vector! (length lst))))
+	(let ((vect (make-vector (length lst))))
 		(free!
 			(for-each (make-writer vect) lst))))

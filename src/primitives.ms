@@ -44,7 +44,7 @@
 (define (vector-length x) (vector-length x))
 (define (vector-ref x y) (vector-ref x y))
 (define (vector-set! x y z) (vector-set! x y z))
-(define (make-vector! x) (make-vector! x))
+(define (make-vector x) (make-vector x))
 
 (define (assert x) (assert x))
 (define (error) (error))

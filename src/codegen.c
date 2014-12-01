@@ -377,7 +377,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				fprintf(outputFile, "\tPOP GP1\n\tPOP GP2\n\tCALL inline_set_cdr\n");
 			}
 
-			else if (strcmp(expr->primproc, "make-vector!") == 0 && expr->numBody == 1) {
+			else if (strcmp(expr->primproc, "make-vector") == 0 && expr->numBody == 1) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
 				fprintf(outputFile, "\tMOVW GP1, CRSl\n\tMOVW CRSl, HFPl\n\tORI CRSh, 160\n\tST X+, GP1\n\tST X+, GP2\n\tLSL GP1\n\tROL GP2\n\tADD HFPl, GP1\n\tADC HFPh, GP2\n");
 			}

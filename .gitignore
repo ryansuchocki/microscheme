@@ -27,4 +27,7 @@ examples/*.hex
 working
 working/*
 
+emulator
+emulator/*
+
 microscheme

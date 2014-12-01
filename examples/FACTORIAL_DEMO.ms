@@ -30,7 +30,7 @@
 
 
 
-(include "libraries/long.ms")
+(include "examples/long.ms")
 
 
 
