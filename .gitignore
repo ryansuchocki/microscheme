@@ -27,6 +27,4 @@ examples/*.hex
 working
 working/*
 
-emulator.scm
-
 microscheme
