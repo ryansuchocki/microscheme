@@ -4,7 +4,7 @@
 #define _LEXER_H_GUARD
 
 // Type definitions
-	enum lexer_tokenNodeType {Keyword, Primword, Numerictoken, Identifier, Stringtoken, Booleantoken, Chartoken, Parens };  
+	enum lexer_tokenNodeType {Keyword, Primword, Numerictoken, Identifier, Stringtoken, Booleantoken, Chartoken, Parens, Nulltoken };  
 	enum keywordtype {lambda, ifword, let, set, define, begin, andword, orword, includeword};
 	typedef struct lexer_tokenNode {enum lexer_tokenNodeType type; enum keywordtype keyword; char *raw; 
 		struct lexer_tokenNode **children; int numChildren; struct lexer_tokenNode *parent; int fileLine;} lexer_tokenNode;

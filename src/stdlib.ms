@@ -2,16 +2,6 @@
 ;; microscheme.org
 
 
-;; Compose : Up to 3 g-args.
-
-(define (compose f g)
-	(if (= (arity g) 1)
-		(lambda (x) (f (g x)))
-		(if (= (arity g) 2)
-			(lambda (x y) (f (g x y)))
-			(if (= (arity g) 3)
-				(lambda (x y z) (f (g x y z)))
-				(error)))))
 
 ;; Looping constructs
 
@@ -45,7 +35,7 @@
 
 (define equal? (lambda (X Y)
 	(or
-		(= X Y)
+		(eq? X Y)
 		(and 
 			(pair? X)
 			(pair? Y)
@@ -126,8 +116,8 @@
 (define (high p)	(set-pin p #t))
 (define (low p)		(set-pin p #f))
 
-(define input?	(compose ¬ output?))
-(define low?	(compose ¬ high?))
+(define (input? p)	(¬ (output? p)))
+(define (low? p)	(¬ (high? p)))
 
 (define (toggle p)	(set-pin p (low? p)))
 
@@ -150,7 +140,7 @@
 		(reverse-aux (cdr lst) (cons (car lst) acc))))
 
 (define (reverse lst)
-	(reverse-aux lst ()))
+	(reverse-aux lst '()))
 
 (define (append l m)
 	(if (null? l) m
@@ -163,7 +153,7 @@
 		(map-aux proc (cdr lst) (cons (proc (car lst)) acc))))
 
 (define (map proc lst)
-	(reverse-aux (map-aux proc lst ()) ()))
+	(reverse-aux (map-aux proc lst '()) '()))
 
 (define (map-2-aux proc lst1 lst2 acc)
 	(if (or (null? lst1) (null? lst2))
@@ -171,7 +161,7 @@
 		(map-2-aux proc (cdr lst1) (cdr lst2) (cons (proc (car lst1) (car lst2)) acc))))
 
 (define (map-2 proc lst1 lst2)
-	(reverse-aux (map-2-aux proc lst1 lst2 ()) ()))
+	(reverse-aux (map-2-aux proc lst1 lst2 '()) '()))
 
 (define (zip x y)
 	(map-2 cons x y))
@@ -281,7 +271,7 @@
 
 
 (define (vector->list vect)
-	(reverse (vlstep vect 0 (vector-length vect) ())))
+	(reverse (vlstep vect 0 (vector-length vect) '())))
 
 (define (list->vector lst)
 	(let ((vect (make-vector (length lst))))

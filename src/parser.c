@@ -89,6 +89,13 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 				result->variable = str_clone(token[0]->raw);
 				break;
 
+			case Nulltoken:
+				c = try_malloc(sizeof(AST_const)); 
+				c->type = Emptylistconst; 
+				c->strvalue = NULL;
+				result->value=c;
+				break;
+
 			case Primword:
 				if(strcmp(token[0]->raw, "list") == 0 || strcmp(token[0]->raw, "vector") == 0) {
 					fprintf(stderr, ">> ERROR 6a: Procedure '%s' is variadic-primitive, and cannot be used as a value\n", token[0]->raw);
@@ -106,11 +113,8 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 				innerTokens = token[0]->children; 
 				innerNumTokens = token[0]->numChildren;
 				if (innerNumTokens < 1) {
-					c = try_malloc(sizeof(AST_const)); 
-					c->type = Emptylistconst; 
-					c->strvalue = NULL;
-					result->value=c;
-					break;
+					fprintf (stderr, ">> Unexpected empty parenthesis...\n");
+					exit(EXIT_FAILURE);
 				}
 
 				switch(innerTokens[0]->type) {

@@ -228,7 +228,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 			break;
 
 		case PrimCall:
-			if (strcmp(expr->primproc, "=") == 0 && expr->numBody == 2) {
+			if ((strcmp(expr->primproc, "=") == 0 || strcmp(expr->primproc, "eq?") == 0) && expr->numBody == 2) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
 				fprintf(outputFile, "\tPUSH CRSl\n\tPUSH CRSh\n");
 				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);

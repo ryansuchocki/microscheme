@@ -17,7 +17,7 @@ int fileLine = 1;
 char** keywords = (char *[]){	"lambda", "if", "let", "set!", "define", "begin", "and", "or", "include"};
 int keywordsi = 9;
 
-char** primwords = (char *[]){	"=", ">", ">=", "<", "<=", "not", "¬",
+char** primwords = (char *[]){	"=", ">", ">=", "<", "<=", "not", "¬", "eq?",
 								"+", "-", "*", "div", "mod", "zero?",
 								"number?", "pair?", "vector?", "procedure?", "char?", "boolean?", "null?",
 								"cons", "car", "cdr", "set-car!", "set-cdr!", "list",
@@ -27,7 +27,7 @@ char** primwords = (char *[]){	"=", ">", ">=", "<", "<=", "not", "¬",
 								"char->number",
 								"free!", "arity", /*"free-current-closure!!", "free-pair!!",*/
 								"@if-model-mega", "@if-model-uno", "@if-model-leo"	};
-int primwordsi = 46;
+int primwordsi = 47;
 
 
 lexer_tokenNode *lexer_openNode = NULL;
@@ -37,7 +37,7 @@ lexer_tokenNode *lexer_openNode = NULL;
 char acc[TOKEN_BUFFER_LENGTH];
 int acci = 0;
 
-int inString = 0, inComment = 0;
+int inString = 0, inComment = 0, inQuote = 0;
 
 void addChild(lexer_tokenNode *child, lexer_tokenNode *parent) {
 	if (parent->numChildren == 0)
@@ -104,7 +104,11 @@ void classify(char *acc, int acci, lexer_tokenNode *parent) {
 			new->type = Numerictoken;
 			matched = 1;
 		}
+	}
 
+	if (strcmp(newRaw, "'()") == 0) {
+		new->type = Nulltoken;
+		matched = 1;
 	}
 
 	for (i = 0; i < keywordsi; i++) {
@@ -197,49 +201,65 @@ void lexer_lex(char ch) {
 			case '"':	inString = 1;
 						break;
 			case ' ':
-			case '\n':
+			case '\n':	fileLine++;
 			case '\r':
 			case '\t':	if (acci > 0) {
 							classify(acc, acci, lexer_openNode);
 							acci = 0;
 						}
-
-						if (ch == '\n')
-							fileLine++;
+							
 						break;
-			case '(':	if (acci > 0) {
-							classify(acc, acci, lexer_openNode);
-							acci = 0;
+			case '\'':
+						inQuote = 1;
+						acc[acci++] = ch;
+						break;
+			case '(':	
+						if (inQuote) {
+							acc[acci++] = ch;
+						} else {
+							if (acci > 0) {
+								classify(acc, acci, lexer_openNode);
+								acci = 0;
+							}
+
+							// Construct new parens
+							lexer_tokenNode *new;
+							new = (lexer_tokenNode*) try_malloc(sizeof(lexer_tokenNode));
+
+							new->type = Parens;
+							new->raw = NULL;
+							new->children = NULL;
+							new->numChildren = 0;
+							new->parent = lexer_openNode;
+
+							// Add the new parens to the children of the lexer_openNode one
+							addChild(new, lexer_openNode);
+
+							// Make the new parens lexer_openNode
+							lexer_openNode = new;
 						}
-
-						// Construct new parens
-						lexer_tokenNode *new;
-						new = (lexer_tokenNode*) try_malloc(sizeof(lexer_tokenNode));
-
-						new->type = Parens;
-						new->raw = NULL;
-						new->children = NULL;
-						new->numChildren = 0;
-						new->parent = lexer_openNode;
-
-						// Add the new parens to the children of the lexer_openNode one
-						addChild(new, lexer_openNode);
-
-						// Make the new parens lexer_openNode
-						lexer_openNode = new;
 						
 						break;
-			case ')':	if (lexer_openNode->parent == NULL) {
-							fprintf(stderr, "%i: ERROR 4: Extraneous )\n", fileLine);
-							exit(EXIT_FAILURE);
+			case ')':	
+
+						if (inQuote) {
+							acc[acci++] = ch;
+							inQuote = 0;
+						} else {
+							if (lexer_openNode->parent == NULL) {
+								fprintf(stderr, "%i: ERROR 4: Extraneous )\n", fileLine);
+								exit(EXIT_FAILURE);
+							}
+
+							if (acci > 0) {
+								classify(acc, acci, lexer_openNode);
+								acci = 0;
+							}
+
+							lexer_openNode = lexer_openNode->parent;
+
 						}
 
-						if (acci > 0) {
-							classify(acc, acci, lexer_openNode);
-							acci = 0;
-						}
-
-						lexer_openNode = lexer_openNode->parent;
 						break;
 			default:	acc[acci++] = ch;
 		}
