@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 	// First, we process the user's command-line arguments, which dictate the input file
 	// and target processor.
 
-	char* fname, *inname, *outname;
+	char *inname, *outname, *basename;
 	int c;
 
 	opterr = 0;
@@ -92,14 +92,12 @@ int main(int argc, char *argv[]) {
 		return(EXIT_FAILURE);
 	}
 
-	fname=argv[optind];
+	inname=argv[optind];
 
-	if (strncmp(fname + strlen(fname) - 3, ".ms", 3) == 0)
-		fname[strlen(fname) - 3] = 0;
+	basename=str_clone(inname);
+	basename[strcspn(inname, ".")] = 0;
 
-	inname=str_clone_more(fname, 3);
-	outname=str_clone_more(fname, 2);
-	strcat(inname, ".ms");
+	outname=str_clone_more(basename, 2);
 	strcat(outname, ".s");
 
 	if (argc == optind) {
@@ -256,11 +254,11 @@ int main(int argc, char *argv[]) {
 		}
 
 		fprintf(stderr, ">> Assembling...\n");
-		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s", STR_LEVEL, fname, fname);
+		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s", STR_LEVEL, basename, basename);
 
 		try_execute(cmd);
 
-		sprintf(cmd, "avr-objcopy --output-target=ihex %s.elf %s.hex", fname, fname);
+		sprintf(cmd, "avr-objcopy --output-target=ihex %s.elf %s.hex", basename, basename);
 		
 		try_execute(cmd);
 	}
@@ -278,7 +276,7 @@ int main(int argc, char *argv[]) {
 		if (opt_verbose) opt1 = "-v"; else opt1 = "";
 		if (opt_verify) opt2 = ""; else opt2 = "-V";
 
-		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, STR_TARGET, STR_PROG, device, STR_BAUD, fname);
+		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, STR_TARGET, STR_PROG, device, STR_BAUD, basename);
 		
 		try_execute(cmd);
 	}
@@ -287,9 +285,9 @@ int main(int argc, char *argv[]) {
 		fprintf(stdout, ">> Cleaning Up...\n");
 
 		#ifdef __WIN32 // Defined for both 32 and 64 bit environments
-			sprintf(cmd, "del %s.s %s.elf %s.hex", fname, fname, fname);
+			sprintf(cmd, "del %s.s %s.elf %s.hex", basename, basename, basename);
 		#else
-			sprintf(cmd, "rm -f %s.s %s.elf %s.hex", fname, fname, fname);
+			sprintf(cmd, "rm -f %s.s %s.elf %s.hex", basename, basename, basename);
 		#endif
 
 		try_execute(cmd);
@@ -297,7 +295,7 @@ int main(int argc, char *argv[]) {
 
 	fprintf(stdout, ">> Finished.\n");
 
-	try_free(inname);
+	try_free(basename);
 	try_free(outname);
 
 	int i;
