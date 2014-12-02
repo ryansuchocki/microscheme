@@ -1,6 +1,11 @@
 ;; Microscheme primitives for other scheme implementations...
 ;; microscheme.org
 
+;; This file defines microscheme-specific syntax/primitives, 
+;; and emulates a set of digital I/O registers, so that you
+;; can run Microscheme programs on other Scheme implementations
+;; (For example, on your PC).
+
 (define-syntax free!
   (syntax-rules ()
     ((free! body ...)

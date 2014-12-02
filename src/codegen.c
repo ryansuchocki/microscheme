@@ -554,6 +554,26 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
 				fprintf(outputFile, "\tMOV GP1, CRSh\n\tANDI GP1, 224\n\tLDI GP2, 192\n\tCPSE GP1, GP2\n\tJMP error_notproc\n\tANDI CRSh, 31\n\tLD GP1, Y;CRS\n\tMOV CRSl, GP1\n\tMOV CRSh, zeroReg\n");
 			}
+			
+			else if (strcmp(expr->primproc, "call-c-func") == 0 && expr->numBody > 0 && expr->numBody <= 10) {
+				fprintf(outputFile, "\tPUSH CCPl\n\tPUSH CCPh\n\tPUSH HFPl\n\tPUSH HFPh\n\tPUSH AFPl\n\tPUSH AFPh\n\tPUSH r1\n\tCLR r1\n");
+				
+				//load args into (24:25) -> (8:9) descending l:h
+				for (i=1; i<expr->numBody; i++) {
+					codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+					fprintf(outputFile, "\tMOV r%i, CRSl\n\tMOV r%i, CRSh\n", 26 - (i * 2), 27 - (i * 2));
+				}
+
+				fprintf(outputFile, "\tRCALL %s\n\tMOVW CRSl, r24\n\tPOP r1\n\tPOP AFPh\n\tPOP AFPl\n\tPOP HFPh\n\tPOP HFPl\n\tPOP CCPh\n\tPOP CCPl\n", expr->body[0]->value->strvalue);
+			}
+
+			else if (strcmp(expr->primproc, "include-asm") == 0 && expr->numBody == 1) {
+				fprintf(outputFile, ".include \"%s\"\n", expr->body[0]->value->strvalue);
+			}
+
+			else if (strcmp(expr->primproc, "asm") == 0 && expr->numBody == 1) {
+				fprintf(outputFile, "\t%s\n", expr->body[0]->value->strvalue);
+			}
 
 
 			/*else if (strcmp(expr->primproc, "free-current-closure!!") == 0 && expr->numBody == 0) {

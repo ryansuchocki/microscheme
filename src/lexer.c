@@ -26,8 +26,9 @@ char** primwords = (char *[]){	"=", ">", ">=", "<", "<=", "not", "¬", "eq?",
 								"serial-send", "digital-state", "set-digital-state",
 								"char->number",
 								"free!", "arity", /*"free-current-closure!!", "free-pair!!",*/
-								"@if-model-mega", "@if-model-uno", "@if-model-leo"	};
-int primwordsi = 47;
+								"@if-model-mega", "@if-model-uno", "@if-model-leo",
+								"call-c-func", "include-asm", "asm"};
+int primwordsi = 50;
 
 
 lexer_tokenNode *lexer_openNode = NULL;
