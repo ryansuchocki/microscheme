@@ -1,9 +1,10 @@
 
 import serial
 import time
+import sys
 
 
-ser = serial.Serial("/dev/ttyACM0", 9600)
+ser = serial.Serial(sys.argv[1], 9600)
 ser.flushInput()
 ser.close()
 
