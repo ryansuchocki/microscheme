@@ -1,6 +1,12 @@
 ;; FFI Demo
 ;; microscheme.org
 
+;; README:
+;; To run this test, use the -w option to compile this file *with*
+;; the C source file.
+;;
+;; $ microscheme -m ... -d ... -au -w ffi_stuff/ffitest.c ffi_stuff/ffi-test.ms 
+
 ;; Define a scheme wrapper around each of our external functions...
 (define (pow x y)
 	(call-c-func "mathpow" x y))

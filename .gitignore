@@ -23,6 +23,9 @@ release/
 examples/*.s
 examples/*.elf
 examples/*.hex
+*.s
+*.elf
+*.hex
 
 working
 working/*
