@@ -117,10 +117,13 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 
 				case Global: 
 					if (opt_aggressive) {
-						int realAddress = globalEnv->realAddress[expr->varRefIndex];
-						fprintf(outputFile, "\tLDS CRSh, RAM + %i\n\tLDS CRSl, RAM + %i\n", (2 * realAddress), 1 + (2 * realAddress));
+						//int realAddress = globalEnv->realAddress[expr->varRefIndex];
+						//fprintf(outputFile, "\tLDS CRSh, RAM + %i\n\tLDS CRSl, RAM + %i\n", (2 * realAddress), 1 + (2 * realAddress));
+						fprintf(outputFile, "\tLDS CRSh, _global_%i+1\n\tLDS CRSl, _global_%i\n", globalEnv->realAddress[expr->varRefIndex], globalEnv->realAddress[expr->varRefIndex]);
+							
 					} else {
-						fprintf(outputFile, "\tLDS CRSh, RAM + %i\n\tLDS CRSl, RAM + %i\n", (2 * expr->varRefIndex), 1 + (2 * expr->varRefIndex));
+						//fprintf(outputFile, "\tLDS CRSh, RAM + %i\n\tLDS CRSl, RAM + %i\n", (2 * expr->varRefIndex), 1 + (2 * expr->varRefIndex));
+						fprintf(outputFile, "\tLDS CRSh, _global_%i+1\n\tLDS CRSl, _global_%i\n", expr->varRefIndex, expr->varRefIndex);
 					}
 					break;
 			}
@@ -150,15 +153,18 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 					break;
 
 				case Global: 
+
 					if (opt_aggressive) {
 						if (globalEnv->realAddress[expr->varRefIndex] >= 0) {
-							int realAddress = globalEnv->realAddress[expr->varRefIndex];
+							//int realAddress = globalEnv->realAddress[expr->varRefIndex];
 							codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
-							fprintf(outputFile, "\tSTS RAM + %i, CRSh\n\tSTS RAM + %i, CRSl\n", (2 * realAddress), 1 + (2 * realAddress));
+							//fprintf(outputFile, "\tSTS RAM + %i, CRSh\n\tSTS RAM + %i, CRSl\n", (2 * realAddress), 1 + (2 * realAddress));
+							fprintf(outputFile, "\tSTS _global_%i+1, CRSh\n\tSTS _global_%i, CRSl\n", globalEnv->realAddress[expr->varRefIndex], globalEnv->realAddress[expr->varRefIndex]);
 						}
 					} else {
 						codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
-						fprintf(outputFile, "\tSTS RAM + %i, CRSh\n\tSTS RAM + %i, CRSl\n", (2 * expr->varRefIndex), 1 + (2 * expr->varRefIndex));
+						//fprintf(outputFile, "\tSTS RAM + %i, CRSh\n\tSTS RAM + %i, CRSl\n", (2 * expr->varRefIndex), 1 + (2 * expr->varRefIndex));
+						fprintf(outputFile, "\tSTS _global_%i+1, CRSh\n\tSTS _global_%i, CRSl\n", expr->varRefIndex, expr->varRefIndex);
 					}
 				
 				break;
@@ -299,7 +305,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 			}
 
 			else if (strcmp(expr->primproc, "heapsize") == 0 && expr->numBody == 0) {
-				fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSUBI CRSl, lo8(RAM + HEAP_RESERVE)\n\tSBCI CRSh, hi8(RAM + HEAP_RESERVE)\n");
+				fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSUBI CRSl, lo8(_end)\n\tSBCI CRSh, hi8(_end)\n");
 			}
 
 			else if (strcmp(expr->primproc, "error") == 0 && expr->numBody == 0) {
@@ -632,7 +638,17 @@ void copyHex(unsigned char* data, unsigned int length, FILE *outputFile) {
 }
 
 void codegen_emitPreamble(FILE *outputFile, int numUsedGlobals) {
-	fprintf(outputFile, ".EQU HEAP_RESERVE, %i\n", numUsedGlobals * 2);
+	//fprintf(outputFile, ".EQU HEAP_RESERVE, %i\n", numUsedGlobals * 2);
+
+	int i = 0;
+	for (i=0; i<globalEnv->numBinds; i++) {
+		if (opt_aggressive) {
+			if (globalEnv->realAddress[i] >= 0)
+				fprintf(outputFile, "\t.global _global_%i\n\t.data\n\t.size _global_%i, 2\n_global_%i:\n\t.word falseHigh\n\t.text\n", globalEnv->realAddress[i], globalEnv->realAddress[i], globalEnv->realAddress[i]);
+		} else {
+				fprintf(outputFile, "\t.global _global_%i\n\t.data\n\t.size _global_%i, 2\n_global_%i:\n\t.word falseHigh\n\t.text\n", i, i, i);
+		}
+	}
 	
 	//fprintf(outputFile, ".include \"include/preamble.s\"\n");
 	//copyIn("include/preamble.s", outputFile, expr);
@@ -640,7 +656,7 @@ void codegen_emitPreamble(FILE *outputFile, int numUsedGlobals) {
 }
 
 void codegen_emitPostamble(FILE *outputFile) {
-	fprintf(outputFile, "SBI PORT13, P13\n");
+	fprintf(outputFile, "SBI PORT13, P13\nJMP _exit\n");
 }
 
 void codegen_emitModelHeader(char *model, FILE *outputFile) {

@@ -48,14 +48,12 @@ CLR zeroReg
 
 LDI		CRSl,	0
 LDI		CRSh,	0
-LDI 	HFPl,	lo8(RAM + HEAP_RESERVE)
-LDI		HFPh,	hi8(RAM + HEAP_RESERVE)
+LDI 	HFPl,	lo8(_end)
+LDI		HFPh,	hi8(_end)
 LDI		CCPl,	0
 LDI		CCPh,	0
-LDI		AFPl,	lo8(RAMEND)
-LDI		AFPh,	hi8(RAMEND)
-OUT		SPl,	AFPl				;; Initialise Stack Pointers
-OUT		SPh,	AFPh
+LDI		AFPl,	lo8(__stack)
+LDI		AFPh,	hi8(__stack)
 
 SBI	DDR13,	P13
 CBI	PORT13,	P13

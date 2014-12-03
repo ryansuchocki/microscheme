@@ -27,6 +27,7 @@ int opt_includeonce = true, opt_assemble = false,
 
 char* model = "MEGA";
 char* device = "";
+char* linkwith = "";
 
 int treeshaker_max_rounds = 10;
 
@@ -59,7 +60,7 @@ int main(int argc, char *argv[]) {
 	int c;
 
 	opterr = 0;
-	while ((c = getopt (argc, argv, "iaucpsovrm:d:t:")) != -1)
+	while ((c = getopt (argc, argv, "iaucpsovrm:d:t:w:")) != -1)
 	switch (c)	{
 		case 'i':	opt_includeonce = false;	break;
 		case 'u':	opt_upload = true;			
@@ -72,6 +73,7 @@ int main(int argc, char *argv[]) {
 		case 'r':	opt_verify = true;			break;
 		case 'm':	model = optarg;				break;
 		case 'd':	device = optarg;			break;
+		case 'w':	linkwith = optarg;			break;
 		case 't':	treeshaker_max_rounds = atoi(optarg);	break;
 		case '?':
 			if (optopt == 'm')
@@ -195,6 +197,8 @@ int main(int argc, char *argv[]) {
 
 	// 4) Generate code. (Starting with some preamble)
 
+
+
 	FILE *outputFile;
 	outputFile = fopen(outname, "w");
 
@@ -225,17 +229,17 @@ int main(int argc, char *argv[]) {
 	char *STR_LEVEL, *STR_TARGET, *STR_PROG, *STR_BAUD;
 
 	if (strcmp(model, "MEGA") == 0) {
-		STR_LEVEL  = "avr6";
+		STR_LEVEL  = "atmega2560";
 		STR_TARGET = "atmega2560";
 		STR_PROG   = "wiring";
 		STR_BAUD   = "115200";
 	} else if (strcmp(model, "UNO") == 0) {
-		STR_LEVEL  = "avr5";
+		STR_LEVEL  = "atmega328p";
 		STR_TARGET = "atmega328p";
 		STR_PROG   = "arduino";
 		STR_BAUD   = "115200";
 	} else if (strcmp(model, "LEO") == 0) {
-		STR_LEVEL  = "avr5";
+		STR_LEVEL  = "atmega32u4";
 		STR_TARGET = "atmega32u4";
 		STR_PROG   = "arduino";
 		STR_BAUD   = "115200";
@@ -254,7 +258,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		fprintf(stderr, ">> Assembling...\n");
-		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s", STR_LEVEL, basename, basename);
+		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s %s", STR_LEVEL, basename, basename, linkwith);
 
 		try_execute(cmd);
 
