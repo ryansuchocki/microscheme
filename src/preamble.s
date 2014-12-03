@@ -87,6 +87,36 @@ proc_call:
 	LDD AFPl, Y+2;CRS
 	IJMP
 
+before_c_func:
+	POP r2
+	POP r3
+		PUSH CCPl
+		PUSH CCPh
+		PUSH HFPl
+		PUSH HFPh
+		PUSH AFPl
+		PUSH AFPh
+		PUSH r1
+		CLR r1
+	PUSH r3
+	PUSH r2
+	RET
+
+after_c_func:
+	POP r2
+	POP r3
+		MOVW CRSl, r24
+		POP r1
+		POP AFPh
+		POP AFPl
+		POP HFPh
+		POP HFPl
+		POP CCPh
+		POP CCPl
+	PUSH r3
+	PUSH r2
+	RET
+
 inline_cons:
 	ST X+, GP1;HFP
 	ST X+, GP2

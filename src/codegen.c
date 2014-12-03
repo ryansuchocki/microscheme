@@ -562,7 +562,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 			}
 			
 			else if (strcmp(expr->primproc, "call-c-func") == 0 && expr->numBody > 0 && expr->numBody <= 10) {
-				fprintf(outputFile, "\tPUSH CCPl\n\tPUSH CCPh\n\tPUSH HFPl\n\tPUSH HFPh\n\tPUSH AFPl\n\tPUSH AFPh\n\tPUSH r1\n\tCLR r1\n");
+				fprintf(outputFile, "\tCALL before_c_func\n");
 				
 				//load args into (24:25) -> (8:9) descending l:h
 				for (i=1; i<expr->numBody; i++) {
@@ -570,7 +570,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 					fprintf(outputFile, "\tMOV r%i, CRSl\n\tMOV r%i, CRSh\n", 26 - (i * 2), 27 - (i * 2));
 				}
 
-				fprintf(outputFile, "\tRCALL %s\n\tMOVW CRSl, r24\n\tPOP r1\n\tPOP AFPh\n\tPOP AFPl\n\tPOP HFPh\n\tPOP HFPl\n\tPOP CCPh\n\tPOP CCPl\n", expr->body[0]->value->strvalue);
+				fprintf(outputFile, "\tCALL %s\n\tCALL after_c_func\n", expr->body[0]->value->strvalue);
 			}
 
 			else if (strcmp(expr->primproc, "include-asm") == 0 && expr->numBody == 1) {

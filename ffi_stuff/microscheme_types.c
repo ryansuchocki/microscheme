@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdlib.h>
 
 struct vector;
 struct pair;
@@ -65,4 +66,17 @@ ms_value toVector (vector *x) {
 
 ms_value toClosure (closure *x) {
 	return 0b1100000000000000 | (0b0001111111111111 & ((unsigned int) x));
+}
+
+ms_value cons(ms_value x, ms_value y) {
+	pair *newcell = malloc(4);
+	newcell->car = x;
+	newcell->cdr = y;
+	return toPair(newcell);
+}
+
+ms_value make_vector(unsigned int len) {
+	vector *newvect = malloc(2 + len + len);
+	newvect->length = len;
+	return toVector(newvect);
 }
