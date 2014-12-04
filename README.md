@@ -1,5 +1,5 @@
-![logo](http://microscheme.org/mini.png "logo") Microscheme 
-===========================================================
+Microscheme 
+===========
 
 Microscheme is a Scheme subset/variant designed for Atmel microcontrollers, especially as found on Arduino boards.
 
@@ -48,9 +48,7 @@ Packages are available on all good linux distro's:
 
 For example, on Arch linux:
 
-`$ sudo pacman -S avr-gcc`
-
-`$ sudo pacman -S avrdude`
+`$ sudo pacman -S avr-gcc avrdude`
 
 Or, on Ubuntu or Debian:
 
