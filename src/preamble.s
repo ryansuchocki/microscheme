@@ -100,9 +100,11 @@ before_c_func:
 		CLR r1
 	PUSH r3
 	PUSH r2
+	SEI
 	RET
 
 after_c_func:
+	CLI
 	POP r2
 	POP r3
 		MOVW CRSl, r24
