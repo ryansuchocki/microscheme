@@ -8,7 +8,7 @@ main:
 .EQU	TCSh,	3	; Tail Call Special/Save
 .EQU falseReg,	4
 .EQU zeroReg,	5
-			;	6
+.EQU c_sreg, 	6
 			;	7
 
 			;	8
@@ -39,12 +39,17 @@ main:
 .EQU	AFPl,	30
 .EQU	AFPh,	31
 
+.EQU	SREG,	0x3F
+
 .EQU	falseHigh,	254
 .EQU	trueHigh,	255
 
 LDI GP1, falseHigh
 MOV falseReg, GP1
 CLR zeroReg
+
+CLI
+MOV c_sreg, SREG
 
 LDI		CRSl,	0
 LDI		CRSh,	0
@@ -100,11 +105,12 @@ before_c_func:
 		CLR r1
 	PUSH r3
 	PUSH r2
-	SEI
+	MOV SREG, c_sreg
 	RET
 
 after_c_func:
 	CLI
+	MOV c_sreg, SREG
 	POP r2
 	POP r3
 		MOVW CRSl, r24

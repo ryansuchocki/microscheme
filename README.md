@@ -1,4 +1,4 @@
-Microscheme
+Microscheme [logo]()http://microscheme.org/logosmall.png
 ===========
 
 Microscheme is a Scheme subset/variant designed for Atmel microcontrollers, especially as found on Arduino boards.
