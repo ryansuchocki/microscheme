@@ -49,7 +49,7 @@ MOV falseReg, GP1
 CLR zeroReg
 
 CLI
-MOV c_sreg, SREG
+IN c_sreg, SREG
 
 LDI		CRSl,	0
 LDI		CRSh,	0
@@ -105,12 +105,12 @@ before_c_func:
 		CLR r1
 	PUSH r3
 	PUSH r2
-	MOV SREG, c_sreg
+	OUT SREG, c_sreg
 	RET
 
 after_c_func:
 	CLI
-	MOV c_sreg, SREG
+	IN c_sreg, SREG
 	POP r2
 	POP r3
 		MOVW CRSl, r24
