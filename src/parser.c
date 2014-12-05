@@ -14,6 +14,8 @@ extern bool opt_verbose;
 extern char **globalIncludeList;
 extern int globalIncludeListN;
 
+AST_expr *currentLambda = NULL, *tmpLambda = NULL;
+
 void parser_initExpr(AST_expr *expr) {
 	expr->type = Constant;
 	expr->numBody = 0;
@@ -25,6 +27,7 @@ void parser_initExpr(AST_expr *expr) {
 	expr->proc = NULL;
 	expr->closure = NULL;
 	expr->value = NULL;
+	expr->stack_allocate = false;
 }
 
 AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel, bool tailPosition) {
@@ -33,7 +36,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 
 	lexer_tokenNode **innerTokens = NULL;
 	int innerNumTokens = 0;
-	int i = 0;
+	int i = 0, j = 0;
 	AST_const *c;
 	lexer_tokenNode *innerFile;
 
@@ -139,14 +142,17 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 									fprintf(stderr, ">> ERROR 8: Malford lambda. No formals given");
 									exit(EXIT_FAILURE);
 								}
-								result->numBody = innerNumTokens-2;
-								result->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-2));
-								for (i=2; i<innerNumTokens-1; i++) {
-									result->body[i-2] = parser_parseExpr(&innerTokens[i], 1, false, false);
-								}
-								//Give the last one tail position:
-								result->body[innerNumTokens-3] = parser_parseExpr(&innerTokens[innerNumTokens-1], 1, false, true);
 
+								tmpLambda = currentLambda;
+								currentLambda = result;
+									result->numBody = innerNumTokens-2;
+									result->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-2));
+									for (i=2; i<innerNumTokens-1; i++) {
+										result->body[i-2] = parser_parseExpr(&innerTokens[i], 1, false, false);
+									}
+									//Give the last one tail position:
+									result->body[innerNumTokens-3] = parser_parseExpr(&innerTokens[innerNumTokens-1], 1, false, true);
+								currentLambda = tmpLambda;
 								//DEBUG printf("Compound Procedure"); 
 								break;
 
@@ -286,13 +292,18 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 												}
 											}
 											
-											result->body[0]->numBody = innerNumTokens-2;
-											result->body[0]->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-2));
-											for (i=2; i<innerNumTokens-1; i++) {
-												result->body[0]->body[i-2] = parser_parseExpr(&innerTokens[i], 1, false, false);
-											}
-											//Give the last one tail position:
-											result->body[0]->body[innerNumTokens-3] = parser_parseExpr(&innerTokens[innerNumTokens-1], 1, false, true);
+
+
+											tmpLambda = currentLambda;
+											currentLambda = result->body[0];
+												result->body[0]->numBody = innerNumTokens-2;
+												result->body[0]->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-2));
+												for (i=2; i<innerNumTokens-1; i++) {
+													result->body[0]->body[i-2] = parser_parseExpr(&innerTokens[i], 1, false, false);
+												}
+												//Give the last one tail position:
+												result->body[0]->body[innerNumTokens-3] = parser_parseExpr(&innerTokens[innerNumTokens-1], 1, false, true);
+											currentLambda = tmpLambda;
 
 									} else {
 										fprintf(stderr, ">> ERROR 14: First operand to DEFINE should be IDENTIFIER or PARENS\n");
@@ -320,7 +331,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 
 							case let:		
 								if (innerNumTokens >= 3 && innerTokens[1]->type == Parens) {
-									result->type = ProcCall;
+									if (tailPosition) result->type = TailCall; else result->type = ProcCall;
 									result->numBody = innerTokens[1]->numChildren;
 									result->body = try_malloc(sizeof(AST_expr*) * innerTokens[1]->numChildren);
 
@@ -329,6 +340,9 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 									result->proc->type = Lambda;
 									result->proc->numFormals = innerTokens[1]->numChildren;
 									result->proc->formal = try_malloc(sizeof(char*) * innerTokens[1]->numChildren);
+
+									// Important:
+									result->proc->stack_allocate = true;
 									
 
 									for (i = 0; i < innerTokens[1]->numChildren; i++) {
@@ -348,9 +362,38 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 									// build result->proc->body
 									result->proc->numBody = innerNumTokens-2;
 									result->proc->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-2));
-									for (i=0; i<innerNumTokens - 2; i++) {
+									for (i=0; i<innerNumTokens - 3; i++) {
 										result->proc->body[i] = parser_parseExpr(&innerTokens[i+2], 1, false, false);
 									}
+
+									result->proc->body[innerNumTokens-3] = parser_parseExpr(&innerTokens[innerNumTokens-1], 1, false, true);
+
+
+									//Bring the current lambda environment into the new let environment:
+									if (currentLambda) {
+										for (i=0; i<currentLambda->numFormals; i++) {
+											char* candidate = currentLambda->formal[i];
+											bool needed = true;
+											for (j=0; j<result->proc->numFormals; j++) {
+												if (strcmp(result->proc->formal[j], candidate) == 0)
+													needed = false;
+											}
+											if (needed) {
+												result->proc->numFormals++;
+												result->proc->formal = try_realloc(result->proc->formal, sizeof(char*) * result->proc->numFormals);
+												result->proc->formal[result->proc->numFormals - 1] = str_clone(candidate);
+												result->numBody++;
+												result->body = try_realloc(result->body, sizeof(AST_expr*) * result->numBody);
+												result->body[result->numBody-1] = try_malloc(sizeof(AST_expr));
+												parser_initExpr(result->body[result->numBody-1]);
+												result->body[result->numBody-1]->type = Variable;
+												result->body[result->numBody-1]->variable = str_clone(candidate);
+
+												//fprintf(stderr, "Pre-closing: %s\n", candidate);
+											}
+										}
+									}
+
 
 									// Add the (free-current-closure!)
 									/*result->proc->body[innerNumTokens-2] = try_malloc(sizeof(AST_expr));

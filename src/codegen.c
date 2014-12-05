@@ -180,10 +180,17 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				fprintf(outputFile, "\tPUSH CRSl\n\tPUSH CRSh\n");
 			}
 			codegen_emit(expr->proc, parent_numArgs, outputFile, expr);
+
+			fprintf(outputFile, "\tIN AFPl, SPl\n\tIN AFPh, SPh\n");
+			if (expr->proc->type == Lambda && expr->proc->stack_allocate)
+				fprintf(outputFile, "\tADIW AFPl, %i\n", (expr->proc->closure->numBinds * 2) + 5);
+			fprintf(outputFile, "\tMOVW GP5, AFPl\n");
+
 			fprintf(outputFile, "\tLDI PCR, %i\n\tJMP proc_call\nproc_ret%i:\n\tPOP CCPl\n\tPOP CCPh\n\tPOP AFPl\n\tPOP AFPh\n", expr->numBody, label1);
 			break;
 
 		case TailCall:
+
 			for (i=0; i<expr->numBody; i++) {
 				codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
 				fprintf(outputFile, "\tPUSH CRSl\n\tPUSH CRSh\n");
@@ -191,19 +198,50 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 
 			codegen_emit(expr->proc, parent_numArgs, outputFile, expr);
 
-			fprintf(outputFile, "\tMOVW TCSl, CRSl\n\tADIW AFPl, %i\n\tOUT SPl, AFPl\n\tOUT SPh, AFPh\n\tSBIW AFPl, %i\n", 2*parent_numArgs, 2*parent_numArgs + 2*expr->numBody);
 
-			for (i=0; i<expr->numBody*2; i++) {
-				fprintf(outputFile, "\tLDD GP1, Z+%i\n\tPUSH GP1\n", (2*expr->numBody) - i);
-			}
-			
-			fprintf(outputFile, "\tMOVW CRSl, TCSl\n\tLDI PCR, %i\n\tJMP proc_call\n", expr->numBody);
+
+			fprintf(outputFile, "\tIN GP3, SPl\n");
+			fprintf(outputFile, "\tIN GP4, SPh\n");
+			if (parent_numArgs > 0)
+				fprintf(outputFile, "\tADIW AFPl, %i\n", 2*parent_numArgs);
+			fprintf(outputFile, "\tOUT SPl, AFPl\n");
+			fprintf(outputFile, "\tOUT SPh, AFPh\n");
+			if (expr->numBody > 0)
+				fprintf(outputFile, "\tSBIW AFPl, %i\n", 2*expr->numBody);
+			fprintf(outputFile, "\tMOVW GP5, AFPl\n");
+			fprintf(outputFile, "\tMOVW AFPl, GP3\n");
+
+			if (expr->proc->type == Lambda && expr->proc->stack_allocate)
+				fprintf(outputFile, "\tADIW AFPl, %i\n", (expr->proc->closure->numBinds * 2) + 5);
+
+			if (expr->numBody > 0)
+				fprintf(outputFile, "\tADIW AFPl, %i\n", 2*expr->numBody);
+
+			fprintf(outputFile, "1:\tCP AFPl, GP3\n");
+			fprintf(outputFile, "\tCPC AFPh, GP4\n");
+			fprintf(outputFile, "\tBREQ 2f\n");			
+			fprintf(outputFile, "\tLD GP1, Z\n");
+			fprintf(outputFile, "\tSBIW AFPl, 1\n");
+			fprintf(outputFile, "\tPUSH GP1\n");
+			fprintf(outputFile, "\tRJMP 1b\n");
+
+			fprintf(outputFile, "2:\tLDI PCR, %i\n", expr->numBody);
+			if (expr->proc->type == Lambda && expr->proc->stack_allocate)
+				fprintf(outputFile, "\tIN CRSh, SPh\n\tIN CRSl, SPl\n\tADIW CRSl, 1\n\tORI CRSh, 192\n");
+			fprintf(outputFile, "\tJMP proc_call\n");
+
 			break;
 
 		case Lambda: 
 			label1 = proc_entry_unique++;
 			label2 = proc_after_unique++;
 			closureEnvironment = expr->closure;
+
+			
+			if (expr->stack_allocate) {
+				//fprintf(stderr, "stack allocating...");
+				fprintf(outputFile, "\tMOVW GP3, HFPl\n\tIN HFPl, SPl\n\tIN HFPh, SPh\n\tSBIW HFPl, %i\n\tOUT SPl, HFPl\n\tOUT SPh, HFPh\n\tADIW HFPl, 1\n", (closureEnvironment->numBinds * 2) + 5);
+			}
 
 			fprintf(outputFile, "\tLDI GP1,%i\n\tST X+, GP1;HFP\n\tLDI GP1, hi8(pm(proc_entry%i))\n\tST X+, GP1\n\tLDI GP1, lo8(pm(proc_entry%i))\n\tST X+, GP1\n", expr->numFormals, label1, label1);
 
@@ -226,7 +264,13 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				lambdaname = expr->variable;
 
 
-			fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSBIW CRSl, %i\n\tORI CRSh, 192\n\tJMP proc_after%i\nproc_entry%i: ; %s\n\tIN AFPl, SPl\n\tIN AFPh, SPh\n", (closureEnvironment->numBinds * 2) + 5, label2, label1, lambdaname);
+			fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSBIW CRSl, %i\n\tORI CRSh, 192\n", (closureEnvironment->numBinds * 2) + 5);
+
+			if (expr->stack_allocate) {
+				fprintf(outputFile, "\tMOVW HFPl, GP3\n");
+			}
+
+			fprintf(outputFile, "\tJMP proc_after%i\nproc_entry%i: ; %s\n\tMOVW AFPl, GP5\n", label2, label1, lambdaname);
 			for (i=0; i<expr->numBody; i++) codegen_emit(expr->body[i], expr->numFormals, outputFile, expr);
 			if (expr->body[expr->numBody-1]->type != TailCall) fprintf(outputFile, "\tADIW AFPl, %i\n\tOUT SPl, AFPl\n\tOUT SPh, AFPh\n\tPOP AFPl\n\tPOP AFPh\n\tIJMP\n", 2 * expr->numFormals);
 			fprintf(outputFile, "proc_after%i:\n", label2);

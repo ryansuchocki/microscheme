@@ -10,7 +10,7 @@
 	enum AST_varRefType { Local, Free, Global };
 	typedef struct AST_expr { enum AST_exprType type; struct AST_const *value; char *variable; char **formal; int numFormals;
 		struct AST_expr **body; int numBody; char *primproc; struct AST_expr *proc; enum AST_varRefType varRefType; int varRefHop;
-		int varRefIndex; struct Environment *closure; } AST_expr;
+		int varRefIndex; struct Environment *closure; bool stack_allocate; } AST_expr;
 
 // Shared function declarations
 	extern AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel, bool tailPosition);
