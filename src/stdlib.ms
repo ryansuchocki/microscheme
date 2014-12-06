@@ -174,15 +174,15 @@
 (define (length lst)
 	(length-aux lst 0))
 
-(define (foldr f z xs)
+(define (fold-right f z xs)
 	(if (null? xs)
 		z
-		(f (car xs) (foldr f z (cdr xs)))))
+		(f (car xs) (fold-right f z (cdr xs)))))
 
-(define (foldl f z xs)
+(define (fold f z xs)
 	(if (null? xs)
 		z
-		(foldl f (f z (car xs)) (cdr xs))))
+		(fold f (f z (car xs)) (cdr xs))))
 
 (define (for-each proc lst)
 	(if (null? lst)
@@ -239,10 +239,10 @@
 (define (vector-concat left right)
 	(let ((destination (make-vector (+ (vector-length left) (vector-length right)))))
 		(free!
-		(let ((writer (make-writer destination 0)))
-			(for-each-vector writer left)
-			(for-each-vector writer right)
-			destination))))
+			(let ((writer (make-writer destination 0)))
+				(for-each-vector writer left)
+				(for-each-vector writer right)
+				destination))))
 
 (define (vector-copy src dest src-start src-finish dest-start)
 	(if (> src-start src-finish)

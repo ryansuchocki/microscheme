@@ -1,7 +1,7 @@
 ;; Ryan Suchocki
 ;; microscheme.org
 
-(define led-pin (output 10))
+(define led-pin (output 13))
 
 (define (loop)
 	(toggle led-pin)

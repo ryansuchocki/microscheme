@@ -327,7 +327,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 								break;
 
 
-
+							// And now for the tricky bit...
 
 							case let:		
 								if (innerNumTokens >= 3 && innerTokens[1]->type == Parens) {
@@ -344,7 +344,6 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 									// Important:
 									result->proc->stack_allocate = true;
 									
-
 									for (i = 0; i < innerTokens[1]->numChildren; i++) {
 										if (innerTokens[1]->children[i]->type == Parens && innerTokens[1]->children[i]->numChildren == 2 
 											&& innerTokens[1]->children[i]->children[0]->type == Identifier) {
@@ -356,7 +355,6 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 											fprintf(stderr, ">> ERROR 16: Malformed Binding");
 											exit(EXIT_FAILURE);
 										}
-										
 									}
 
 									// build result->proc->body
@@ -368,8 +366,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 
 									result->proc->body[innerNumTokens-3] = parser_parseExpr(&innerTokens[innerNumTokens-1], 1, false, true);
 
-
-									//Bring the current lambda environment into the new let environment:
+									//Merge the current lambda environment into the new let environment:
 									if (currentLambda) {
 										for (i=0; i<currentLambda->numFormals; i++) {
 											char* candidate = currentLambda->formal[i];
@@ -393,15 +390,6 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 											}
 										}
 									}
-
-
-									// Add the (free-current-closure!)
-									/*result->proc->body[innerNumTokens-2] = try_malloc(sizeof(AST_expr));
-									parser_initExpr(result->proc->body[innerNumTokens-2]);
-									result->proc->body[innerNumTokens-2]->type = PrimCall;
-									result->proc->body[innerNumTokens-2]->primproc = str_clone("free-current-closure!!");
-									result->proc->body[innerNumTokens-2]->numBody = 0;
-									result->proc->body[innerNumTokens-2]->body = NULL;*/
 										
 
 								} else {

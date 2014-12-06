@@ -109,8 +109,8 @@ before_c_func:
 	RET
 
 after_c_func:
-	CLI
 	IN c_sreg, SREG
+	CLI
 	POP r2
 	POP r3
 		MOVW CRSl, r24
