@@ -1,0 +1,101 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="../css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="../local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Language Guide: Page 4</h2>
+								<h4 class="subheader">A crash course in the particular workings of microscheme</h4>
+
+			
+
+   <h5>Type System</h5>
+
+<p>Microscheme has a strong dynamic type system. It is strong in the sense that:</p>
+<ul><li> All values have a specific, definite type</li>
+<li>No type coersion occurs</li>
+<li>Procedures are generally valid for a specific set of types</li>
+<li>Type exceptions are raised when procedures are applied to values of the wrong type</li></ul>
+<p>It is dynamic in the sense that a variable is not restricted to hold values of a certain type. The type of value to which a variable name will be bound is not known until runtime, and can change as the program progresses.</p>
+
+<p>The built-in types are: <strong>Number</strong>, <strong>Char</strong>, <strong>Boolean</strong>, <strong>Pair</strong>, <strong>Vector</strong>, <strong>&lsquo;The Empty List&rsquo;</strong> aka <strong>null</strong>, which is said to have a type of its own, and <strong>Procedure</strong>. From these basic types we can infer compound types. A <strong>List</strong> is defined to be something of the type <strong>null</strong> or <strong>pair</strong> where the value of the cdr field has type <strong>List</strong>. This definition is effectively implemented by the (list? &hellip;) function in the &lsquo;list.ms&rsquo; library.</p>
+
+<p>Even though the built-in numeric type is fairly restricted (15-bit unsigned integer), a richer numeric stack can be built using combinations of pairs, vectors and numbers. For example, the 'xtypes.ms' library provides types <strong>long</strong> and <strong>fp</strong>, which represent 8-digit unsigned integers, and 4+4 digit fixed-point real numbers respectively.</p>
+
+<p>For every type, there is a predicate function which answers the question 'is this value of type X'. These predicates are consistently formed by appending a question mark to the type name. For example, (number? 4) evaluates to #t. (boolean? 4) evaluates to #f. (boolean? (number? 4)) evaluates to #t.</p>
+
+<p>Procedures for converting between types are formed with an arrow between the type names, e.g. (vector->list a b). These conversions are not provided for many types, but they can be written manually.</p>
+
+
+<hr />
+
+<ul class="pagination" style="float: right;">
+          <li class="arrow"><a href="3">&laquo;</a></li>
+          <li><a href="../guide">1</a></li>
+          <li><a href="2">2</a></li>
+          <li><a href="3">3</a></li>
+          <li class="current"><a>4</a></li>
+          <li><a href="5">5</a></li>
+          <li><a href="6">6</a></li>
+	  <li><a href="7">7</a></li>
+          <li class="arrow"><a href="5">&raquo;</a></li>
+        </ul>
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="../logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="../">About</a></li>
+						<li class="divider"></li>
+						<li><a href="../download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="../workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="../examples">Examples</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="../guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="../caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="../help">Help</a></li>
+						<li class="divider" ></li>
+
+	<li style="color: #BBB">&copy; Ryan Suchocki</li>
+					</ul>
+				<div>
+			</section>
+		</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+	</body>
+</html>

@@ -1,0 +1,138 @@
+
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>microscheme.org</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+    <link type="text/css" rel="stylesheet" href="css/foundation.css" />
+    <link type="text/css" rel="stylesheet" href="local.css" />
+    <script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+  </head>
+  <body>
+    <div class="inner-wrap">
+      <section id="main-content">
+        <div class="row">
+    <div class="large-10 medium-10 columns push-2">
+      <div class="row">
+        <div class="large-12 medium-12 columns">
+          <h2>Getting Started</h2>
+          <h4 class="subheader">Downloading microscheme and its pre-requisites&hellip;</h4>
+
+          <h5>Microscheme Compiler</h5>
+          <p>The microscheme compiler is written in pure C (99), and relies only on standard C libraries. Linux and MS Windows binaries are provided. The current release is <strong>v0.8</strong>, build <strong>511</strong></p>
+	<div class="alert-box"><strong>Update Alert</strong> Version 0.8 now available, featuring arbitrary lambda nesting and multiple-include protection.</div>
+
+            <div class="row">
+              <div class="large-6 columns">
+                <div class="panel callout">
+                  <h5>Linux Binaries</h5>
+                  <p style="font-size: 0.9em">A .tar.gz archive containing the compiler, libraries, example program, and a makefile for automating the build process</p>
+                  <p style="text-align: center;"><a href="/binaries/microscheme_0.8_BUILD511_linux_32.tar.gz" class="button tiny" style="color: #FFFFFF; margin-bottom: 0px;" onClick="ga('send', 'event', 'link', 'click', 'dllinux32live');" target="_blank">32-bit Linux</a>
+                    <a href="/binaries/microscheme_0.8_BUILD511_linux_64.tar.gz" class="button tiny" style="color: #FFFFFF; margin-bottom: 0px;" onClick="ga('send', 'event', 'link', 'click', 'dllinux64live');" target="_blank">64-bit Linux</a></p>
+                </div>
+              </div>
+
+	      <div class="large-6 columns">
+		<div class="panel callout">
+		  <h5>Windows Binaries</h5>
+		  <p style="font-size: 0.9em">A ZIP archive containing the compiler, libraries and example program.</p>
+ <p style="text-align: center;"><a href="/binaries/microscheme_0.8_BUILD511_win_32.zip" class="button tiny" style="color: #FFFFFF; margin-bottom: 0px;" onClick="ga('send', 'event', 'link', 'click', 'dlwin32live');" target="_blank">32-bit Windows</a>
+                    <a href="/binaries/microscheme_0.8_BUILD511_win_64.zip" class="button tiny" style="color: #FFFFFF; margin-bottom: 0px;" onClick="ga('send', 'event', 'link', 'click', 'dlwin64live');" target="_blank">64-bit Windows</a></p>
+		  </div>
+		</div>
+
+
+            </div>
+
+
+          <hr />
+
+          <h5>License</h5>
+          <p>The standalone binaries provided here are released under the (CC BY-NC-ND 4.0) license
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/deed.en_GB"><img alt="Creative Commons Licence" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>.
+          </p>
+
+<hr />
+<h5>Changelog</h5>
+<ul>
+<li>Version 0.8, Build 511: Arbitrary lambda nesting (fixed closures). Multiple-include protection.</li>
+<li>Version 0.7, Build 400: Full any-dimensional vector support. Minor bug-fixes.</li>
+<li>Version 0.7, Build 363: Improved performance, full arduino UNO support</li>
+<li>Version 0.6: Initial release. Full arduino MEGA support.</li>
+</ul>
+
+<hr />
+
+ <h5>Source</h5>
+                  <p>Since this compiler is my final-year (dissertation) project, the code will not be available until it is submitted and marked</p>
+
+          <hr />
+
+          <h5>Required tools</h5>
+          <p>Microscheme compiles your programs, but it does not assemble, link, or upload them. These functions are provided by avr-gcc and avrdude, which are available in mainstream Linux repositories. For example:</p>
+		<p>On Arch Linux, run:
+<pre style="margin-top:-12px;"><code>    $ sudo pacman -S avr-gcc
+    $ sudo pacman -S avrdude</code></pre></p>
+
+		<p>On Ubuntu, run:
+
+<pre style="margin-top:-12px;"><code>    $ sudo apt-get install gcc-avr
+    $ sudo apt-get install avrdude</code></pre></p>
+		<p>The <a href="http://winavr.sourceforge.net/">winavr</a> project provides a port of both these tools for MS Windows.</p>
+
+
+          
+        </div>
+        
+      </div>
+ 
+</div>
+
+        <div class="large-2 medium-2 columns pull-10">
+          <ul class="side-nav">
+            <li style="text-align: center;"><img src="logosmall.png"</li>
+            <li class="divider" ></li>
+            <li><a href="/">About</a></li>
+            <li class="divider"></li>
+            <li class="active"><a href="download">Download</a></li>
+            <li class="divider"></li>
+            <li><a href="workflow">Workflow</a></li>
+            <li class="divider"></li>
+            <li><a href="examples">Examples</a></li>
+            <li class="divider"></li>
+            <li><a href="guide">Language Guide</a></li>
+            <li class="divider"></li>
+            <li><a href="caveats">Caveats</a></li>
+            <li class="divider"></li>
+            <li><a href="help">Help</a></li>
+            <li class="divider" ></li>
+	<li style="color: #BBB">&copy; Ryan Suchocki</li>
+          </ul>
+        <div>
+      </section>
+    </div>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
+
+
+
+
+
+

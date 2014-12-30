@@ -1,0 +1,60 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Help</h2>
+
+
+								<h5>Frequently Asked Questions</h5>
+								<p>There aren't any yet!</p>
+
+								<h5>Contact Details</h5>
+								<p >Feel free to contact me with questions, requests, and general feedback by emailing ryan [at] ryansuchocki [dot] co [dot] uk</p>
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="/">About</a></li>
+						<li class="divider"></li>
+						<li><a href="download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="examples">Examples</a></li>
+						<li class="divider"></li>
+						<li><a href="guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="help">Help</a></li>
+						<li class="divider" ></li>
+					</ul>
+				<div>
+			</section>
+		</div>
+	</body>
+</html>

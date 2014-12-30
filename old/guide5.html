@@ -1,0 +1,119 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="../css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="../local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Language Guide: Page 5</h2>
+								<h4 class="subheader">A crash course in the particular workings of microscheme</h4>
+
+
+<h5>Microscheme Libraries</h5>
+<p>Microscheme supports the (include &hellip;) primitive, which effectively loads the whole contents of another file into the program. This allows commonly used program segments to be saved in 'libraries' that can be included in any other program. Typically, libraries contain definitions, but do not perform any input or output, so including them simply makes a set of procedures and data structures available to the program. Some useful libraries are included with microscheme, and more will become available as the project matures:</p>
+
+<p><strong>libraries/io.ms</strong> provides digital Input/Output functionality. This allows you to work with the Arduino's digital I/O pins, using the indices given to them on the arduino board. It provides the procedures:
+<ul><li><strong>(set-ddr N X)</strong> to set the DDR (data-direction-register) for a pin. <strong>N</strong> is the pin number. <strong>X</strong> is #f for &lsquo;input&rsquo; and #t for &lsquo;output&rsquo;.</li>
+<li><strong>(get-ddr N)</strong> returns a boolean representing the DDR value for pin <strong>N</strong>. #t means &lsquo;output&rsquo;.</li>
+<li><strong>(set-pin N Y)</strong> sets the value (high or low) for pin <strong>N</strong>. </li>
+<li><strong>(set-pin N Y)</strong> gets the value (high or low) of pin <strong>N</strong>.</li>
+</ul></p>
+
+<p><strong>libraries/list.ms</strong> provides various functions for working with <em>lists</em>, which are linear data structures built using pairs and null. Procedures provided include:
+<ul>
+<li><strong>(list? X)</strong> returns true if and only if <strong>X</strong> is a list.</li>
+<li><strong>(reverse X)</strong> if <strong>X</strong> is a list, returns a new list which is the reverse of it.</li>
+<li><strong>(map P X)</strong> returns a list formed by performing procedure <strong>P</strong> on every element of list <strong>X</strong>.</li>
+<li><strong>foldr, foldl, for-each, all</strong> various common higher-order list procedures.</li>
+<li><strong>(vector->list V)</strong> returns a list whose elements are identical to those of vector <strong>V</strong>.</li>
+</ul>
+
+NB: the primitive (list &hellip;) for building lists is built-in, and implemented efficiently by the compiler.</p>
+
+<p><strong>libraries/long.ms</strong> provides an implementation for 8-digit unsigned integers:
+<ul><li><strong>(long hi lo)</strong> forms a long where <strong>hi</strong> represents the high four digits and <strong>lo</strong> represents the low four digits of the number. The number 994020 is produced by <code>(long 99 4020)</code>.</li>
+<li><strong>(hi X)</strong> and <strong>(lo X)</strong> extract the high and low parts of a long.</li>
+<li><strong>(long? X)</strong> returns true if <strong>X</strong> is a valid <em>long</em>. Warning: any <strong>pair</strong> of numbers will satisfy this.</li>
+<li><strong>l+ l- l* l/</strong> standard arithmetic operators. (NB: l* and l/ are slow, software-based implementations.</li>
+<li><strong>l++ l-- l**</strong> are in-place versions of l+ l- and l*. i.e. <code>(l++ lX lY)</code> is equivalent to <code>(set! lX (l+ lX lY))</code>, but allocates no new memory. You should use these operators wherever possible</li>
+<li><strong>l= l&lt; l&gt; l&lt;= l&gt;=</strong> standard numeric comparators.</li>
+</ul>
+</p>
+
+<p><strong>libraries/fixedpoint.ms</strong> provides an implementation for 5+5 digit unsigned fixed-point reals:
+</p>
+
+<p>NB: including the xtypes library has the same effect as including long and fixedpoint individually, but saves memory by taking advantage of the overlap between their functions.</p>
+
+
+<hr />
+
+<ul class="pagination" style="float: right;">
+          <li class="arrow"><a href="4">&laquo;</a></li>
+          <li><a href="../guide">1</a></li>
+          <li><a href="2">2</a></li>
+          <li><a href="3">3</a></li>
+          <li><a href="4">4</a></li>
+          <li class="current"><a>5</a></li>
+          <li><a href="6">6</a></li>
+	  <li><a href="7">7</a></li>
+          <li class="arrow"><a href="6">&raquo;</a></li>
+        </ul>
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="../logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="../">About</a></li>
+						<li class="divider"></li>
+						<li><a href="../download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="../workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="../examples">Examples</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="../guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="../caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="../help">Help</a></li>
+						<li class="divider" ></li>
+
+	<li style="color: #BBB">&copy; Ryan Suchocki</li>
+					</ul>
+				<div>
+			</section>
+		</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+	</body>
+</html>

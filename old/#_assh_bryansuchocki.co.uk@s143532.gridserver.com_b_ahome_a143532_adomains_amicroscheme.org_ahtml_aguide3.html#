@@ -1,0 +1,115 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="../css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="../local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Language Guide: Page 3</h2>
+								<h4 class="subheader">A crash course in the particular workings of microscheme</h4>
+
+			
+
+   <h5>Primitive Procedures</h5>
+
+<p>Primitive procedures are procedures that are built-in to the language. This means that the compiler produces efficient low-level routines for them.</p>
+
+<p>One key difference with microscheme primitive
+
+
+<ul><li>
+<p style="font-weight: bold; margin-bottom: 0px;">Assignment: (set! &lt;name&gt; &lt;expr&gt;)</p>
+							    <p>Assignment looks just like definition, but with the &lsquo;set!&rsquo; keyword instead of &lsquo;define&rsquo;. This is used to <em>change</em> the value to which some variable name is bound. That could be a global variable, which is introduced by (define &hellip;), a procedure argument, or a local variable introduced by (let &hellip;) The set keyword includes an exclamation mark to remind you that it is changing the state of the system; and this is why Scheme is considered not to be purely functional. </p></li>
+
+							    <li>
+<p style="font-weight: bold; margin-bottom: 0px;">Conditional: (&lt;predicate&gt; &lt;consequent&gt; &lt;alternative&gt;)</p>
+							    <p>The conditional form takes at least a <em>predicate</em> and a <em>consequent</em>, and optinally an <em>alternative</em>. Each of these are expressions of any kind. If the predicate evaluates to true (In Scheme, anything other than false, denoted #f, counts as true) then the consequent will be evaluated. If the predicate evaluates to false, and an alternative is given, then it will be evaluated. This is subtly different from the conditional branches of imperative programming. As well as making a decision about which expression to evaluate, the conditional itself inherits the value of whichever branch is chosen. This means you can use the whole expression as a subexpression, whose value depends on the predicate. e.g. <code>(+ 1 (if (= 2 3) 7 13))</code> evaluates to 14.</p></li>
+
+							    <li>
+<p style="font-weight: bold; margin-bottom: 0px;">Conjunction: (and A B C &hellip;)</p>
+							    <p>The conjunction form takes any number of arguments, each of which is a subexpression. It will evaluate those expressions in order. If it reaches one that evaluates to false (denoted #f), then it will stop and return #f. If none of them evaluates to #f, then the value of the final expression will be returned (remember, anything other than #f is considered true). Using this form with zero arguments is equivalent to the true constant #t. </p>
+</li>
+
+<li>
+<p style="font-weight: bold; margin-bottom: 0px;">Disjunction: (or A B C &hellip;)</h5>
+<p>Like conjunction, this disjunction form evaluates each of its arguments in order. If any one of them evaluates to <em>anything other than #f</em>, it stops and returns that value. If it reaches the end of the list, and every expression evaluated to #f, then it returns #f. Using this form with zer oarguments is equivalent to the false constant #f.</p>
+
+<p>When used with <strong>Boolean</strong> type values, the conjunctive and disjunctive forms work just like boolean operators in imperative languages. <code>(or #f #t #f)</code> evaluates to #t and so forth. In Scheme, however, these forms perform a much more powerful function. Since they are variadic, and will keep evaluating until a false or true subexpression is reached respectively, they can be used as control-flow mechanisms in place of nested (if &hellip;) forms.</p>
+
+</li>
+
+<li>
+<p style="font-weight: bold; margin-bottom: 0px;">
+Local Binding: (let ((a X) (b Y) (c Z) &hellip;) B &hellip;)</p>
+
+<p>The let form is used to bind names to values only for a specific part of the program. The first argument to let is a list of binding pairs. Each binding pair is a pair of brackets containing a variable name and an expression. The expressions that are given as the body &lsquo;B &hellip;&rsquo; are evaluated with those names bound to their corrseponding values, and the value of the final expression is returned. Those bindings do not persist outside of the let form. For any code outside of the let's parentheses, the variables a b c &hellip; are unchanged, and may not be defined at all. </p>
+
+<p>Important nuances: <ol><li>Even if you only give one binding pair, the parentheses around the list of binding pairs is still needed. Hence, you end up with double brackets: <code>(let ((x 5)) (+ x 1))</code>. Missing those is a common mistake.</li><li>The variable bindings apply in the body, but not within other binding pairs in the list. i.e., the expression Y should not rely on X being bound to a.</li></ol></p></li>
+
+<li>
+<p style="font-weight: bold; margin-bottom: 0px;">
+Sequence: (begin B1 B2 &hellip;)</p>
+<p>Finally, you can group together expressions with the sequencial form, using the <em>begin</em> keyword. The whole thing is treated as one expression, whose subexpressions are executed in sequence. As usual, the value of the final subexpression is returned for the overall expression. <p>
+
+<p>You can use this in cases where you want to guarantee a group of expressions will be evaluated, or where you want to give multiple expressions in a context where only one is expected.</p>
+
+<p><code>(+ 1 (begin 2 4 6))</code> evaluates to 7. The subexpressions 2 and 4 are evaluated, but they have no effect. 6 is evaluated and returned to the outer + procedure.</p></li>
+</ul>
+
+<hr />
+
+<ul class="pagination" style="float: right;">
+          <li class="arrow"><a href="../guide">&laquo;</a></li>
+          <li><a href="../guide">1</a></li>
+          <li class="current"><a>2</a></li>
+          <li><a href="3">3</a></li>
+          <li><a href="4">4</a></li>
+          <li><a href="5">5</a></li>
+          <li><a href="6">6</a></li>
+          <li class="arrow"><a href="3">&raquo;</a></li>
+        </ul>
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="../logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="../">About</a></li>
+						<li class="divider"></li>
+						<li><a href="../download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="../workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="../examples">Examples</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="../guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="../caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="../help">Help</a></li>
+						<li class="divider" ></li>
+					</ul>
+				<div>
+			</section>
+		</div>
+	</body>
+</html>

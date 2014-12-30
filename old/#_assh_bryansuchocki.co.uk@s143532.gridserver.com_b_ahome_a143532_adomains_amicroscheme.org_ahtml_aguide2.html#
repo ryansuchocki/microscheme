@@ -1,0 +1,98 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="../css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="../local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Language Guide: Page 2</h2>
+								<h4 class="subheader">A crash course in the particular workings of microscheme</h4>
+
+							
+
+   <h5>Fundemental Forms (continued)</h5>
+
+
+<ul><li>
+<p style="font-weight: bold; margin-bottom: 0px;">Assignment: (set!  B &hellip;)</p>
+							    <p>Every fundemental form is surrounded by a pair of parentheses (brackets). The lambda form produces a procedure (a computational unit which models some function). Its name reflects that fact that it represents a <em>lambda abstraction</em> as found in <a href="http://en.wikipedia.org/wiki/Lambda_calculus">Lambda Calculus</a>. The keyword <em>lambda</em> is followed by a list of variable names, which are the arguments of the procedure; as well as one or more expressions which form the body of the procedure. When the procedure is applied (i.e. called, invoked) the body expressions are executed in order, and the value of the final expression is returned. Procedures produced in this way are intrinsically anonymous in Scheme, and they are first-class values. This means that the lambda form evaluates to an <em>thing</em> representing the procedure, which is not automatically given a name. We can bind that <em>thing</em> to a name using (define ...), but we are not obliged to. Instead, we could pass it directly to another procedure, or return it from an enclosing procedure. For example, <code>(lambda (x) (+ x 1))</code> represents a procedure which takes one argument, assumes it has type <strong>number</strong>, and returns the number 1 higher.</p></li>
+
+							    <li>
+<p style="font-weight: bold; margin-bottom: 0px;">Application: (&lt;procedure&gt; A B C &hellip;)</p>
+							    <p>The <em>procedure application</em> form does not contain any keywords. It is composed by writing an expression &lt;procedure&gt;, followed by some number of arguments, all inside a pair of parentheses. The &lt;procedure&gt; expression must evaluate to a procedure in some way. That means it can either be a primitive procedure name (as listed below), a lambda expression, a variable name, or another procedure application. If you give a variable name, then that variable must be bound to a procedure by the time the application is reached. If you give another procedure application as &lt;procedure&gt;, then that application must return something of type <strong>procedure</strong>. In any case, the number of arguments (A B C &hellip;) given must match the number of arguments expected by &lt;procedure&gt;. &lsquo;+&rsquo; is the name of a primitive procedure, taking two arguments. Hence, <code>(+ 3 7)</code> is a valid procedure application which evaluates to 10. Since expressions of any complexity can be used as the two arguments to +, and likewise for other math operators, this form can be used to write any arithmetic expression in <a href="http://en.wikipedia.org/wiki/Polish_notation">prefix notation</a>. To give a richer example, the code given for the lambda form above is a valid expression, which evaluates to something of type <strong>procedure</strong>, expecting a single numeric argument. So, we can form an application like this: (&lt;example from above&gt; &lt;any numeric argument&gt;). Writing it out in full gives: <code>((lambda (x) (+ x 1)) 5)</code> which evaluates to 6.</p></li>
+
+							    <li>
+<p style="font-weight: bold; margin-bottom: 0px;">Definition: (define &lt;name&gt; &lt;expr&gt;)</p>
+							    <p>The two forms we've seen so far are actually powerful enough to express any program that our electronic computers can compute. (See <a href="http://en.wikipedia.org/wiki/Lambda_calculus#Computable_functions_and_lambda_calculus">wikipedia, of course</a>) But, in practice, we can get a lot more done if we give names to things, and use them over and over again. The define form takes a variable name and an expression. It evaluates the expression, and binds the result to the given name (i.e., it stores the result in the variable &lt;name&gt;). From that point onwards, &lt;name&gt; refers to the <em>thing</em> produced by the expression, which could be of any type, even <strong>procedure</strong>.</p>
+
+<p>Combining the three forms above, we can write the following program, which results in the variable 'theothernumber' being bound to the value 6.
+<pre><code>(define plusone (lambda (x) (+ x 1)))
+(define thenumber 5)
+(define theothernumber (plusone 5))
+ </code></pre></li>
+
+<li>
+<p style="font-weight: bold; margin-bottom: 0px;">Definition (again): (define (&lt;proc&gt; X Y Z &hellip;) B &hellip;)</h5>
+<p>Since the pattern for defining a named function: (define &lt;procname&gt; (lambda (&hellip;) &hellip;)) is so frequently used in Scheme programs, a shorthand notation is provided for it. The first definition of the program above can be rewritten as <code>(define (plusone x) (+ x 1))</code>. Under Scheme's semmantics, these expressions are precisely equivalent. It is (slightly) important that the programmer realises that this is a <em>library form</em>, i.e. it is compiled just as a lambda <em>inside</em> a define form.</p></li>
+
+
+</ul>
+
+<hr />
+
+<ul class="pagination" style="float: right;">
+          <li class="arrow"><a href="../guide">&laquo;</a></li>
+          <li><a href="../guide">1</a></li>
+          <li class="current"><a href="2">2</a></li>
+          <li><a href="3">3</a></li>
+          <li><a href="4">4</a></li>
+          <li><a href="5">5</a></li>
+          <li><a href="6">6</a></li>
+	  <li><a href="7">7</a></li>
+          <li class="arrow"><a href="3">&raquo;</a></li>
+        </ul>
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="../logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="/">About</a></li>
+						<li class="divider"></li>
+						<li><a href="download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="examples">Examples</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="help">Help</a></li>
+						<li class="divider" ></li>
+					</ul>
+				<div>
+			</section>
+		</div>
+	</body>
+</html>

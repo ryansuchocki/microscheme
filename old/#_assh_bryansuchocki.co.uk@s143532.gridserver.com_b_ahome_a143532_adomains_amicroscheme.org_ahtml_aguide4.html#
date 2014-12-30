@@ -1,0 +1,93 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="../css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="../local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Language Guide: Page 4</h2>
+								<h4 class="subheader">A crash course in the particular workings of microscheme</h4>
+
+			
+
+   <h5>Type System</h5>
+
+<p>Primitive procedures are procedures that are built-in to the language. This means that the compiler produces efficient low-level routines for them.</p>
+
+<p>Unlike full-blown Scheme, microscheme primitives are not first-class. i.e., they can only appear in the function application form. This is a problem when you want to pass a primitive function as the argument to a higher-order function such as map. For example, you may want to invert a list of Booleans: <code>(map not list_of_booleans)</code>.</p>
+
+<p>The solution is to make a simple wrapper-function which is first-class but performs the same function as the primitive you want to work with: <code>(define (not* x) (not x))</code>.</p>
+
+<p>Then, you are free to use it as a value: <code>(map not* list_of_booleans)</code>. This might seem annoying, but it is not without good reason. Making all primitive functions first-class would tie up around .5 KB of RAM. On the arduino, RAM is precious. This compromise ammounts to you, the programmer, telling the compiler exactly which primitives need to be loaded into RAM. For the vast majority of programs, this ammounts to a massive memory saving. </p>
+
+<h5>Available Primitives</h5>
+<p>The primitive procedures built-in to compiler version 0.6 are:</p>
+<ul>
+<li>=, >, >=, <, <=, not</li>
+<li>+, -, *, div, mod, zero?</li>
+<li>number?, pair?, vector?, procedure?, char?, boolean?, null?</li>
+<li>cons, car, cdr, set-car!, set-cdr!</li>
+<li>list, vector</li>
+<li>vector-length, vector-ref, vector-set!</li>
+<li>assert, error</li>
+<li>include, stacksize, heapsize, pause</li>
+<li>serial-send, digital-state, set-digital-state</li>
+</ul>
+
+<hr />
+
+<ul class="pagination" style="float: right;">
+          <li class="arrow"><a href="2">&laquo;</a></li>
+          <li><a href="../guide">1</a></li>
+          <li><a href="2">2</a></li>
+          <li class="current"><a>3</a></li>
+          <li><a href="4">4</a></li>
+          <li><a href="5">5</a></li>
+          <li><a href="6">6</a></li>
+          <li class="arrow"><a href="4">&raquo;</a></li>
+        </ul>
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="../logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="../">About</a></li>
+						<li class="divider"></li>
+						<li><a href="../download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="../workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="../examples">Examples</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="../guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="../caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="../help">Help</a></li>
+						<li class="divider" ></li>
+					</ul>
+				<div>
+			</section>
+		</div>
+	</body>
+</html>
