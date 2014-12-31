@@ -67,6 +67,19 @@
 		(and (pair? x) 
 			(list? (cdr x)))))
 
+(define (serial-init)
+	; Set Baud Rate registers
+	(asm "LDI GP1,	hi8(BAUD_9600)")
+	(asm "STS	UBRR0H,	GP1				;; ..1H for mega 1")
+	(asm "LDI	GP1,	lo8(BAUD_9600)")
+	(asm "STS	UBRR0L,	GP1				;; ..1L for mega 1")
+
+	; Set control registers
+	(asm "CLR GP1")
+	(asm "SBR GP1,	TXENm")
+	(asm "SBR GP1,	RXENm")
+	(asm "STS UCSR0B,	GP1				;; ..1B for mega 1"))
+
 
 ;; Digital Input/Output
 

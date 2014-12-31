@@ -63,17 +63,17 @@ LDI		AFPh,	hi8(__stack)
 SBI	DDR13,	P13
 CBI	PORT13,	P13
 
-; Set Baud Rate registers
-	LDI GP1,	hi8(BAUD_9600)
-	STS	UBRR0H,	GP1				;; ..1H for mega 1
-	LDI	GP1,	lo8(BAUD_9600)
-	STS	UBRR0L,	GP1				;; ..1L for mega 1
+# ; Set Baud Rate registers
+# 	LDI GP1,	hi8(BAUD_9600)
+# 	STS	UBRR0H,	GP1				;; ..1H for mega 1
+# 	LDI	GP1,	lo8(BAUD_9600)
+# 	STS	UBRR0L,	GP1				;; ..1L for mega 1
 
-; Set control registers
-	CLR GP1
-	SBR GP1,	TXENm
-	SBR GP1,	RXENm
-	STS UCSR0B,	GP1				;; ..1B for mega 1
+# ; Set control registers
+# 	CLR GP1
+# 	SBR GP1,	TXENm
+# 	SBR GP1,	RXENm
+# 	STS UCSR0B,	GP1				;; ..1B for mega 1
 
 RJMP entry_point
 
