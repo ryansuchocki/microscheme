@@ -9,6 +9,9 @@
 ;"@if-model-mega", 
 ;"@if-model-uno",
 ;"@if-model-leo"
+;call-c-func
+;asm
+;include-asm
 
 ;; Primitives
 

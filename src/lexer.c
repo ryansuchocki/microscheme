@@ -283,7 +283,6 @@ void lexer_freeTokenTree(lexer_tokenNode* tree) {
 lexer_tokenNode *lexer_lexFile(char *filename, lexer_tokenNode *root) {
 	char ch;
 	FILE *fp;
-	int err = 0;
 
 	fileLine = 1;
 
@@ -325,10 +324,7 @@ lexer_tokenNode *lexer_lexFile(char *filename, lexer_tokenNode *root) {
 }
 
 lexer_tokenNode *lexer_lexBlob(unsigned char *blob, unsigned int length, lexer_tokenNode *root) {
-	char ch;
 
-	int err = 0;
-	
 	if (root == NULL) {
 		root = try_malloc(sizeof(lexer_tokenNode));
 		root->type = Parens;
@@ -340,7 +336,7 @@ lexer_tokenNode *lexer_lexBlob(unsigned char *blob, unsigned int length, lexer_t
 
 	lexer_openNode = root;
 	
-	int i;
+	unsigned int i;
 	for (i = 0; i < length; i++) {
 		lexer_lex(blob[i]);
 	}

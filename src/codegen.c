@@ -24,14 +24,14 @@ extern Environment *globalEnv;
 extern bool opt_aggressive;
 extern char *model;
 
-void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr *parent) {
+void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 	int i, label1, label2, n;
 	Environment *closureEnvironment;
 
 	switch(expr->type) {
 		case Sequence: 
 			for (i=0; i<expr->numBody; i++)
-				codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[i], parent_numArgs, outputFile);
 			break;
 
 		case Constant: 
@@ -72,31 +72,31 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 		case Branch:
 			label1 = if_end_unique++;
 			label2 = if_conseq_unique++;
-			codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+			codegen_emit(expr->body[0], parent_numArgs, outputFile);
 			fprintf(outputFile, "\tCPSE CRSh, falseReg\n\tJMP if_conseq%i\n", label2);
-			if (expr->numBody == 3) codegen_emit(expr->body[2], parent_numArgs, outputFile, expr);
+			if (expr->numBody == 3) codegen_emit(expr->body[2], parent_numArgs, outputFile);
 			fprintf(outputFile, "\tJMP if_end%i\nif_conseq%i:\n", label1, label2);
-			codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+			codegen_emit(expr->body[1], parent_numArgs, outputFile);
 			fprintf(outputFile, "if_end%i:\n", label1);
 			break;
 
 		case And:
 			label1 = and_end_unique++;
 			for (i=0; i<expr->numBody-1; i++) {
-				codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[i], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCPSE CRSh, falseReg\n\tRJMP 1f\n\tJMP and_end%i\n1:", label1);
 			}
-			codegen_emit(expr->body[expr->numBody-1], parent_numArgs, outputFile, expr);
+			codegen_emit(expr->body[expr->numBody-1], parent_numArgs, outputFile);
 			fprintf(outputFile, "and_end%i:\n", label1);
 			break;
 
 		case Or:
 			label1 = or_end_unique++;
 			for (i=0; i<expr->numBody-1; i++) {
-				codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[i], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCPSE CRSh, falseReg\n\tJMP or_end%i\n", label1);
 			}
-			codegen_emit(expr->body[expr->numBody-1], parent_numArgs, outputFile, expr);
+			codegen_emit(expr->body[expr->numBody-1], parent_numArgs, outputFile);
 			fprintf(outputFile, "or_end%i:\n", label1);
 			break;
 
@@ -138,12 +138,12 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 		case Assignment:
 			switch(expr->varRefType) {
 				case Local: 
-					codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+					codegen_emit(expr->body[0], parent_numArgs, outputFile);
 					fprintf(outputFile, "\tSTD Z+%i, CRSh\n\tSTD Z+%i, CRSl\n", 2*(parent_numArgs - expr->varRefIndex) - 1, 2*(parent_numArgs - expr->varRefIndex));
 					break;
 
 				case Free: 
-					codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+					codegen_emit(expr->body[0], parent_numArgs, outputFile);
 					fprintf(outputFile, "\tMOVW GP1, CRSl\n\tMOVW CRSl, CCPl\n");
 
 					for (i=1; i < expr->varRefHop; i++) // traverse the closure-chain
@@ -157,12 +157,12 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 					if (opt_aggressive) {
 						if (globalEnv->realAddress[expr->varRefIndex] >= 0) {
 							//int realAddress = globalEnv->realAddress[expr->varRefIndex];
-							codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+							codegen_emit(expr->body[0], parent_numArgs, outputFile);
 							//fprintf(outputFile, "\tSTS RAM + %i, CRSh\n\tSTS RAM + %i, CRSl\n", (2 * realAddress), 1 + (2 * realAddress));
 							fprintf(outputFile, "\tSTS _global_%i+1, CRSh\n\tSTS _global_%i, CRSl\n", globalEnv->realAddress[expr->varRefIndex], globalEnv->realAddress[expr->varRefIndex]);
 						}
 					} else {
-						codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+						codegen_emit(expr->body[0], parent_numArgs, outputFile);
 						//fprintf(outputFile, "\tSTS RAM + %i, CRSh\n\tSTS RAM + %i, CRSl\n", (2 * expr->varRefIndex), 1 + (2 * expr->varRefIndex));
 						fprintf(outputFile, "\tSTS _global_%i+1, CRSh\n\tSTS _global_%i, CRSl\n", expr->varRefIndex, expr->varRefIndex);
 					}
@@ -176,10 +176,10 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 			label1 = proc_ret_unique++;
 			fprintf(outputFile, "\tPUSH AFPh\n\tPUSH AFPl\n\tPUSH CCPh\n\tPUSH CCPl\n\tLDI GP1, hi8(pm(proc_ret%i))\n\tPUSH GP1\n\tLDI GP1, lo8(pm(proc_ret%i))\n\tPUSH GP1\n", label1, label1);
 			for (i=0; i<expr->numBody; i++) {
-				codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[i], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSl\n\tPUSH CRSh\n");
 			}
-			codegen_emit(expr->proc, parent_numArgs, outputFile, expr);
+			codegen_emit(expr->proc, parent_numArgs, outputFile);
 
 			fprintf(outputFile, "\tIN AFPl, SPl\n\tIN AFPh, SPh\n");
 			if (expr->proc->type == Lambda && expr->proc->stack_allocate)
@@ -192,11 +192,11 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 		case TailCall:
 
 			for (i=0; i<expr->numBody; i++) {
-				codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[i], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSl\n\tPUSH CRSh\n");
 			}
 
-			codegen_emit(expr->proc, parent_numArgs, outputFile, expr);
+			codegen_emit(expr->proc, parent_numArgs, outputFile);
 
 
 
@@ -271,7 +271,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 			}
 
 			fprintf(outputFile, "\tJMP proc_after%i\nproc_entry%i: ; %s\n\tMOVW AFPl, GP5\n", label2, label1, lambdaname);
-			for (i=0; i<expr->numBody; i++) codegen_emit(expr->body[i], expr->numFormals, outputFile, expr);
+			for (i=0; i<expr->numBody; i++) codegen_emit(expr->body[i], expr->numFormals, outputFile);
 			if (expr->body[expr->numBody-1]->type != TailCall) fprintf(outputFile, "\tADIW AFPl, %i\n\tOUT SPl, AFPl\n\tOUT SPh, AFPh\n\tPOP AFPl\n\tPOP AFPh\n\tIJMP\n", 2 * expr->numFormals);
 			fprintf(outputFile, "proc_after%i:\n", label2);
 
@@ -279,68 +279,68 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 
 		case PrimCall:
 			if ((strcmp(expr->primproc, "=") == 0 || strcmp(expr->primproc, "eq?") == 0) && expr->numBody == 2) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSl\n\tPUSH CRSh\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP2\n\tPOP GP1\n\tCP GP2, CRSh\n\tBRNE 1f\n\tLDI CRSh, trueHigh\n\tCPSE GP1, CRSl\n\t1:LDI CRSh, falseHigh\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "zero?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tMOVW GP1, CRSl\n\tCP zeroReg, CRSh\n\tBRNE 1f\n\tLDI CRSh, trueHigh\n\tCPSE zeroReg, CRSl\n\t1:LDI CRSh, falseHigh\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "¬") == 0 && expr->numBody == 1) {
 				// A quick, binary-valid not:
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tLDI GP1, 1\n\tEOR CRSh, GP1\n");
 			}
 
 			else if (strcmp(expr->primproc, "not") == 0 && expr->numBody == 1) {
 				// the (false? ...) version of not:
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tMOVW GP1, CRSl\n\tCP falseReg, CRSh\n\tBRNE 1f\n\tLDI CRSh, trueHigh\n\tCPSE zeroReg, CRSl\n\t1:LDI CRSh, falseHigh\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "+") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tADD CRSl, GP1\n\tADC CRSh, GP2\n");
 			}
 
 			else if (strcmp(expr->primproc, "-") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tSUB CRSl, GP1\n\tSBC CRSh, GP2\n");
 			}
 
 			else if (strcmp(expr->primproc, "*") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tMOV GP3, CRSh\n\tMOV GP4, CRSl\n\tMUL GP1, GP4\n\tMOV CRSl, MLX1\n\tMOV CRSh, MLX2\n\tMUL GP2, GP4\n\tADD CRSh, MLX1\n\tMUL GP1, GP3\n\tADD CRSh, MLX1\n");
 			}
 
 			else if (strcmp(expr->primproc, "div") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tCALL inline_div\n");
 			}
 
 			else if (strcmp(expr->primproc, "mod") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tCALL inline_div\n");
 
 				fprintf(outputFile, "\tADD GP1, GP3\n\tADC GP2, GP4\n\tMOVW CRSl, GP1\n");
 			}
 
 			else if (strcmp(expr->primproc, "serial-send") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCALL util_serial_send\n");
 			}
 
@@ -357,78 +357,78 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 			}
 
 			else if (strcmp(expr->primproc, "assert") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSER GP1\n\tCPSE CRSh, GP1\n\tJMP error_custom\n");
 			}
 
 			else if (strcmp(expr->primproc, "number?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tROL CRSh\n\tROL CRSh\n\tANDI CRSh, 1\n\tCOM CRSh\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "pair?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tORI CRSh, 31\n\tLDI GP1, 159\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 224\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "vector?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tORI CRSh, 31\n\tLDI GP1, 191\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 224\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "procedure?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tORI CRSh, 31\n\tLDI GP1, 223\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 224\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "char?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tORI CRSh, 7\n\tLDI GP1, 231\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 248\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "boolean?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tORI CRSh, 7\n\tLDI GP1, 255\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 248\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "null?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tORI CRSh, 7\n\tLDI GP1, 239\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 248\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "cons") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP1\n\tPOP GP2\n\tCALL inline_cons\n");
 			}
 
 			else if (strcmp(expr->primproc, "car") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCALL inline_car\n");
 			}
 
 			else if (strcmp(expr->primproc, "cdr") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCALL inline_cdr\n");
 			}
 
 			else if (strcmp(expr->primproc, "set-car!") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP1\n\tPOP GP2\n\tCALL inline_set_car\n");
 			}
 
 			else if (strcmp(expr->primproc, "set-cdr!") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP1\n\tPOP GP2\n\tCALL inline_set_cdr\n");
 			}
 
 			else if (strcmp(expr->primproc, "make-vector") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tMOVW GP1, CRSl\n\tMOVW CRSl, HFPl\n\tORI CRSh, 160\n\tST X+, GP1\n\tST X+, GP2\n\tLSL GP1\n\tROL GP2\n\tADD HFPl, GP1\n\tADC HFPh, GP2\n");
 			}
 
@@ -448,7 +448,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 					fprintf(outputFile, "\tLDI GP1, lo8(%i)\n\tLDI GP2, hi8(%i)\n\tST X+, GP1\n\tST X+, GP2\n", expr->numBody, expr->numBody);
 
 					for (i=0; i<expr->numBody; i++) {
-						codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+						codegen_emit(expr->body[i], parent_numArgs, outputFile);
 						fprintf(outputFile, "\tST X+, CRSl\n\tST X+, CRSh\n");
 					}
 
@@ -457,7 +457,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				} else {
 
 					for (i=expr->numBody-1; i>=0; i--) {
-						codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+						codegen_emit(expr->body[i], parent_numArgs, outputFile);
 						fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
 					}
 
@@ -474,7 +474,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 
 			else if (strcmp(expr->primproc, "list") == 0) {
 				for (i=0; i<expr->numBody; i++) {
-					codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+					codegen_emit(expr->body[i], parent_numArgs, outputFile);
 					fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
 				}
 
@@ -489,53 +489,53 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				fprintf(outputFile, "\tPUSH HFPh\n\tPUSH HFPl\n");
 
 				for (i=0; i<expr->numBody; i++) {
-					codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+					codegen_emit(expr->body[i], parent_numArgs, outputFile);
 				}
 
 				fprintf(outputFile, "\tPOP HFPl\n\tPOP HFPh\n");
 			}
 
 			else if (strcmp(expr->primproc, "vector-ref") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP1\n\tPOP GP2\n\tCALL inline_vector_ref\n");
 			}
 
 			else if (strcmp(expr->primproc, "vector-set!") == 0 && expr->numBody == 3) {
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[2], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[2], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP3\n\tPOP GP4\n\tPOP GP1\n\tPOP GP2\n\tCALL inline_vector_set\n");
 			}
 
 			else if (strcmp(expr->primproc, "vector-length") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCALL inline_vector_length\n");
 			}
 
 			else if (strcmp(expr->primproc, ">") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tCALL inline_gt\n");
 			}
 
 			else if (strcmp(expr->primproc, "<") == 0 && expr->numBody == 2) {
 				// (a < b)  ==  (b > a)
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tCALL inline_gt\n");
 			}
 
 			else if (strcmp(expr->primproc, ">=") == 0 && expr->numBody == 2) {
 				// (a >= b) == ¬(b > a)
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tCALL inline_gt\n");
 				// NOT:
 				fprintf(outputFile, "\tLDI GP1, 1\n\tEOR CRSh, GP1\n");
@@ -543,65 +543,65 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 
 			else if (strcmp(expr->primproc, "<=") == 0 && expr->numBody == 2) {
 				// (a <= b) == ¬(a > b)
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tCALL inline_gt\n");
 				// NOT:
 				fprintf(outputFile, "\tLDI GP1, 1\n\tEOR CRSh, GP1\n");
 			}
 
 			else if (strcmp(expr->primproc, "digital-state") == 0 && expr->numBody == 2) {
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSl\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP3\n\tLD GP4, Y\n\tLDI CRSh, trueHigh\n\tAND GP4, GP3\n\tCPSE GP4, GP3\n\tLDI CRSh, falseHigh\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "set-digital-state") == 0 && expr->numBody == 3) {
-				codegen_emit(expr->body[1], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSl\n");
-				codegen_emit(expr->body[2], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[2], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSh\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPOP GP4\n\tPOP GP3\n\tLD GP5, Y\n\tOR GP5, GP3\n\tCOM GP3\n\tSBRS GP4, 0\n\tAND GP5, GP3\n\tST Y, GP5\n");					
 			}
 
 			else if (strcmp(expr->primproc, "pause") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCALL util_pause\n");
 			}
 
 			else if (strcmp(expr->primproc, "micropause") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCALL util_micropause\n");
 			}
 
 			else if (strcmp(expr->primproc, "char->number") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tCLR CRSh\n");
 			}
 
 			else if (strcmp(expr->primproc, "@if-model-mega") == 0 && expr->numBody == 1) {
 				fprintf(outputFile, ".if IS_MODEL_MEGA\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, ".endif\n");
 			}
 
 			else if (strcmp(expr->primproc, "@if-model-uno") == 0 && expr->numBody == 1) {
 				fprintf(outputFile, ".if IS_MODEL_UNO\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, ".endif\n");
 			}
 
 			else if (strcmp(expr->primproc, "@if-model-leo") == 0 && expr->numBody == 1) {
 				fprintf(outputFile, ".if IS_MODEL_LEO\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, ".endif\n");
 			}
 
 			else if (strcmp(expr->primproc, "arity") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile, expr);
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tMOV GP1, CRSh\n\tANDI GP1, 224\n\tLDI GP2, 192\n\tCPSE GP1, GP2\n\tJMP error_notproc\n\tANDI CRSh, 31\n\tLD GP1, Y;CRS\n\tMOV CRSl, GP1\n\tMOV CRSh, zeroReg\n");
 			}
 			
@@ -610,7 +610,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile, AST_expr
 				
 				//load args into (24:25) -> (8:9) descending l:h
 				for (i=1; i<expr->numBody; i++) {
-					codegen_emit(expr->body[i], parent_numArgs, outputFile, expr);
+					codegen_emit(expr->body[i], parent_numArgs, outputFile);
 					fprintf(outputFile, "\tMOV r%i, CRSl\n\tMOV r%i, CRSh\n", 26 - (i * 2), 27 - (i * 2));
 				}
 
@@ -659,14 +659,14 @@ void copyIn(char *filename, FILE *outputFile) {
 }
 
 void copyHex(unsigned char* data, unsigned int length, FILE *outputFile) { 
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < length; i++) {
 		fputc(data[i], outputFile);
 	}
 }
 
-void codegen_emitPreamble(FILE *outputFile, int numUsedGlobals) {
+void codegen_emitPreamble(FILE *outputFile/*, int numUsedGlobals*/) {
 	//fprintf(outputFile, ".EQU HEAP_RESERVE, %i\n", numUsedGlobals * 2);
 
 	int i = 0;
@@ -680,7 +680,7 @@ void codegen_emitPreamble(FILE *outputFile, int numUsedGlobals) {
 	}
 	
 	//fprintf(outputFile, ".include \"include/preamble.s\"\n");
-	//copyIn("include/preamble.s", outputFile, expr);
+	//copyIn("include/preamble.s", outputFile);
 	copyHex(src_preamble_s, src_preamble_s_len, outputFile);
 }
 
@@ -689,10 +689,10 @@ void codegen_emitPostamble(FILE *outputFile) {
 }
 
 void codegen_emitModelHeader(char *model, FILE *outputFile) {
-	//fprintf(outputFile, ".include \"include/%s.s\"\n", expr);
+	//fprintf(outputFile, ".include \"include/%s.s\"\n");
 	//char *filename = str_clone_more("include/.s", strlen(model, expr));
-	//sprintf(filename, "include/%s.s", expr);
-	//copyIn(filename, outputFile, expr);
+	//sprintf(filename, "include/%s.s");
+	//copyIn(filename, outputFile);
 
 	if (strcmp(model, "MEGA") == 0) {
 		copyHex(src_MEGA_s, src_MEGA_s_len, outputFile);

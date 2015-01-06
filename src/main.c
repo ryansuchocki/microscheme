@@ -10,10 +10,12 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <ctype.h>
 
 #include "lexer.h"
 #include "parser.h"
 #include "scoper.h"
+#include "codegen.h"
 #include "common.h"
 #include "treeshaker.h"
 #include "microscheme_hex.h"
@@ -59,8 +61,7 @@ int main(int argc, char *argv[]) {
 	char *inname, *outname, *basename;
 	int c;
 
-	opterr = 0;
-	while ((c = getopt (argc, argv, "iaucpsovrm:d:t:w:")) != -1)
+	while ((c = getopt(argc, argv, "iaucpsovrm:d:t:w:")) != -1)
 	switch (c)	{
 		case 'i':	opt_includeonce = false;	break;
 		case 'u':	opt_upload = true;			
@@ -138,7 +139,7 @@ int main(int argc, char *argv[]) {
 	globalIncludeListN = 1;
 
 	// 2) Parse the file
-	AST_expr *ASTroot = parser_parseFile(root->children, root->numChildren, true);
+	AST_expr *ASTroot = parser_parseFile(root->children, root->numChildren);
 
 	// (We can free the memory used by the lexer once the parser has finished)...
 	lexer_freeTokenTree(root);
@@ -203,10 +204,10 @@ int main(int argc, char *argv[]) {
 	outputFile = fopen(outname, "w");
 
 		codegen_emitModelHeader(model, outputFile);
-		codegen_emitPreamble(outputFile, numUsedGlobals);
+		codegen_emitPreamble(outputFile);
 
 		// Next, we recursively emit code for the actual program body:
-		codegen_emit(ASTroot, 0, outputFile, model, NULL, opt_aggressive, globalEnv);
+		codegen_emit(ASTroot, 0, outputFile);
 
 		// Finally, we emit some postamble code
 		codegen_emitPostamble(outputFile);

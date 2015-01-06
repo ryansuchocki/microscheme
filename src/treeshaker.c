@@ -57,7 +57,7 @@ void treeshaker_shakeExpr(AST_expr *expr) {
 
 }
 
-void treeshaker_purge() {
+void treeshaker_purge(void) {
 	numUsedGlobals = 0;
 	numPurgedGlobals = 0;
 

@@ -5,7 +5,7 @@
 
 	extern void treeshaker_shakeExpr(AST_expr *expr);
 
-	extern void treeshaker_purge();
+	extern void treeshaker_purge(void);
 
 	extern int numUsedGlobals;
 	extern int numPurgedGlobals;

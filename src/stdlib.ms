@@ -9,10 +9,6 @@
 	(f)
 	(forever f))
 
-(define (while f)
-	(if (f)
-		(while f)))
-
 (define (vector-last vect)
 	(- (vector-length vect) 1))
 

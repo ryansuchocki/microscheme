@@ -23,12 +23,19 @@ void scoper_initEnv(Environment *env) {
 	env->enclosing = NULL;
 }
 
+int getBindingIndex(char *variable, Environment *env) {
+	int i;
+	for (i=0; i< env->numBinds; i++) {
+		if (strcmp(env->binding[i], variable) == 0)
+			return i;
+	}
+	return -1;
+}
+
 AST_expr *scoper_scopeExpr(AST_expr *expr) {
 	Environment *innerEnvironment, *tmpEnv, *tmpClosEnv, *last;
 	
 	int i, j, depth;
-
-	bool isAccess = true;
 	
 	switch(expr->type) {
 		// The simple ones (recursion only):
@@ -108,8 +115,6 @@ AST_expr *scoper_scopeExpr(AST_expr *expr) {
 		case Assignment:
 			expr->body[0] = scoper_scopeExpr(expr->body[0]);
 
-			isAccess = false;
-
 			// IMPORTANT: No break here, so assignment falls through to var case:
 		
 		case Variable:
@@ -179,17 +184,12 @@ AST_expr *scoper_scopeExpr(AST_expr *expr) {
 			exit(EXIT_FAILURE);
 				
 			return expr;
+
+		default:
+			//wtf!?
+			fprintf(stderr, "INTERNAL ERROR @ SCOPER CASE");
+			exit(EXIT_FAILURE);
 	}	
-}
-
-
-int getBindingIndex(char *variable, Environment *env) {
-	int i;
-	for (i=0; i< env->numBinds; i++) {
-		if (strcmp(env->binding[i], variable) == 0)
-			return i;
-	}
-	return -1;
 }
 
 void freeEnvironment(Environment *env) {

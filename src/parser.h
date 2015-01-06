@@ -14,7 +14,7 @@
 
 // Shared function declarations
 	extern AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel, bool tailPosition);
-	extern AST_expr *parser_parseFile(lexer_tokenNode **token, int numTokens, bool topLevel);
+	extern AST_expr *parser_parseFile(lexer_tokenNode **token, int numTokens);
 	extern void parser_freeAST(AST_expr *tree);
 	extern void parser_initExpr(AST_expr *expr);
 

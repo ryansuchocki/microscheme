@@ -16,7 +16,7 @@ hexify:
 	xxd -i src/stdlib.ms >> src/microscheme_hex.c
 
 build:
-	gcc -ggdb -o microscheme src/*.c
+	gcc -ggdb -std=gnu99 -Wall -Wextra -o microscheme src/*.c
 
 install:
 	sudo install -m755 ./microscheme /usr/local/bin

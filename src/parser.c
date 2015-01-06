@@ -8,6 +8,7 @@
 #include "main.h"
 #include "lexer.h"
 #include "parser.h"
+#include "scoper.h"
 #include "common.h"
 
 extern bool opt_verbose;
@@ -430,7 +431,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 										fileLine++;
 										innerFile = lexer_lexFile(innerTokens[1]->raw, NULL);
 										free(result);
-										result = parser_parseFile(innerFile->children, innerFile->numChildren, topLevel);
+										result = parser_parseFile(innerFile->children, innerFile->numChildren);
 										// Pass on topLevel. So if an (include x) is at the top level, then defines are allowed within it.s
 										lexer_freeTokenTree(innerFile);
 									}
@@ -516,7 +517,7 @@ void parser_freeAST(AST_expr *tree) {
 
 }
 
-AST_expr *parser_parseFile(lexer_tokenNode **token, int numTokens, bool topLevel) {
+AST_expr *parser_parseFile(lexer_tokenNode **token, int numTokens) {
 	int i = 0;
 
 	AST_expr *result = try_malloc(sizeof(AST_expr)); //{Sequence, NULL, NULL, NULL, 0, NULL, numTokens, NULL, NULL};
