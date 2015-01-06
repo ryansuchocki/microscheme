@@ -41,16 +41,10 @@ Environment *globalEnv;
 void try_execute(char *command) {
 	int result = system(command);
 
-	if (result < 0) {
-		fprintf(stderr, ">> Command failed.\n");
+	if (result < 0 || result == 127) {
+		fprintf(stderr, ">> Command failed. [%i]\n", result);
 		exit(EXIT_FAILURE);
 	}
-	#ifdef WEXITSTATUS
-	if (WEXITSTATUS(result) == 127) {
-		fprintf(stderr, ">> Command failed!\nIt appears the required program is not available.\n");
-		exit(EXIT_FAILURE);
-	}
-	#endif
 }
 
 int main(int argc, char *argv[]) {
