@@ -14,26 +14,26 @@ extern bool opt_verbose;
 
 int fileLine = 1;
 
-char** keywords = (char *[]){	"lambda", "if", "let", "set!", "define", "begin", "and", "or", "include"};
-int keywordsi = 9;
+char* keywords[] = {	"lambda", "if", "let", "set!", "define", "begin", "and", "or", "include"};
+int keywordsi = sizeof(keywords) / sizeof(char*);
 
-char** primwords = (char *[]){	"=", ">", ">=", "<", "<=", "not", "¬", "eq?",
+char* primwords[] = {	"=", ">", ">=", "<", "<=", "not", "¬", "eq?",
 								"+", "-", "*", "div", "mod", "zero?",
 								"number?", "pair?", "vector?", "procedure?", "char?", "boolean?", "null?",
 								"cons", "car", "cdr", "set-car!", "set-cdr!", "list",
 								"vector", "vector-length", "vector-ref", "vector-set!", "make-vector",
 								"assert", "error", "stacksize", "heapsize", "pause", "micropause",
-								"serial-send", "digital-state", "set-digital-state",
+								"digital-state", "set-digital-state",
 								"char->number",
 								"free!", "arity", /*"free-current-closure!!", "free-pair!!",*/
-								"@if-model-mega", "@if-model-uno", "@if-model-leo",
+								"@if-model",
 								"call-c-func", "include-asm", "asm"};
-int primwordsi = 50;
+int primwordsi = sizeof(primwords) / sizeof(char*);
 
 
 lexer_tokenNode *lexer_openNode = NULL;
 
-#define TOKEN_BUFFER_LENGTH 100
+#define TOKEN_BUFFER_LENGTH 1000
 
 char acc[TOKEN_BUFFER_LENGTH];
 int acci = 0;
@@ -160,7 +160,7 @@ void classify(char *acc, int acci, lexer_tokenNode *parent) {
 
 void lexer_lex(char ch) {
 	if (acci == TOKEN_BUFFER_LENGTH) {
-		fprintf(stderr, "%i: ERROR 1: Char buffer full. Max token length = %i", fileLine, TOKEN_BUFFER_LENGTH);
+		fprintf(stderr, "%i: ERROR 1: Char buffer full. Max token length = %i\n", fileLine, TOKEN_BUFFER_LENGTH);
 		exit(EXIT_FAILURE);
 	} else if (inString) {
 		if (ch == '"') {

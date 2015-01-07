@@ -15,6 +15,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "scoper.h"
+#include "models.h"
 #include "codegen.h"
 #include "common.h"
 #include "treeshaker.h"
@@ -111,6 +112,21 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+	model_info theModel;
+	int i;
+	bool found = false;
+	
+	for (i = 0; i<numModels; i++) {
+		if (strcmp(models[i].name, model) == 0) {
+			theModel = models[i];
+			found = true;
+		}
+	}
+
+	if (!found) {
+		fprintf(stderr, "Device not supported.\n");
+		return EXIT_FAILURE;
+	}
 
 
 
@@ -201,7 +217,7 @@ int main(int argc, char *argv[]) {
 	FILE *outputFile;
 	outputFile = fopen(outname, "w");
 
-		codegen_emitModelHeader(model, outputFile);
+		codegen_emitModelHeader(theModel, outputFile);
 		codegen_emitPreamble(outputFile);
 
 		// Next, we recursively emit code for the actual program body:
@@ -220,35 +236,7 @@ int main(int argc, char *argv[]) {
 	fprintf(stdout, ">> %i lines compiled OK\n", fileLine);
 
 
-
-
-
-
 	char cmd[500];
-	char *STR_LEVEL, *STR_TARGET, *STR_PROG, *STR_BAUD;
-
-	if (strcmp(model, "MEGA") == 0) {
-		STR_LEVEL  = "atmega2560";
-		STR_TARGET = "atmega2560";
-		STR_PROG   = "wiring";
-		STR_BAUD   = "115200";
-	} else if (strcmp(model, "UNO") == 0) {
-		STR_LEVEL  = "atmega328p";
-		STR_TARGET = "atmega328p";
-		STR_PROG   = "arduino";
-		STR_BAUD   = "115200";
-	} else if (strcmp(model, "LEO") == 0) {
-		STR_LEVEL  = "atmega32u4";
-		STR_TARGET = "atmega32u4";
-		STR_PROG   = "arduino";
-		STR_BAUD   = "115200";
-	} else {
-		fprintf(stderr, "Device not supported.\n");
-		return EXIT_FAILURE;
-	}
-
-
-
 
 	if (opt_assemble) {
 		if (strcmp(model, "") == 0) {
@@ -257,7 +245,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		fprintf(stderr, ">> Assembling...\n");
-		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s %s", STR_LEVEL, basename, basename, linkwith);
+		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s %s", theModel.STR_TARGET, basename, basename, linkwith);
 
 		try_execute(cmd);
 
@@ -279,7 +267,7 @@ int main(int argc, char *argv[]) {
 		if (opt_verbose) opt1 = "-v"; else opt1 = "";
 		if (opt_verify) opt2 = ""; else opt2 = "-V";
 
-		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, STR_TARGET, STR_PROG, device, STR_BAUD, basename);
+		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, theModel.STR_TARGET, theModel.STR_PROG, device, theModel.STR_BAUD, basename);
 		
 		try_execute(cmd);
 	}
@@ -301,7 +289,6 @@ int main(int argc, char *argv[]) {
 	try_free(basename);
 	try_free(outname);
 
-	int i;
 	for (i=0; i<globalIncludeListN; i++)
 		try_free(globalIncludeList[i]);
 

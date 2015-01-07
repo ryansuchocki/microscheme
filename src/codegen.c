@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "scoper.h"
 #include "common.h"
+#include "models.h"
 
 #include "assembly_hex.h"
 
@@ -339,11 +340,6 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tADD GP1, GP3\n\tADC GP2, GP4\n\tMOVW CRSl, GP1\n");
 			}
 
-			else if (strcmp(expr->primproc, "serial-send") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile);
-				fprintf(outputFile, "\tCALL util_serial_send\n");
-			}
-
 			else if (strcmp(expr->primproc, "stacksize") == 0 && expr->numBody == 0) {
 				fprintf(outputFile, "\tIN GP1, SPl\n\tIN GP2, SPh\n\tLDI CRSl, lo8(RAMEND)\n\tLDI CRSh, hi8(RAMEND)\n\tSUB CRSl, GP1\n\tSBC CRSh, GP2\n");
 			}
@@ -582,22 +578,11 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tCLR CRSh\n");
 			}
 
-			else if (strcmp(expr->primproc, "@if-model-mega") == 0 && expr->numBody == 1) {
-				fprintf(outputFile, ".if IS_MODEL_MEGA\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile);
-				fprintf(outputFile, ".endif\n");
-			}
+			else if (strcmp(expr->primproc, "@if-model") == 0 && expr->numBody == 2) {
+				if (strcmp(expr->body[0]->value->strvalue, model) == 0) {
+					codegen_emit(expr->body[1], parent_numArgs, outputFile);
+				}
 
-			else if (strcmp(expr->primproc, "@if-model-uno") == 0 && expr->numBody == 1) {
-				fprintf(outputFile, ".if IS_MODEL_UNO\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile);
-				fprintf(outputFile, ".endif\n");
-			}
-
-			else if (strcmp(expr->primproc, "@if-model-leo") == 0 && expr->numBody == 1) {
-				fprintf(outputFile, ".if IS_MODEL_LEO\n");
-				codegen_emit(expr->body[0], parent_numArgs, outputFile);
-				fprintf(outputFile, ".endif\n");
 			}
 
 			else if (strcmp(expr->primproc, "arity") == 0 && expr->numBody == 1) {
@@ -688,18 +673,25 @@ void codegen_emitPostamble(FILE *outputFile) {
 	fprintf(outputFile, "SBI PORT13, P13\nJMP _exit\n");
 }
 
-void codegen_emitModelHeader(char *model, FILE *outputFile) {
+void codegen_emitModelHeader(model_info theModel, FILE *outputFile) {
 	//fprintf(outputFile, ".include \"include/%s.s\"\n");
 	//char *filename = str_clone_more("include/.s", strlen(model, expr));
 	//sprintf(filename, "include/%s.s");
 	//copyIn(filename, outputFile);
 
-	if (strcmp(model, "MEGA") == 0) {
-		copyHex(src_MEGA_s, src_MEGA_s_len, outputFile);
-	} else if (strcmp(model, "UNO") == 0) {
-		copyHex(src_UNO_s, src_UNO_s_len, outputFile);
-	} else if (strcmp(model, "LEO") == 0) {
-		copyHex(src_LEO_s, src_LEO_s_len, outputFile);
+	// if (strcmp(model, "MEGA") == 0) {
+	// 	copyHex(src_MEGA_s, src_MEGA_s_len, outputFile);
+	// } else if (strcmp(model, "UNO") == 0) {
+	// 	copyHex(src_UNO_s, src_UNO_s_len, outputFile);
+	// } else if (strcmp(model, "LEO") == 0) {
+	// 	copyHex(src_LEO_s, src_LEO_s_len, outputFile);
+	// }
+
+	unsigned int i;
+
+	for (i = 0; i < strlen(theModel.specific_asm); i++) {
+		fputc((unsigned char) theModel.specific_asm[i], outputFile);
 	}
+
 }
 

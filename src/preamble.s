@@ -44,6 +44,20 @@ main:
 .EQU	falseHigh,	254
 .EQU	trueHigh,	255
 
+;; 16-bit counting registers, of which XYZ are
+;; are memory address registers.
+.EQU	WL,	0x18
+.EQU	WH,	0x19
+.EQU	XL,	0x1A
+.EQU	XH,	0x1B
+.EQU	YL,	0x1C
+.EQU	YH,	0x1D
+.EQU 	ZL,	0x1E
+.EQU	ZH,	0x1F
+
+.EQU	SPl,	0x3D
+.EQU	SPh,	0x3E
+
 LDI GP1, falseHigh
 MOV falseReg, GP1
 CLR zeroReg
@@ -342,20 +356,7 @@ error_custom:
 RJMP error_custom
 
 
-util_serial_send:
-PUSH GP1
-	util_serial_send_wait1:
-		LDS	GP1,	UCSR0A 				;;..1A for mega 1
-		SBRS	GP1,	UDRE0
-		RJMP	util_serial_send_wait1
-		STS	UDR0,	CRSh				;;UDR1 for mega 1
-	util_serial_send_wait2:
-		LDS	GP1,	UCSR0A
-		SBRS	GP1,	UDRE0
-		RJMP	util_serial_send_wait2
-		STS	UDR0,	CRSl
-POP GP1
-RET
+
 
 ; INPUT: Y = delay (milliseconds)
 util_pause:

@@ -76,13 +76,32 @@
 	(asm "SBR GP1,	RXENm")
 	(asm "STS UCSR0B,	GP1				;; ..1B for mega 1"))
 
+(define (serial-send x)
+	x
+	
+	(asm "
+		util_serial_send:
+PUSH GP1
+	util_serial_send_wait1:
+		LDS	GP1,	UCSR0A 				;;..1A for mega 1
+		SBRS	GP1,	UDRE0
+		RJMP	util_serial_send_wait1
+		STS	UDR0,	CRSh				;;UDR1 for mega 1
+	util_serial_send_wait2:
+		LDS	GP1,	UCSR0A
+		SBRS	GP1,	UDRE0
+		RJMP	util_serial_send_wait2
+		STS	UDR0,	CRSl
+POP GP1
+RET"))
+
 
 ;; Digital Input/Output
 
 (define arduino-ports)
 (define arduino-pins)
 
-(@if-model-mega
+(@if-model "MEGA"
 	(begin
 		(set! arduino-ports	(vector #x2C	#x2C	#x2C	#x2C	#x32	#x2C	#x100	#x100
 									#x100	#x100	#x23	#x23	#x23	#x23	#x109	#x109
@@ -95,12 +114,12 @@
 									8 16 32 64 128 128 64 32 16 8 4 2 1 128 4 2 1 128 64 32 16 8 
 									4 2 1 8 4 2 1 1 2 4 8 16 32 64 128 1 2 4 8 16 32 64 128))))
 
-(@if-model-uno
+(@if-model "UNO"
 	(begin
 		(set! arduino-ports	(vector #x29 #x29 #x29 #x29 #x29 #x29 #x29 #x29 #x23 #x23 #x23 #x23 #x23 #x23))
 		(set! arduino-pins	(vector 1 2 4 8 16 32 64 128 1 2 4 8 16 32))))
 
-(@if-model-leo
+(@if-model "LEO"
 	;; D2 D3 D1 D0 D4 C6 D7 E6 B4 B5 B6 B7 D6 C7 B3 B1 B2 B3 F7 F6 F5 F4 F1 F0
 	(begin
 		(set! arduino-ports	(vector #x29 #x29 #x29 #x29 #x29 #x26 #x29 #x2C
