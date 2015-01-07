@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
 
 
 
-	char cmd[100];
+	char cmd[500];
 	char *STR_LEVEL, *STR_TARGET, *STR_PROG, *STR_BAUD;
 
 	if (strcmp(model, "MEGA") == 0) {
