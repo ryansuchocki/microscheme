@@ -19,7 +19,7 @@
 					<div class="large-10 medium-10 columns push-2">
 						<div class="row">
 							<div class="large-12 medium-12 columns">
-								<h2>Language Guide: Page 1</h2>
+								<h2>Language Guide</h2>
 								<h4 class="subheader">A crash course in the particular workings of microscheme</h4>
 
 								<h5>Learning Scheme</h5>
@@ -53,16 +53,7 @@
 <p>Since the pattern for defining a named function: (define &lt;procname&gt; (lambda (&hellip;) &hellip;)) is so frequently used in Scheme programs, a shorthand notation is provided for it. The first definition of the program above can be rewritten as <code>(define (plusone x) (+ x 1))</code>. Under Scheme's semmantics, these expressions are precisely equivalent. It is (slightly) important that the programmer realises that this is a <em>library form</em>, i.e. it is compiled just as a lambda <em>inside</em> a define form.</p></li>
 
 
-</ul>
-
-<hr />
-
-	
-
-   <h5>Fundemental Forms (continued)</h5>
-
-
-<ul><li>
+<li>
 <p style="font-weight: bold; margin-bottom: 0px;">Assignment: (set! &lt;name&gt; &lt;expr&gt;)</p>
 							    <p>Assignment looks just like definition, but with the &lsquo;set!&rsquo; keyword instead of &lsquo;define&rsquo;. This is used to <em>change</em> the value to which some variable name is bound. That could be a global variable, which is introduced by (define &hellip;), a procedure argument, or a local variable introduced by (let &hellip;) The set keyword includes an exclamation mark to remind you that it is changing the state of the system; and this is why Scheme is considered not to be purely functional. </p></li>
 
