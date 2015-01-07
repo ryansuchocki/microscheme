@@ -30,4 +30,7 @@ examples/*.hex
 working
 working/*
 
+production
+production/*
+
 microscheme
