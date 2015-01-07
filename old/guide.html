@@ -57,17 +57,206 @@
 
 <hr />
 
-<ul class="pagination" style="float: right;">
-          <li class="arrow unavailable"><a>&laquo;</a></li>
-          <li class="current"><a>1</a></li>
-          <li><a href="guide/2">2</a></li>
-          <li><a href="guide/3">3</a></li>
-          <li><a href="guide/4">4</a></li>
-          <li><a href="guide/5">5</a></li>
-          <li><a href="guide/6">6</a></li>
-	  <li><a href="guide/7">7</a></li>
-          <li class="arrow"><a href="guide/2">&raquo;</a></li>
-        </ul>
+	
+
+   <h5>Fundemental Forms (continued)</h5>
+
+
+<ul><li>
+<p style="font-weight: bold; margin-bottom: 0px;">Assignment: (set! &lt;name&gt; &lt;expr&gt;)</p>
+							    <p>Assignment looks just like definition, but with the &lsquo;set!&rsquo; keyword instead of &lsquo;define&rsquo;. This is used to <em>change</em> the value to which some variable name is bound. That could be a global variable, which is introduced by (define &hellip;), a procedure argument, or a local variable introduced by (let &hellip;) The set keyword includes an exclamation mark to remind you that it is changing the state of the system; and this is why Scheme is considered not to be purely functional. </p></li>
+
+							    <li>
+<p style="font-weight: bold; margin-bottom: 0px;">Conditional: (&lt;predicate&gt; &lt;consequent&gt; &lt;alternative&gt;)</p>
+							    <p>The conditional form takes at least a <em>predicate</em> and a <em>consequent</em>, and optinally an <em>alternative</em>. Each of these are expressions of any kind. If the predicate evaluates to true (In Scheme, anything other than false, denoted #f, counts as true) then the consequent will be evaluated. If the predicate evaluates to false, and an alternative is given, then it will be evaluated. This is subtly different from the conditional branches of imperative programming. As well as making a decision about which expression to evaluate, the conditional itself inherits the value of whichever branch is chosen. This means you can use the whole expression as a subexpression, whose value depends on the predicate. e.g. <code>(+ 1 (if (= 2 3) 7 13))</code> evaluates to 14.</p></li>
+
+							    <li>
+<p style="font-weight: bold; margin-bottom: 0px;">Conjunction: (and A B C &hellip;)</p>
+							    <p>The conjunction form takes any number of arguments, each of which is a subexpression. It will evaluate those expressions in order. If it reaches one that evaluates to false (denoted #f), then it will stop and return #f. If none of them evaluates to #f, then the value of the final expression will be returned (remember, anything other than #f is considered true). Using this form with zero arguments is equivalent to the true constant #t. </p>
+</li>
+
+<li>
+<p style="font-weight: bold; margin-bottom: 0px;">Disjunction: (or A B C &hellip;)</h5>
+<p>Like conjunction, this disjunction form evaluates each of its arguments in order. If any one of them evaluates to <em>anything other than #f</em>, it stops and returns that value. If it reaches the end of the list, and every expression evaluated to #f, then it returns #f. Using this form with zer oarguments is equivalent to the false constant #f.</p>
+
+<p>When used with <strong>Boolean</strong> type values, the conjunctive and disjunctive forms work just like boolean operators in imperative languages. <code>(or #f #t #f)</code> evaluates to #t and so forth. In Scheme, however, these forms perform a much more powerful function. Since they are variadic, and will keep evaluating until a false or true subexpression is reached respectively, they can be used as control-flow mechanisms in place of nested (if &hellip;) forms.</p>
+
+</li>
+
+<li>
+<p style="font-weight: bold; margin-bottom: 0px;">
+Local Binding: (let ((a X) (b Y) (c Z) &hellip;) B &hellip;)</p>
+
+<p>The let form is used to bind names to values only for a specific part of the program. The first argument to let is a list of binding pairs. Each binding pair is a pair of brackets containing a variable name and an expression. The expressions that are given as the body &lsquo;B &hellip;&rsquo; are evaluated with those names bound to their corrseponding values, and the value of the final expression is returned. Those bindings do not persist outside of the let form. For any code outside of the let's parentheses, the variables a b c &hellip; are unchanged, and may not be defined at all. </p>
+
+<p>Important nuances: <ol><li>Even if you only give one binding pair, the parentheses around the list of binding pairs is still needed. Hence, you end up with double brackets: <code>(let ((x 5)) (+ x 1))</code>. Missing those is a common mistake.</li><li>The variable bindings apply in the body, but not within other binding pairs in the list. i.e., the expression Y should not rely on X being bound to a.</li></ol></p></li>
+
+<li>
+<p style="font-weight: bold; margin-bottom: 0px;">
+Sequence: (begin B1 B2 &hellip;)</p>
+<p>Finally, you can group together expressions with the sequencial form, using the <em>begin</em> keyword. The whole thing is treated as one expression, whose subexpressions are executed in sequence. As usual, the value of the final subexpression is returned for the overall expression. <p>
+
+<p>You can use this in cases where you want to guarantee a group of expressions will be evaluated, or where you want to give multiple expressions in a context where only one is expected.</p>
+
+<p><code>(+ 1 (begin 2 4 6))</code> evaluates to 7. The subexpressions 2 and 4 are evaluated, but they have no effect. 6 is evaluated and returned to the outer + procedure.</p></li>
+</ul>
+
+<hr />
+
+<h5>Primitive Procedures</h5>
+
+<p>Primitive procedures are procedures that are built-in to the language. This means that the compiler produces efficient low-level routines for them.</p>
+
+<p>Unlike full-blown Scheme, microscheme primitives are not first-class. i.e., they can only appear in the function application form. This is a problem when you want to pass a primitive function as the argument to a higher-order function such as map. For example, you may want to invert a list of Booleans: <code>(map not list_of_booleans)</code>.</p>
+
+<p>The solution is to make a simple wrapper-function which is first-class but performs the same function as the primitive you want to work with: <code>(define (not* x) (not x))</code>.</p>
+
+<p>Then, you are free to use it as a value: <code>(map not* list_of_booleans)</code>. This might seem annoying, but it is not without good reason. Making all primitive functions first-class would tie up around .5 KB of RAM. On the arduino, RAM is precious. This compromise ammounts to you, the programmer, telling the compiler exactly which primitives need to be loaded into RAM. For the vast majority of programs, this ammounts to a massive memory saving. </p>
+
+<h5>Available Primitives</h5>
+<p>The primitive procedures built-in to compiler version 0.6 are:</p>
+<ul>
+<li>=, >, >=, <, <=, not</li>
+<li>+, -, *, div, mod, zero?</li>
+<li>number?, pair?, vector?, procedure?, char?, boolean?, null?</li>
+<li>cons, car, cdr, set-car!, set-cdr!</li>
+<li>list, vector</li>
+<li>vector-length, vector-ref, vector-set!</li>
+<li>assert, error</li>
+<li>include, stacksize, heapsize, pause</li>
+<li>serial-send, digital-state, set-digital-state</li>
+</ul>
+
+<hr />
+
+<h5>Type System</h5>
+
+<p>Microscheme has a strong dynamic type system. It is strong in the sense that:</p>
+<ul><li> All values have a specific, definite type</li>
+<li>No type coersion occurs</li>
+<li>Procedures are generally valid for a specific set of types</li>
+<li>Type exceptions are raised when procedures are applied to values of the wrong type</li></ul>
+<p>It is dynamic in the sense that a variable is not restricted to hold values of a certain type. The type of value to which a variable name will be bound is not known until runtime, and can change as the program progresses.</p>
+
+<p>The built-in types are: <strong>Number</strong>, <strong>Char</strong>, <strong>Boolean</strong>, <strong>Pair</strong>, <strong>Vector</strong>, <strong>&lsquo;The Empty List&rsquo;</strong> aka <strong>null</strong>, which is said to have a type of its own, and <strong>Procedure</strong>. From these basic types we can infer compound types. A <strong>List</strong> is defined to be something of the type <strong>null</strong> or <strong>pair</strong> where the value of the cdr field has type <strong>List</strong>. This definition is effectively implemented by the (list? &hellip;) function in the &lsquo;list.ms&rsquo; library.</p>
+
+<p>Even though the built-in numeric type is fairly restricted (15-bit unsigned integer), a richer numeric stack can be built using combinations of pairs, vectors and numbers. For example, the 'xtypes.ms' library provides types <strong>long</strong> and <strong>fp</strong>, which represent 8-digit unsigned integers, and 4+4 digit fixed-point real numbers respectively.</p>
+
+<p>For every type, there is a predicate function which answers the question 'is this value of type X'. These predicates are consistently formed by appending a question mark to the type name. For example, (number? 4) evaluates to #t. (boolean? 4) evaluates to #f. (boolean? (number? 4)) evaluates to #t.</p>
+
+<p>Procedures for converting between types are formed with an arrow between the type names, e.g. (vector->list a b). These conversions are not provided for many types, but they can be written manually.</p>
+
+
+<hr />
+
+<h5>Microscheme Libraries</h5>
+<p>Microscheme supports the (include &hellip;) primitive, which effectively loads the whole contents of another file into the program. This allows commonly used program segments to be saved in 'libraries' that can be included in any other program. Typically, libraries contain definitions, but do not perform any input or output, so including them simply makes a set of procedures and data structures available to the program. Some useful libraries are included with microscheme, and more will become available as the project matures:</p>
+
+<p><strong>libraries/io.ms</strong> provides digital Input/Output functionality. This allows you to work with the Arduino's digital I/O pins, using the indices given to them on the arduino board. It provides the procedures:
+<ul><li><strong>(set-ddr N X)</strong> to set the DDR (data-direction-register) for a pin. <strong>N</strong> is the pin number. <strong>X</strong> is #f for &lsquo;input&rsquo; and #t for &lsquo;output&rsquo;.</li>
+<li><strong>(get-ddr N)</strong> returns a boolean representing the DDR value for pin <strong>N</strong>. #t means &lsquo;output&rsquo;.</li>
+<li><strong>(set-pin N Y)</strong> sets the value (high or low) for pin <strong>N</strong>. </li>
+<li><strong>(set-pin N Y)</strong> gets the value (high or low) of pin <strong>N</strong>.</li>
+</ul></p>
+
+<p><strong>libraries/list.ms</strong> provides various functions for working with <em>lists</em>, which are linear data structures built using pairs and null. Procedures provided include:
+<ul>
+<li><strong>(list? X)</strong> returns true if and only if <strong>X</strong> is a list.</li>
+<li><strong>(reverse X)</strong> if <strong>X</strong> is a list, returns a new list which is the reverse of it.</li>
+<li><strong>(map P X)</strong> returns a list formed by performing procedure <strong>P</strong> on every element of list <strong>X</strong>.</li>
+<li><strong>foldr, foldl, for-each, all</strong> various common higher-order list procedures.</li>
+<li><strong>(vector->list V)</strong> returns a list whose elements are identical to those of vector <strong>V</strong>.</li>
+</ul>
+
+NB: the primitive (list &hellip;) for building lists is built-in, and implemented efficiently by the compiler.</p>
+
+<p><strong>libraries/long.ms</strong> provides an implementation for 8-digit unsigned integers:
+<ul><li><strong>(long hi lo)</strong> forms a long where <strong>hi</strong> represents the high four digits and <strong>lo</strong> represents the low four digits of the number. The number 994020 is produced by <code>(long 99 4020)</code>.</li>
+<li><strong>(hi X)</strong> and <strong>(lo X)</strong> extract the high and low parts of a long.</li>
+<li><strong>(long? X)</strong> returns true if <strong>X</strong> is a valid <em>long</em>. Warning: any <strong>pair</strong> of numbers will satisfy this.</li>
+<li><strong>l+ l- l* l/</strong> standard arithmetic operators. (NB: l* and l/ are slow, software-based implementations.</li>
+<li><strong>l++ l-- l**</strong> are in-place versions of l+ l- and l*. i.e. <code>(l++ lX lY)</code> is equivalent to <code>(set! lX (l+ lX lY))</code>, but allocates no new memory. You should use these operators wherever possible</li>
+<li><strong>l= l&lt; l&gt; l&lt;= l&gt;=</strong> standard numeric comparators.</li>
+</ul>
+</p>
+
+<p><strong>libraries/fixedpoint.ms</strong> provides an implementation for 5+5 digit unsigned fixed-point reals:
+</p>
+
+<p>NB: including the xtypes library has the same effect as including long and fixedpoint individually, but saves memory by taking advantage of the overlap between their functions.</p>
+
+
+<hr />
+
+<h5>Compiler Errors</h5>
+
+<p>As of version 0.6, build 230, the possible compile-time errors are:</p>
+
+<pre>
+0  Out of memory
+1  Char buffer full
+2  while lexing the file '%s'. File could not be opened
+3  Comment before end of token
+4  Extraneous )
+5  Missing )
+6  Procedure '%s' is primitive, and cannot be used as a value
+7  Non-identifier in formal argument list
+8  Malford lambda. No formals given
+9  Wrong number of operands to IF form
+10 First operand to SET should be IDENTIFIER
+11 Wrong number of operands to SET form
+12 Wrong number of operands to DEFINE form
+13 Non-identifier in formal argument list
+14 First operand to DEFINE should be IDENTIFIER or PARENS
+15 Definition not allowed here
+16 Malformed Binding
+17 Malformed LET?
+18 First operand to INCLUDE should be STRING
+19 Wrong number of operands to INCLUDE form
+20 Unknown parenthesized form
+21 Unknown form\n
+22 Unexpected list of expressions
+23 NOT IN SCOPE %s
+24 Integer constant too large
+25 Freevar refs of degree > 1 not supported yet
+26 No primitive P taking N arguments
+27 Internal Error
+</pre>
+
+<hr />
+
+<h5>Runtime Exceptions</h5>
+							
+
+   	<p>Like Scheme, microscheme is strongly, dynamically typed. Exceptions are semmantic errors that arise at runtime. Microscheme makes use of the Arduino's built-in LED on digital pin 13 to give on-device indications of these situations. Generally, exceptions are not recoverable, and the device will need to be reset if an exception is raised. While it is possible to use digital pin 13 for general input and output, it is highly recommended to leave it free for exception indication.</p>
+
+
+<table><tr><th>Status</th><th>Meaning</th><th>Indication</th></tr>
+<tr><td>RUN</td><td>Program Running</td><td>No Light</td></tr>
+<tr><td>NVP</td><td>Not a Valued Procedure</td><td>Single Flashes</td></tr>
+<tr><td>NAR</td><td>Number of ARguments</td><td>2 Flashes</td></tr>
+<tr><td>NAN</td><td>Not A Number</td><td>3 Flashes</td></tr>
+<tr><td>NAP</td><td>Not A Pair</td><td>4 Flashes</td></tr>
+<tr><td>NAV</td><td>Not A Vector</td><td>5 Flashes</td></tr>
+<tr><td>OOB</td><td>Out Of Bounds</td><td>6 Flashes</td></tr>
+<tr><td>DBZ</td><td>Divide By Zero</td><td>7 Flashes</td></tr>
+<tr><td>ERR</td><td>Custom Exception</td><td>Continuous Flashes</td></tr>
+<tr><td>HALT</td><td>Program Completed</td><td>Continuous Light</td></tr></table>
+
+							<h5>Exception Details</h5>
+							<p><strong>NVP</strong>: A procedure application takes the form (proc X1 X2 ... Xn) where proc is an expression. At the time of application, if proc does not evaluate to a (valued) procedure, such as the result of a (lambda &hellip;) form, or a variable bound to a procedure, then NVP will be raised.</p>
+							<p><strong>NAR</strong>: A procedure application takes the form (proc X1 X2 ... Xn) where X1 X2 ... Xn are arguments. At the time of application, if proc evaluates to a procedure taking m arguments, but m &ne; n, then NAR will be raised.</p>
+							<p><strong>NAN</strong>: Indicates that an arithmetic operator (+, -, *, /, div, mod) received an argument that did not evaluate to a number.</p>
+							<p><strong>NAP</strong>: Indicates that a pair operator (car, cdr, set-car!, set-cdr!) received an argument that did not evaluate to a pair.</p>
+							<p><strong>NAV</strong>: Indicates that a vector operator (vector-ref, vector-set!) received an argument that did not evaluate to a vector.</p>
+							<p><strong>OOB</strong>: Indicates that a vector operator (vector-ref, vector-set!) received an index that was outside the dimensions of the vector given.</p>
+							<p><strong>DBZ</strong>: Indicates an attempt to divide by zero.</p>
+							<p><strong>ERR</strong>: This exception is raised manually by the programmer. See (error) and (assert expr) in the language guide.</p>
+
+
+<hr />
+
+
 
 
 								
