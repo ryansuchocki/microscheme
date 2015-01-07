@@ -42,8 +42,12 @@ void try_execute(char *command) {
 	int result = system(command);
 
 	if (result < 0 || result == 127) {
-		fprintf(stderr, ">> Command failed. [%i]\n", result);
+		fprintf(stderr, ">> Command failed. (%i)\n", result);
 		exit(EXIT_FAILURE);
+	}
+
+	if (result > 0) {
+		fprintf(stderr, ">> Warning: Command may have failed. (Exit code %i)\n", result);
 	}
 }
 
