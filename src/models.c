@@ -43,8 +43,8 @@ model_info models[] = {
 		"LEO",
 
 		"atmega32u4",
-		"arduino",
-		"115200",
+		"avr109",
+		"57600",
 
 		true,
 

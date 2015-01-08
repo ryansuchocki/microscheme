@@ -11,6 +11,9 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <fcntl.h>   /* File control definitions */
+#include <errno.h>   /* Error number definitions */
+#include <termios.h> /* POSIX terminal control definitions */
 
 #include "lexer.h"
 #include "parser.h"
@@ -26,7 +29,7 @@ int opt_includeonce = true, opt_assemble = false,
 	opt_upload = false, opt_cleanup = false, 
 	opt_primitives = true, opt_stdlib = true, 
 	opt_aggressive = true, opt_verbose = false, 
-	opt_verify = false;
+	opt_verify = false, opt_softreset = false;
 
 char* model = "MEGA";
 char* device = "";
@@ -67,7 +70,8 @@ int main(int argc, char *argv[]) {
 		case 'a':	opt_assemble = true;		break;
 		case 'c':	opt_cleanup = true;			break;
 		case 'p':	opt_primitives = false;		break;
-		case 's':	opt_stdlib = false;			break;
+		//case 's':	opt_stdlib = false;			break;
+		case 's':	opt_softreset = true;		break;
 		case 'o':	opt_aggressive = false;		break;
 		case 'v':	opt_verbose = true;			break;
 		case 'r':	opt_verify = true;			break;
@@ -252,6 +256,29 @@ int main(int argc, char *argv[]) {
 		sprintf(cmd, "avr-objcopy --output-target=ihex %s.elf %s.hex", basename, basename);
 		
 		try_execute(cmd);
+	}
+
+	if (opt_softreset && theModel.software_reset) {
+		fprintf(stdout, ">> Attempting software reset...\n");
+		int fd = -1;
+		struct termios options;
+		
+		tcgetattr(fd, &options);
+
+		cfsetispeed(&options, B1200);
+		cfsetospeed(&options, B1200);
+		
+		options.c_cflag |= (CLOCAL | CREAD | CS8 | HUPCL);
+		options.c_cflag &= ~(PARENB | CSTOPB);
+		
+		tcsetattr(fd, TCSANOW, &options);
+
+		fd = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
+		if (fd == -1) {
+			fprintf(stderr, ">> Warning: Unable to open %s for soft reset. (%s)\n", device, strerror(errno));
+		} else {
+			close(fd);
+		}
 	}
 
 	if (opt_upload) {
