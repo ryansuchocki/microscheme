@@ -92,8 +92,7 @@ PUSH GP1
 		SBRS	GP1,	UDRE0
 		RJMP	util_serial_send_wait2
 		STS	UDR0,	CRSl
-POP GP1
-RET"))
+POP GP1"))
 
 
 ;; Digital Input/Output
