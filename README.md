@@ -54,7 +54,8 @@ Or, on Ubuntu or Debian:
 
 `$ sudo apt-get install gcc-avr avrdude`
 
-The [winavr](http://winavr.sourceforge.net/) project provides implementations of these tools for Windows.
+These tools are available via the [Homebrew](http://brew.sh/) and [MacPorts](https://www.macports.org/) package
+managers on Mac OS X and the [winavr](http://winavr.sourceforge.net/) project on Windows.
 
 Targets
 -------
