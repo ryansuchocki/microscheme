@@ -79,21 +79,19 @@
 (define (serial-send x)
 	x
 	
-	(asm "
-		util_serial_send:
-PUSH GP1
-	util_serial_send_wait1:
-		LDS	GP1,	UCSR0A 				;;..1A for mega 1
-		SBRS	GP1,	UDRE0
-		RJMP	util_serial_send_wait1
-		STS	UDR0,	CRSh				;;UDR1 for mega 1
-	util_serial_send_wait2:
-		LDS	GP1,	UCSR0A
-		SBRS	GP1,	UDRE0
-		RJMP	util_serial_send_wait2
-		STS	UDR0,	CRSl
-POP GP1"))
-
+	(asm "util_serial_send:")
+	(asm "PUSH GP1")
+	(asm "	util_serial_send_wait1:")
+	(asm "		LDS	GP1,	UCSR0A 				;;..1A for mega 1")
+	(asm "		SBRS	GP1,	UDRE0")
+	(asm "		RJMP	util_serial_send_wait1")
+	(asm "	STS	UDR0,	CRSh				;;UDR1 for mega 1")
+	(asm "	util_serial_send_wait2:")
+	(asm "		LDS	GP1,	UCSR0A")
+	(asm "		SBRS	GP1,	UDRE0")
+	(asm "		RJMP	util_serial_send_wait2")
+	(asm "	STS	UDR0,	CRSl")
+	(asm "	POP GP1"))
 
 ;; Digital Input/Output
 
@@ -232,6 +230,38 @@ POP GP1"))
 
 
 
+
+
+;; Apply!
+
+(define (apply fnc lst)
+	(assert (procedure? fnc))
+	(assert (list? lst))
+	(asm "PUSH AFPh") (asm "PUSH AFPl")
+	(asm "PUSH CCPh") (asm "PUSH CCPl")
+	(asm "LDI GP1, hi8(pm(sp_apply_ret))")
+	(asm "PUSH GP1")
+	(asm "LDI GP1, lo8(pm(sp_apply_ret))")
+	(asm "PUSH GP1")
+	lst
+	(asm "MOVW CCPl, CRSl")
+	(asm "sp_loop_begin:")
+		(asm "MOVW CRSl, CCPl")
+		(asm "CALL inline_car")	
+		(asm "PUSH CRSl") (asm "PUSH CRSh")
+		(asm "MOVW CRSl, CCPl")
+		(asm "CALL inline_cdr")
+		(if (not (null? (asm "MOVW CCPl, CRSl")))
+			(asm "RJMP sp_loop_begin"))
+	(length lst)
+	(asm "MOV PCR, CRSl")
+	fnc
+	(asm "IN AFPl, SPl") (asm "IN AFPh, SPh")
+	(asm "MOVW GP5, AFPl")
+	(asm "JMP proc_call")
+	(asm "sp_apply_ret:")
+	(asm "POP CCPl") (asm "POP CCPh")
+	(asm "POP AFPl") (asm "POP AFPh"))
 
 
 
