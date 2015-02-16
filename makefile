@@ -2,6 +2,8 @@
 # (C) 2014 Ryan Suchocki
 # microscheme.org
 
+PREFIX?=/usr/local
+
 all: hexify build
 
 hexify:
@@ -16,5 +18,4 @@ build:
 	gcc -ggdb -std=gnu99 -Wall -Wextra -o microscheme src/*.c
 
 install:
-	sudo install -m755 ./microscheme /usr/local/bin
-
+	install -m755 ./microscheme $(PREFIX)/bin
