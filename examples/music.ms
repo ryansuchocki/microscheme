@@ -1,8 +1,6 @@
 ;; Ryan Suchocki
 ;; microscheme.org
 
-(include "libraries/io.ms")
-(include "libraries/list.ms")
 
 (define mleft	(list 4 5 6 7))
 (for-each output mleft)
