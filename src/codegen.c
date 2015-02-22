@@ -606,10 +606,11 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, ".include \"%s\"\n", expr->body[0]->value->strvalue);
 			}
 
-			else if (strcmp(expr->primproc, "asm") == 0 && expr->numBody == 1) {
-				fprintf(outputFile, "\t%s\n", expr->body[0]->value->strvalue);
+			else if (strcmp(expr->primproc, "asm") == 0) {
+				for (i=0; i<expr->numBody; i++) {
+					fprintf(outputFile, "\t%s\n", expr->body[i]->value->strvalue);
+				}
 			}
-
 
 			else {
 				fprintf(stderr, "ERROR 26: No primitive '%s' taking %i arguments.\n", expr->primproc, expr->numBody);

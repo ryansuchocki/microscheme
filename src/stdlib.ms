@@ -63,35 +63,51 @@
 		(and (pair? x) 
 			(list? (cdr x)))))
 
-(define (serial-init)
+;; Serial communications
+
+(define (serial-init baud)
+	(- (div 10000 baud) 1)
+
 	; Set Baud Rate registers
-	(asm "LDI GP1,	hi8(BAUD_9600)")
-	(asm "STS	UBRR0H,	GP1				;; ..1H for mega 1")
-	(asm "LDI	GP1,	lo8(BAUD_9600)")
-	(asm "STS	UBRR0L,	GP1				;; ..1L for mega 1")
+	(asm "STS	UBRR0H,	CRSh"
+	     "STS	UBRR0L,	CRSl")
 
 	; Set control registers
-	(asm "CLR GP1")
-	(asm "SBR GP1,	TXENm")
-	(asm "SBR GP1,	RXENm")
-	(asm "STS UCSR0B,	GP1				;; ..1B for mega 1"))
+	(asm "LDI GP1,	(1<<RXEN0)|(1<<TXEN0)"
+	     "STS UCSR0B,	GP1"))
 
-(define (serial-send x)
+(define (serial-write x)
 	x
-	
-	(asm "util_serial_send:")
-	(asm "PUSH GP1")
-	(asm "	util_serial_send_wait1:")
-	(asm "		LDS	GP1,	UCSR0A 				;;..1A for mega 1")
-	(asm "		SBRS	GP1,	UDRE0")
-	(asm "		RJMP	util_serial_send_wait1")
-	(asm "	STS	UDR0,	CRSh				;;UDR1 for mega 1")
-	(asm "	util_serial_send_wait2:")
-	(asm "		LDS	GP1,	UCSR0A")
-	(asm "		SBRS	GP1,	UDRE0")
-	(asm "		RJMP	util_serial_send_wait2")
-	(asm "	STS	UDR0,	CRSl")
-	(asm "	POP GP1"))
+	(asm "util_serial_send:"
+	     "  PUSH GP1"
+	     ;"  util_serial_send_wait1:"
+	     ;"    LDS GP1, UCSR0A"
+	     ;"    SBRS GP1, UDRE0"
+	     ;"    RJMP util_serial_send_wait1"
+	     ;"  STS	UDR0, CRSh"
+	     "  util_serial_send_wait2:"
+	     "    LDS GP1, UCSR0A"
+	     "    SBRS GP1, UDRE0"
+	     "    RJMP util_serial_send_wait2"
+	     "  STS	UDR0, CRSl"
+	     "  POP GP1"))
+
+(define (serial-available)
+	#f
+	(asm "LDS GP1, UCSR0A"
+	     "SBRC GP1, RXC0")
+	#t)
+
+(define (serial-read)
+	#\a
+	(asm "util_serial_receive:"
+		 "	PUSH GP1"
+		 "  util_serial_receive_wait:"
+		 "    LDS GP1, UCSR0A"
+	     "    SBRS GP1, RXC0"
+	     "    RJMP util_serial_receive_wait"
+	     "  LDS CRSl, UDR0"
+	     "  POP GP1"))
 
 ;; Digital Input/Output
 
@@ -247,7 +263,7 @@
 	(asm "MOVW CCPl, CRSl")
 	(asm "sp_loop_begin:")
 		(asm "MOVW CRSl, CCPl")
-		(asm "CALL inline_car")	
+		(asm "CALL inline_car")
 		(asm "PUSH CRSl") (asm "PUSH CRSh")
 		(asm "MOVW CRSl, CCPl")
 		(asm "CALL inline_cdr")

@@ -25,6 +25,19 @@ model_info models[] = {
 		".EQU	PORT13,	0x05	\n"
 		".EQU	DDR13,	0x04	\n"
 		".EQU	P13,	7		\n"
+
+		".EQU	UDR0,	0xC6	\n"
+		".EQU	UBRR0H,	0xC5	\n"
+		".EQU	UBRR0L,	0xC4	\n"
+		".EQU	UCSR0C,	0xC2	\n"
+		".EQU	UCSR0B,	0xC1	\n"
+		".EQU	UCSR0A,	0xC0	\n"
+		".EQU	TXEN0,	3		\n"
+		".EQU	RXEN0,	4		\n"
+		".EQU	UDRE0,	5		\n"
+		".EQU	TXC0,	6		\n"
+		".EQU	RXC0,	7		\n"
+		".EQU	BAUD_9600, 103	\n"
 	},
 	{
 		"UNO",
@@ -38,6 +51,19 @@ model_info models[] = {
 		".EQU	PORT13,	0x05	\n"
 		".EQU	DDR13,	0x04	\n"
 		".EQU	P13,	5		\n"
+
+		".EQU	UDR0,	0xC6	\n"
+		".EQU	UBRR0H,	0xC5	\n"
+		".EQU	UBRR0L,	0xC4	\n"
+		".EQU	UCSR0C,	0xC2	\n"
+		".EQU	UCSR0B,	0xC1	\n"
+		".EQU	UCSR0A,	0xC0	\n"
+		".EQU	TXEN0,	3		\n"
+		".EQU	RXEN0,	4		\n"
+		".EQU	UDRE0,	5		\n"
+		".EQU	TXC0,	6		\n"
+		".EQU	RXC0,	7		\n"
+		".EQU	BAUD_9600, 103	\n"
 	},
 	{
 		"LEO",

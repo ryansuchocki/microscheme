@@ -156,7 +156,7 @@ inline_car:
 	CPSE GP1, GP2
 	RJMP error_notpair
 	ANDI CRSh, 31
-	LDD GP1, Y+0; (Y=CCP)
+	LDD GP1, Y+0; (Y=CRS)
 	LDD CRSh, Y+1
 	MOV CRSl, GP1
 	RET
@@ -168,7 +168,7 @@ inline_cdr:
 	CPSE GP1, GP2
 	RJMP error_notpair
 	ANDI CRSh, 31
-	LDD GP1, Y+2; (Y=CCP)
+	LDD GP1, Y+2; (Y=CRS)
 	LDD CRSh, Y+3
 	MOV CRSl, GP1
 	RET
