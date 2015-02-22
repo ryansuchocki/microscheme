@@ -19,3 +19,5 @@ build:
 
 install:
 	install -Dm755 ./microscheme $(PREFIX)/bin/microscheme
+	install -d $(PREFIX)/share/microscheme/
+	cp -r examples/ $(PREFIX)/share/microscheme/
