@@ -18,4 +18,4 @@ build:
 	gcc -ggdb -std=gnu99 -Wall -Wextra -o microscheme src/*.c
 
 install:
-	install -m755 ./microscheme $(PREFIX)/bin
+	install -Dm755 ./microscheme $(PREFIX)/bin/microscheme
