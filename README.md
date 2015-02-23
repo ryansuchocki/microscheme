@@ -41,7 +41,8 @@ Usage
 
 As of version 0.9.1, the usage is:
 
-```microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]`
+```
+microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]
 
 -a = Assemble (implied by -u)
 -u = Upload (requires -d)
@@ -53,7 +54,8 @@ As of version 0.9.1, the usage is:
 -m model = Specify a model (UNO/MEGA/LEO...)
 -d device = Specify a physical device.
 -w "file names" = 'Link' with external C or assembly files.
--t rounds = Specify the maximum number of tree-shaker rounds```
+-t rounds = Specify the maximum number of tree-shaker rounds
+```
 
 Prerequisites
 -------------
