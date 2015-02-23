@@ -44,7 +44,7 @@ As of version 0.9.1, the usage is:
 ```
 microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]
 
--a = Assemble (implied by -u)
+-a = Assemble (implied by -u) (requires -m)
 -u = Upload (requires -d)
 -c = Cleanup (removes intermediate files)
 -v = Verbose
@@ -52,8 +52,8 @@ microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[
 -i = Allow the same file to be included more than once
 -o = Disable optimisations	
 -m model = Specify a model (UNO/MEGA/LEO...)
--d device = Specify a physical device.
--w "file names" = 'Link' with external C or assembly files.
+-d device = Specify a physical device
+-w "file names" = 'Link' with external C or assembly files
 -t rounds = Specify the maximum number of tree-shaker rounds
 ```
 
