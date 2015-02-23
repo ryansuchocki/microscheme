@@ -212,10 +212,13 @@ int main(int argc, char *argv[]) {
 
 	// 4) Generate code. (Starting with some preamble)
 
-
-
 	FILE *outputFile;
 	outputFile = fopen(outname, "w");
+
+	if (!outputFile) {
+		fprintf(stderr, ">> Error! Could not open output file.\n");
+		exit(EXIT_FAILURE);
+	}
 
 		codegen_emitModelHeader(theModel, outputFile);
 		codegen_emitPreamble(outputFile);
@@ -234,7 +237,6 @@ int main(int argc, char *argv[]) {
 
 	// If we've reached this stage, then everything has gone OK:
 	fprintf(stdout, ">> %i lines compiled OK\n", fileLine);
-
 
 	char cmd[500];
 
