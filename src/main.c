@@ -88,10 +88,11 @@ int main(int argc, char *argv[]) {
 			abort ();
 	}
 
-	fprintf(stdout, "Microscheme 0.8, (C) Ryan Suchocki\n");
+	fprintf(stdout, "Microscheme 0.9.1, (C) Ryan Suchocki\n");
 
 	if (argc < 2) {
-		fprintf(stdout, "usage: microscheme [-iaucpsov] [-m model] [-d device] [-t treeshaker-rounds] program[.ms]\n");
+		fprintf(stdout, "Usage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]\n");
+
 		return(EXIT_FAILURE);
 	}
 
