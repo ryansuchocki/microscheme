@@ -27,7 +27,8 @@ void treeshaker_shakeExpr(AST_expr *expr) {
 		case TailCall: treeshaker_shakeExpr(expr->proc); 
 		case Branch: 	
 		case Sequence: 	
-		case PrimCall: 	
+		case PrimCall: 
+		case OtherFundemental:	
 		case And: 		
 		case Or: 		
 		case Lambda:	for (i=0; i<expr->numBody; i++) {treeshaker_shakeExpr(expr->body[i]);} break;

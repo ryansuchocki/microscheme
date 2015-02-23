@@ -80,15 +80,10 @@
 	x
 	(asm "util_serial_send:"
 	     "  PUSH GP1"
-	     ;"  util_serial_send_wait1:"
-	     ;"    LDS GP1, UCSR0A"
-	     ;"    SBRS GP1, UDRE0"
-	     ;"    RJMP util_serial_send_wait1"
-	     ;"  STS	UDR0, CRSh"
-	     "  util_serial_send_wait2:"
+	     "  util_serial_send_wait:"
 	     "    LDS GP1, UCSR0A"
 	     "    SBRS GP1, UDRE0"
-	     "    RJMP util_serial_send_wait2"
+	     "    RJMP util_serial_send_wait"
 	     "  STS	UDR0, CRSl"
 	     "  POP GP1"))
 

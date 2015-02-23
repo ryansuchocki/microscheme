@@ -11,9 +11,9 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <ctype.h>
-#include <fcntl.h>   /* File control definitions */
-#include <errno.h>   /* Error number definitions */
-#include <termios.h> /* POSIX terminal control definitions */
+//#include <fcntl.h>   /* File control definitions */
+//#include <errno.h>   /* Error number definitions */
+
 
 #include "lexer.h"
 #include "parser.h"
@@ -27,7 +27,6 @@
 
 int opt_includeonce = true, opt_assemble = false, 
 	opt_upload = false, opt_cleanup = false, 
-	opt_primitives = true, opt_stdlib = true, 
 	opt_aggressive = true, opt_verbose = false, 
 	opt_verify = false, opt_softreset = false;
 
@@ -63,15 +62,13 @@ int main(int argc, char *argv[]) {
 	char *inname, *outname, *basename;
 	int c;
 
-	while ((c = getopt(argc, argv, "iaucpsovrm:d:t:w:")) != -1)
+	while ((c = getopt(argc, argv, "iaucovrm:d:t:w:")) != -1)
 	switch (c)	{
 		case 'i':	opt_includeonce = false;	break;
 		case 'u':	opt_upload = true;			
 		case 'a':	opt_assemble = true;		break;
 		case 'c':	opt_cleanup = true;			break;
-		case 'p':	opt_primitives = false;		break;
-		//case 's':	opt_stdlib = false;			break;
-		case 's':	opt_softreset = true;		break;
+		//case 's':	opt_softreset = true;		break;
 		case 'o':	opt_aggressive = false;		break;
 		case 'v':	opt_verbose = true;			break;
 		case 'r':	opt_verify = true;			break;
@@ -144,11 +141,9 @@ int main(int argc, char *argv[]) {
 	// 1) Lex the file
 	lexer_tokenNode *root = NULL;
 
-	if (opt_primitives)
-		root = lexer_lexBlob(src_primitives_ms, src_primitives_ms_len, root);
+	root = lexer_lexBlob(src_primitives_ms, src_primitives_ms_len, root);
 
-	if (opt_stdlib)
-		root = lexer_lexBlob(src_stdlib_ms, src_stdlib_ms_len, root);
+	root = lexer_lexBlob(src_stdlib_ms, src_stdlib_ms_len, root);
 
 	root = lexer_lexFile(inname, root);
 
@@ -258,28 +253,28 @@ int main(int argc, char *argv[]) {
 		try_execute(cmd);
 	}
 
-	if (opt_softreset && theModel.software_reset) {
-		fprintf(stdout, ">> Attempting software reset...\n");
-		int fd = -1;
-		struct termios options;
+	// if (opt_softreset && theModel.software_reset) {
+	// 	fprintf(stdout, ">> Attempting software reset...\n");
+	// 	int fd = -1;
+	// 	struct termios options;
 		
-		tcgetattr(fd, &options);
+	// 	tcgetattr(fd, &options);
 
-		cfsetispeed(&options, B1200);
-		cfsetospeed(&options, B1200);
+	// 	cfsetispeed(&options, B1200);
+	// 	cfsetospeed(&options, B1200);
 		
-		options.c_cflag |= (CLOCAL | CREAD | CS8 | HUPCL);
-		options.c_cflag &= ~(PARENB | CSTOPB);
+	// 	options.c_cflag |= (CLOCAL | CREAD | CS8 | HUPCL);
+	// 	options.c_cflag &= ~(PARENB | CSTOPB);
 		
-		tcsetattr(fd, TCSANOW, &options);
+	// 	tcsetattr(fd, TCSANOW, &options);
 
-		fd = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
-		if (fd == -1) {
-			fprintf(stderr, ">> Warning: Unable to open %s for soft reset. (%s)\n", device, strerror(errno));
-		} else {
-			close(fd);
-		}
-	}
+	// 	fd = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
+	// 	if (fd == -1) {
+	// 		fprintf(stderr, ">> Warning: Unable to open %s for soft reset. (%s)\n", device, strerror(errno));
+	// 	} else {
+	// 		close(fd);
+	// 	}
+	// }
 
 	if (opt_upload) {
 

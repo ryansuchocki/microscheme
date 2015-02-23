@@ -5,7 +5,7 @@
 
 // Type definitions
 	enum lexer_tokenNodeType {Keyword, Primword, Numerictoken, Identifier, Stringtoken, Booleantoken, Chartoken, Parens, Nulltoken };  
-	enum keywordtype {lambda, ifword, let, set, define, begin, andword, orword, includeword};
+	enum keywordtype {lambda, ifword, let, set, define, begin, andword, orword, includeword, freeword, ifmodelword, listword, vectorword, callcfuncword, includeasmword, asmword};
 	typedef struct lexer_tokenNode {enum lexer_tokenNodeType type; enum keywordtype keyword; char *raw; 
 		struct lexer_tokenNode **children; int numChildren; struct lexer_tokenNode *parent; int fileLine;} lexer_tokenNode;
 

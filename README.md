@@ -36,6 +36,25 @@ The result is a standalone binary called 'microscheme' which is entirely self-co
 from other files in this repository. On linux systems, invoke `$ sudo make install` to copy the binary to
 /usr/local/bin/, thus making it available system-wide.
 
+Usage
+-----
+
+As of version 0.9.1:
+
+`Usage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]`
+
+-a = Assemble (implied by -u)
+-u = Upload (requires -d)
+-c = Cleanup (removes intermediate files)
+-v = Verbose
+-r = Verify (Uploading takes longer)
+-i = Allow the same file to be included more than once
+-o = Disable optimisations	
+-m model = Specify a model (UNO/MEGA/LEO...)
+-d device = Specify a physical device.
+-w "file names" = 'Link' with external C or assembly files.
+-t rounds = Specify the maximum number of tree-shaker rounds
+
 Prerequisites
 -------------
 

@@ -278,6 +278,102 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 
 			break;
 
+		case OtherFundemental:
+			if (strcmp(expr->primproc, "list") == 0) {
+				for (i=0; i<expr->numBody; i++) {
+					codegen_emit(expr->body[i], parent_numArgs, outputFile);
+					fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
+				}
+
+				fprintf(outputFile, "\tLDI CRSh, 232\n\tLDI CRSl, 0\n");
+
+				for (i=0; i<expr->numBody; i++) {
+					fprintf(outputFile, "\tPOP GP1\n\tPOP GP2\n\tCALL inline_cons\n");
+				}
+			}
+
+			else if (strcmp(expr->primproc, "vector") == 0) {
+
+				// Here we do some static analysis, in order to select the faster vector-building routine
+				// whenever possible:
+				bool all_const = true;
+
+				for (i=0; i<expr->numBody; i++) {
+					if (expr->body[i]->type != Constant)
+						all_const = false;
+				}
+
+				if (all_const) {
+
+					fprintf(outputFile, "\tLDI GP1, lo8(%i)\n\tLDI GP2, hi8(%i)\n\tST X+, GP1\n\tST X+, GP2\n", expr->numBody, expr->numBody);
+
+					for (i=0; i<expr->numBody; i++) {
+						codegen_emit(expr->body[i], parent_numArgs, outputFile);
+						fprintf(outputFile, "\tST X+, CRSl\n\tST X+, CRSh\n");
+					}
+
+					fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSUBI CRSl, lo8(%i)\n\tSBCI CRSh, hi8(%i)\n\tORI CRSh, 160\n", 2+2*expr->numBody, 2+2*expr->numBody);
+				
+				} else {
+
+					for (i=expr->numBody-1; i>=0; i--) {
+						codegen_emit(expr->body[i], parent_numArgs, outputFile);
+						fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
+					}
+
+					fprintf(outputFile, "\tLDI GP1, lo8(%i)\n\tLDI GP2, hi8(%i)\n\tST X+, GP1\n\tST X+, GP2\n", expr->numBody, expr->numBody);
+
+					for (i=0; i<expr->numBody; i++) {
+						fprintf(outputFile, "\tPOP CRSl\n\tPOP CRSh\n");
+						fprintf(outputFile, "\tST X+, CRSl\n\tST X+, CRSh\n");
+					}
+
+					fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSUBI CRSl, lo8(%i)\n\tSBCI CRSh, hi8(%i)\n\tORI CRSh, 160\n", 2+2*expr->numBody, 2+2*expr->numBody);
+				}
+			}
+
+			else if (strcmp(expr->primproc, "free!") == 0) {
+				fprintf(outputFile, "\tPUSH HFPh\n\tPUSH HFPl\n");
+
+				for (i=0; i<expr->numBody; i++) {
+					codegen_emit(expr->body[i], parent_numArgs, outputFile);
+				}
+
+				fprintf(outputFile, "\tPOP HFPl\n\tPOP HFPh\n");
+			}
+
+			else if (strcmp(expr->primproc, "@if-model") == 0 && expr->numBody == 2) {
+				if (strcmp(expr->body[0]->value->strvalue, model) == 0) {
+					codegen_emit(expr->body[1], parent_numArgs, outputFile);
+				}
+
+			}
+			
+			else if (strcmp(expr->primproc, "call-c-func") == 0 && expr->numBody > 0 && expr->numBody <= 10) {
+				fprintf(outputFile, "\tCALL before_c_func\n");
+				
+				//load args into (24:25) -> (8:9) descending l:h
+				for (i=1; i<expr->numBody; i++) {
+					codegen_emit(expr->body[i], parent_numArgs, outputFile);
+					fprintf(outputFile, "\tMOV r%i, CRSl\n\tMOV r%i, CRSh\n", 26 - (i * 2), 27 - (i * 2));
+				}
+
+				fprintf(outputFile, "\tCALL %s\n\tCALL after_c_func\n", expr->body[0]->value->strvalue);
+			}
+
+			else if (strcmp(expr->primproc, "include-asm") == 0 && expr->numBody == 1) {
+				fprintf(outputFile, ".include \"%s\"\n", expr->body[0]->value->strvalue);
+			}
+
+			else if (strcmp(expr->primproc, "asm") == 0) {
+				for (i=0; i<expr->numBody; i++) {
+					fprintf(outputFile, "\t%s\n", expr->body[i]->value->strvalue);
+				}
+			}
+
+			break;
+
+
 		case PrimCall:
 			if ((strcmp(expr->primproc, "=") == 0 || strcmp(expr->primproc, "eq?") == 0) && expr->numBody == 2) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
@@ -367,11 +463,6 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tORI CRSh, 31\n\tLDI GP1, 159\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 224\n\tCLR CRSl\n");
 			}
 
-			else if (strcmp(expr->primproc, "vector?") == 0 && expr->numBody == 1) {
-				codegen_emit(expr->body[0], parent_numArgs, outputFile);
-				fprintf(outputFile, "\tORI CRSh, 31\n\tLDI GP1, 191\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 224\n\tCLR CRSl\n");
-			}
-
 			else if (strcmp(expr->primproc, "procedure?") == 0 && expr->numBody == 1) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tORI CRSh, 31\n\tLDI GP1, 223\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 224\n\tCLR CRSl\n");
@@ -428,67 +519,9 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tMOVW GP1, CRSl\n\tMOVW CRSl, HFPl\n\tORI CRSh, 160\n\tST X+, GP1\n\tST X+, GP2\n\tLSL GP1\n\tROL GP2\n\tADD HFPl, GP1\n\tADC HFPh, GP2\n");
 			}
 
-			else if (strcmp(expr->primproc, "vector") == 0) {
-
-				// Here we do some static analysis, in order to select the faster vector-building routine
-				// whenever possible:
-				bool all_const = true;
-
-				for (i=0; i<expr->numBody; i++) {
-					if (expr->body[i]->type != Constant)
-						all_const = false;
-				}
-
-				if (all_const) {
-
-					fprintf(outputFile, "\tLDI GP1, lo8(%i)\n\tLDI GP2, hi8(%i)\n\tST X+, GP1\n\tST X+, GP2\n", expr->numBody, expr->numBody);
-
-					for (i=0; i<expr->numBody; i++) {
-						codegen_emit(expr->body[i], parent_numArgs, outputFile);
-						fprintf(outputFile, "\tST X+, CRSl\n\tST X+, CRSh\n");
-					}
-
-					fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSUBI CRSl, lo8(%i)\n\tSBCI CRSh, hi8(%i)\n\tORI CRSh, 160\n", 2+2*expr->numBody, 2+2*expr->numBody);
-				
-				} else {
-
-					for (i=expr->numBody-1; i>=0; i--) {
-						codegen_emit(expr->body[i], parent_numArgs, outputFile);
-						fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-					}
-
-					fprintf(outputFile, "\tLDI GP1, lo8(%i)\n\tLDI GP2, hi8(%i)\n\tST X+, GP1\n\tST X+, GP2\n", expr->numBody, expr->numBody);
-
-					for (i=0; i<expr->numBody; i++) {
-						fprintf(outputFile, "\tPOP CRSl\n\tPOP CRSh\n");
-						fprintf(outputFile, "\tST X+, CRSl\n\tST X+, CRSh\n");
-					}
-
-					fprintf(outputFile, "\tMOVW CRSl, HFPl\n\tSUBI CRSl, lo8(%i)\n\tSBCI CRSh, hi8(%i)\n\tORI CRSh, 160\n", 2+2*expr->numBody, 2+2*expr->numBody);
-				}
-			}
-
-			else if (strcmp(expr->primproc, "list") == 0) {
-				for (i=0; i<expr->numBody; i++) {
-					codegen_emit(expr->body[i], parent_numArgs, outputFile);
-					fprintf(outputFile, "\tPUSH CRSh\n\tPUSH CRSl\n");
-				}
-
-				fprintf(outputFile, "\tLDI CRSh, 232\n\tLDI CRSl, 0\n");
-
-				for (i=0; i<expr->numBody; i++) {
-					fprintf(outputFile, "\tPOP GP1\n\tPOP GP2\n\tCALL inline_cons\n");
-				}
-			}
-
-			else if (strcmp(expr->primproc, "free!") == 0) {
-				fprintf(outputFile, "\tPUSH HFPh\n\tPUSH HFPl\n");
-
-				for (i=0; i<expr->numBody; i++) {
-					codegen_emit(expr->body[i], parent_numArgs, outputFile);
-				}
-
-				fprintf(outputFile, "\tPOP HFPl\n\tPOP HFPh\n");
+			else if (strcmp(expr->primproc, "vector?") == 0 && expr->numBody == 1) {
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tORI CRSh, 31\n\tLDI GP1, 191\n\tCPSE CRSh, GP1\n\tCBR CRSh, 1\n\tORI CRSh, 224\n\tCLR CRSl\n");
 			}
 
 			else if (strcmp(expr->primproc, "vector-ref") == 0 && expr->numBody == 2) {
@@ -578,38 +611,9 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tCLR CRSh\n");
 			}
 
-			else if (strcmp(expr->primproc, "@if-model") == 0 && expr->numBody == 2) {
-				if (strcmp(expr->body[0]->value->strvalue, model) == 0) {
-					codegen_emit(expr->body[1], parent_numArgs, outputFile);
-				}
-
-			}
-
 			else if (strcmp(expr->primproc, "arity") == 0 && expr->numBody == 1) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tMOV GP1, CRSh\n\tANDI GP1, 224\n\tLDI GP2, 192\n\tCPSE GP1, GP2\n\tJMP error_notproc\n\tANDI CRSh, 31\n\tLD GP1, Y;CRS\n\tMOV CRSl, GP1\n\tMOV CRSh, zeroReg\n");
-			}
-			
-			else if (strcmp(expr->primproc, "call-c-func") == 0 && expr->numBody > 0 && expr->numBody <= 10) {
-				fprintf(outputFile, "\tCALL before_c_func\n");
-				
-				//load args into (24:25) -> (8:9) descending l:h
-				for (i=1; i<expr->numBody; i++) {
-					codegen_emit(expr->body[i], parent_numArgs, outputFile);
-					fprintf(outputFile, "\tMOV r%i, CRSl\n\tMOV r%i, CRSh\n", 26 - (i * 2), 27 - (i * 2));
-				}
-
-				fprintf(outputFile, "\tCALL %s\n\tCALL after_c_func\n", expr->body[0]->value->strvalue);
-			}
-
-			else if (strcmp(expr->primproc, "include-asm") == 0 && expr->numBody == 1) {
-				fprintf(outputFile, ".include \"%s\"\n", expr->body[0]->value->strvalue);
-			}
-
-			else if (strcmp(expr->primproc, "asm") == 0) {
-				for (i=0; i<expr->numBody; i++) {
-					fprintf(outputFile, "\t%s\n", expr->body[i]->value->strvalue);
-				}
 			}
 
 			else {

@@ -101,15 +101,15 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 				break;
 
 			case Primword:
-				if(strcmp(token[0]->raw, "list") == 0 || strcmp(token[0]->raw, "vector") == 0) {
-					fprintf(stderr, ">> ERROR 6a: Procedure '%s' is variadic-primitive, and cannot be used as a value\n", token[0]->raw);
-					exit(EXIT_FAILURE);
-				} else {
+				// if(strcmp(token[0]->raw, "list") == 0 || strcmp(token[0]->raw, "vector") == 0) {
+				// 	fprintf(stderr, ">> ERROR 6a: Procedure '%s' is variadic-primitive, and cannot be used as a value\n", token[0]->raw);
+				// 	exit(EXIT_FAILURE);
+				// } else {
 					//fprintf(stderr, ">> ERROR 6: Procedure '%s' is primitive, and cannot be used as a value\n", token[0]->raw);
 					//exit(EXIT_FAILURE);					
 					result->type = Variable;
 					result->variable = str_clone(token[0]->raw);
-				}
+				//}
 				
 				break;
 
@@ -401,50 +401,60 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 								break;
 
 							case includeword:
-							if (innerNumTokens == 2) {
-								if (innerTokens[1]->type == Stringtoken) {
-									bool alreadyincluded = false;
-									for (i = 0; i<globalIncludeListN; i++) {
-										if (strcmp(innerTokens[1]->raw, globalIncludeList[i]) == 0) {
-											if (opt_includeonce) {
-												fprintf(stderr, ">> File '%s' already included, skipping.\n", innerTokens[1]->raw);
-												alreadyincluded = true;
-											} else {
-												fprintf(stderr, ">> Note: '%s' included again, consider compiling without '-i'.\n", innerTokens[1]->raw);
+								if (innerNumTokens == 2) {
+									if (innerTokens[1]->type == Stringtoken) {
+										bool alreadyincluded = false;
+										for (i = 0; i<globalIncludeListN; i++) {
+											if (strcmp(innerTokens[1]->raw, globalIncludeList[i]) == 0) {
+												if (opt_includeonce) {
+													fprintf(stderr, ">> File '%s' already included, skipping.\n", innerTokens[1]->raw);
+													alreadyincluded = true;
+												} else {
+													fprintf(stderr, ">> Note: '%s' included again, consider compiling without '-i'.\n", innerTokens[1]->raw);
+												}
+
+												// insert a placeholder #f in the AST:
+												c = try_malloc(sizeof(AST_const));
+												c->type = Booleanconst;
+												c->strvalue = NULL;
+												c->value=0;
+												result->value=c;
 											}
-
-											// insert a placeholder #f in the AST:
-											c = try_malloc(sizeof(AST_const));
-											c->type = Booleanconst;
-											c->strvalue = NULL;
-											c->value=0;
-											result->value=c;
 										}
+
+										if (!alreadyincluded) {
+											globalIncludeListN = globalIncludeListN + 1;
+											globalIncludeList = try_realloc(globalIncludeList, globalIncludeListN * sizeof(char*));
+											globalIncludeList[globalIncludeListN - 1] = str_clone(innerTokens[1]->raw);
+
+											if (opt_verbose) fprintf(stderr, ">> Including file '%s' ", innerTokens[1]->raw);
+											fileLine++;
+											innerFile = lexer_lexFile(innerTokens[1]->raw, NULL);
+											free(result);
+											result = parser_parseFile(innerFile->children, innerFile->numChildren);
+											// Pass on topLevel. So if an (include x) is at the top level, then defines are allowed within it.s
+											lexer_freeTokenTree(innerFile);
+										}
+
+									} else {
+										fprintf(stderr, ">> ERROR 18: First operand to INCLUDE should be STRING\n");
+										exit(EXIT_FAILURE);
 									}
-
-									if (!alreadyincluded) {
-										globalIncludeListN = globalIncludeListN + 1;
-										globalIncludeList = try_realloc(globalIncludeList, globalIncludeListN * sizeof(char*));
-										globalIncludeList[globalIncludeListN - 1] = str_clone(innerTokens[1]->raw);
-
-										if (opt_verbose) fprintf(stderr, ">> Including file '%s' ", innerTokens[1]->raw);
-										fileLine++;
-										innerFile = lexer_lexFile(innerTokens[1]->raw, NULL);
-										free(result);
-										result = parser_parseFile(innerFile->children, innerFile->numChildren);
-										// Pass on topLevel. So if an (include x) is at the top level, then defines are allowed within it.s
-										lexer_freeTokenTree(innerFile);
-									}
-
 								} else {
-									fprintf(stderr, ">> ERROR 18: First operand to INCLUDE should be STRING\n");
+									fprintf(stderr, ">> ERROR 19: Wrong number of operands to INCLUDE form\n");
 									exit(EXIT_FAILURE);
 								}
-							} else {
-								fprintf(stderr, ">> ERROR 19: Wrong number of operands to INCLUDE form\n");
-								exit(EXIT_FAILURE);
-							}
 							break;
+
+							default:
+								result->type = OtherFundemental;
+								result->primproc = str_clone(innerTokens[0]->raw);
+								result->numBody = innerNumTokens-1;
+								result->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-1));
+								for (i=1; i<innerNumTokens; i++) {
+									result->body[i-1] = parser_parseExpr(&innerTokens[i], 1, false, false);
+								}
+								break;
 						} break;
 					case Primword:
 						result->type = PrimCall;

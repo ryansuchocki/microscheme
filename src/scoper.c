@@ -45,6 +45,7 @@ AST_expr *scoper_scopeExpr(AST_expr *expr) {
 		case Branch: 	
 		case Sequence: 	
 		case PrimCall: 	
+		case OtherFundemental:
 		case And: 		
 		case Or: 		for (i=0; i<expr->numBody; i++) {expr->body[i] = scoper_scopeExpr(expr->body[i]);} return expr;
 		
