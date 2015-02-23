@@ -1,13 +1,13 @@
 Microscheme 
 ===========
 
-Microscheme is a Scheme subset/variant designed for Atmel microcontrollers, especially as found on Arduino boards.
+Microscheme is a Scheme subset designed for Atmel microcontrollers, especially as found on Arduino boards.
 
 Recent Changes
 --------------
 
- 1. Microscheme is now open-source!
- 2. Microscheme now has a tree-shaker
+ 1. Microscheme now has apply!
+ 2. Microscheme now has an FFI!
 
 Compiling
 ---------
