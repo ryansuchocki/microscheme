@@ -62,8 +62,27 @@ int main(int argc, char *argv[]) {
 	char *inname, *outname, *basename, *shortbase;
 	int c;
 
-	while ((c = getopt(argc, argv, "iaucovrm:d:t:w:")) != -1)
+	fprintf(stdout, "Microscheme 0.9.1, (C) Ryan Suchocki\n");
+
+	char *helpmsg = "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]\n\n"
+			"Option flags:\n"
+			"  -a    Assemble (implied by -u) (requires -m)\n"
+			"  -u    Upload (requires -d)\n"
+			"  -c    Cleanup (removes intermediate files)\n"
+			"  -v    Verbose\n"
+			"  -r    Verify (Uploading takes longer)\n"
+			"  -i    Allow the same file to be included more than once\n"
+			"  -o    Disable optimisations  \n"
+			"  -h    Show this help message \n\n"
+			"Configuration flags:\n"
+			"  -m model     Specify a model (UNO/MEGA/LEO...)\n"
+			"  -d device    Specify a physical device\n"
+			"  -w files     'Link' with external C or assembly files\n"
+			"  -t rounds    Specify the maximum number of tree-shaker rounds\n";
+
+	while ((c = getopt(argc, argv, "hiaucovrm:d:t:w:")) != -1)
 	switch (c)	{
+		case 'h':	fprintf(stdout, "%s", helpmsg); exit(EXIT_SUCCESS); break;
 		case 'i':	opt_includeonce = false;	break;
 		case 'u':	opt_upload = true;			
 		case 'a':	opt_assemble = true;		break;
@@ -88,23 +107,9 @@ int main(int argc, char *argv[]) {
 			abort ();
 	}
 
-	fprintf(stdout, "Microscheme 0.9.1, (C) Ryan Suchocki\n");
 
 	if (argc < 2) {
-		fprintf(stdout, "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]\n\n"
-			"Option flags:\n"
-			"  -a    Assemble (implied by -u) (requires -m)\n"
-			"  -u    Upload (requires -d)\n"
-			"  -c    Cleanup (removes intermediate files)\n"
-			"  -v    Verbose\n"
-			"  -r    Verify (Uploading takes longer)\n"
-			"  -i    Allow the same file to be included more than once\n"
-			"  -o    Disable optimisations  \n\n"
-			"Configuration flags:\n"
-			"  -m model     Specify a model (UNO/MEGA/LEO...)\n"
-			"  -d device    Specify a physical device\n"
-			"  -w files     'Link' with external C or assembly files\n"
-			"  -t rounds    Specify the maximum number of tree-shaker rounds\n");
+		fprintf(stdout, "%s", helpmsg);
 
 		return(EXIT_FAILURE);
 	}
