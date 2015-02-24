@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 	// First, we process the user's command-line arguments, which dictate the input file
 	// and target processor.
 
-	char *inname, *outname, *basename;
+	char *inname, *outname, *basename, *shortbase;
 	int c;
 
 	while ((c = getopt(argc, argv, "iaucovrm:d:t:w:")) != -1)
@@ -91,7 +91,20 @@ int main(int argc, char *argv[]) {
 	fprintf(stdout, "Microscheme 0.9.1, (C) Ryan Suchocki\n");
 
 	if (argc < 2) {
-		fprintf(stdout, "Usage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]\n");
+		fprintf(stdout, "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]\n\n"
+			"Option flags:\n"
+			"  -a    Assemble (implied by -u) (requires -m)\n"
+			"  -u    Upload (requires -d)\n"
+			"  -c    Cleanup (removes intermediate files)\n"
+			"  -v    Verbose\n"
+			"  -r    Verify (Uploading takes longer)\n"
+			"  -i    Allow the same file to be included more than once\n"
+			"  -o    Disable optimisations  \n\n"
+			"Configuration flags:\n"
+			"  -m model     Specify a model (UNO/MEGA/LEO...)\n"
+			"  -d device    Specify a physical device\n"
+			"  -w files     'Link' with external C or assembly files\n"
+			"  -t rounds    Specify the maximum number of tree-shaker rounds\n");
 
 		return(EXIT_FAILURE);
 	}
@@ -101,7 +114,19 @@ int main(int argc, char *argv[]) {
 	basename=str_clone(inname);
 	basename[strcspn(inname, ".")] = 0;
 
-	outname=str_clone_more(basename, 2);
+	#ifdef __WIN32 // Defined for both 32 and 64 bit environments
+		char delimit = '\\';
+	#else
+		char delimit = '/';
+	#endif
+
+	if (strrchr(basename, delimit)) {
+		shortbase = strrchr(basename, delimit) + 1;
+	} else {
+		shortbase = basename;
+	}
+
+	outname=str_clone_more(shortbase, 2);
 	strcat(outname, ".s");
 
 	if (argc == optind) {
@@ -247,11 +272,11 @@ int main(int argc, char *argv[]) {
 		}
 
 		fprintf(stderr, ">> Assembling...\n");
-		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s %s", theModel.STR_TARGET, basename, basename, linkwith);
+		sprintf(cmd, "avr-gcc -mmcu=%s -o %s.elf %s.s %s", theModel.STR_TARGET, shortbase, shortbase, linkwith);
 
 		try_execute(cmd);
 
-		sprintf(cmd, "avr-objcopy --output-target=ihex %s.elf %s.hex", basename, basename);
+		sprintf(cmd, "avr-objcopy --output-target=ihex %s.elf %s.hex", shortbase, shortbase);
 		
 		try_execute(cmd);
 	}
@@ -292,7 +317,7 @@ int main(int argc, char *argv[]) {
 		if (opt_verbose) opt1 = "-v"; else opt1 = "";
 		if (opt_verify) opt2 = ""; else opt2 = "-V";
 
-		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, theModel.STR_TARGET, theModel.STR_PROG, device, theModel.STR_BAUD, basename);
+		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, theModel.STR_TARGET, theModel.STR_PROG, device, theModel.STR_BAUD, shortbase);
 		
 		try_execute(cmd);
 	}
@@ -301,9 +326,9 @@ int main(int argc, char *argv[]) {
 		fprintf(stdout, ">> Cleaning Up...\n");
 
 		#ifdef __WIN32 // Defined for both 32 and 64 bit environments
-			sprintf(cmd, "del %s.s %s.elf %s.hex", basename, basename, basename);
+			sprintf(cmd, "del %s.s %s.elf %s.hex", shortbase, shortbase, shortbase);
 		#else
-			sprintf(cmd, "rm -f %s.s %s.elf %s.hex", basename, basename, basename);
+			sprintf(cmd, "rm -f %s.s %s.elf %s.hex", shortbase, shortbase, shortbase);
 		#endif
 
 		try_execute(cmd);

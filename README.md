@@ -42,19 +42,22 @@ Usage
 As of version 0.9.1, the usage is:
 
 ```
-microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]
+Usage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]
 
--a = Assemble (implied by -u) (requires -m)
--u = Upload (requires -d)
--c = Cleanup (removes intermediate files)
--v = Verbose
--r = Verify (Uploading takes longer)
--i = Allow the same file to be included more than once
--o = Disable optimisations	
--m model = Specify a model (UNO/MEGA/LEO...)
--d device = Specify a physical device
--w "file names" = 'Link' with external C or assembly files
--t rounds = Specify the maximum number of tree-shaker rounds
+Option flags:
+  -a    Assemble (implied by -u) (requires -m)
+  -u    Upload (requires -d)
+  -c    Cleanup (removes intermediate files)
+  -v    Verbose
+  -r    Verify (Uploading takes longer)
+  -i    Allow the same file to be included more than once
+  -o    Disable optimisations  
+
+Configuration flags:
+  -m model     Specify a model (UNO/MEGA/LEO...)
+  -d device    Specify a physical device
+  -w files     'Link' with external C or assembly files
+  -t rounds    Specify the maximum number of tree-shaker rounds
 ```
 
 Prerequisites
