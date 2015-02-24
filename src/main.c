@@ -117,7 +117,6 @@ int main(int argc, char *argv[]) {
 	inname=argv[optind];
 
 	basename=str_clone(inname);
-	basename[strcspn(inname, ".")] = 0;
 
 	#ifdef __WIN32 // Defined for both 32 and 64 bit environments
 		char delimit = '\\';
@@ -130,6 +129,8 @@ int main(int argc, char *argv[]) {
 	} else {
 		shortbase = basename;
 	}
+
+	shortbase[strcspn(shortbase, ".")] = 0;
 
 	outname=str_clone_more(shortbase, 2);
 	strcat(outname, ".s");
