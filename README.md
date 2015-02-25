@@ -52,6 +52,7 @@ Option flags:
   -r    Verify (Uploading takes longer)
   -i    Allow the same file to be included more than once
   -o    Disable optimisations  
+  -h    Show this help message
 
 Configuration flags:
   -m model     Specify a model (UNO/MEGA/LEO...)
