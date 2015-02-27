@@ -26,6 +26,9 @@ model_info models[] = {
 		".EQU	DDR13,	0x04	\n"
 		".EQU	P13,	7		\n"
 
+		// This is necessary to stay within 13-bit addresses!
+		".EQU	_ms_stack,	0x2000\n"
+
 		".EQU	UDR0,	0xC6	\n"
 		".EQU	UBRR0H,	0xC5	\n"
 		".EQU	UBRR0L,	0xC4	\n"
@@ -52,6 +55,8 @@ model_info models[] = {
 		".EQU	DDR13,	0x04	\n"
 		".EQU	P13,	5		\n"
 
+		".EQU	_ms_stack,	__stack\n"
+
 		".EQU	UDR0,	0xC6	\n"
 		".EQU	UBRR0H,	0xC5	\n"
 		".EQU	UBRR0L,	0xC4	\n"
@@ -77,6 +82,8 @@ model_info models[] = {
 		".EQU	PORT13,	0x08	\n"
 		".EQU	DDR13,	0x07	\n"
 		".EQU	P13,	7		\n"
+
+		".EQU	_ms_stack,	__stack\n"
 	}
 };
 

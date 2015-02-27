@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 	char *inname, *outname, *basename, *shortbase;
 	int c;
 
-	fprintf(stdout, "Microscheme 0.9.1, (C) Ryan Suchocki\n");
+	fprintf(stdout, "Microscheme 0.9.2, (C) Ryan Suchocki\n");
 
 	char *helpmsg = "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]\n\n"
 			"Option flags:\n"

@@ -437,7 +437,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 			}
 
 			else if (strcmp(expr->primproc, "stacksize") == 0 && expr->numBody == 0) {
-				fprintf(outputFile, "\tIN GP1, SPl\n\tIN GP2, SPh\n\tLDI CRSl, lo8(RAMEND)\n\tLDI CRSh, hi8(RAMEND)\n\tSUB CRSl, GP1\n\tSBC CRSh, GP2\n");
+				fprintf(outputFile, "\tIN GP1, SPl\n\tIN GP2, SPh\n\tLDI CRSl, lo8(__stack)\n\tLDI CRSh, hi8(__stack)\n\tSUB CRSl, GP1\n\tSBC CRSh, GP2\n");
 			}
 
 			else if (strcmp(expr->primproc, "heapsize") == 0 && expr->numBody == 0) {

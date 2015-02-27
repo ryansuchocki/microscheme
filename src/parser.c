@@ -15,7 +15,7 @@ extern bool opt_verbose;
 extern char **globalIncludeList;
 extern int globalIncludeListN;
 
-AST_expr *currentLambda = NULL, *tmpLambda = NULL;
+AST_expr *currentLambda = NULL;
 
 void parser_initExpr(AST_expr *expr) {
 	expr->type = Constant;
@@ -144,7 +144,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 									exit(EXIT_FAILURE);
 								}
 
-								tmpLambda = currentLambda;
+								AST_expr *tmpLambda = currentLambda;
 								currentLambda = result;
 									result->numBody = innerNumTokens-2;
 									result->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-2));

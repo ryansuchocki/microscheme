@@ -4,7 +4,7 @@ import time
 import sys
 
 
-ser = serial.Serial(sys.argv[1], 1000000)
+ser = serial.Serial(sys.argv[1], 9600)
 ser.flushInput()
 ser.close()
 
@@ -18,6 +18,4 @@ ser.write(b'5')
 
 while 1:
 	b1 = ser.read()
-	b2 = ser.read()
-	val = (ord(b1) << 8) + ord(b2)
-	print (str(val))
+	print (str(b1))

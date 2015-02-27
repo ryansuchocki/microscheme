@@ -39,7 +39,7 @@ from other files in this repository. On linux systems, invoke `$ sudo make insta
 Usage
 -----
 
-As of version 0.9.1, the usage is:
+As of version 0.9.2, the usage is:
 
 ```
 Usage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]
