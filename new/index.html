@@ -1,0 +1,248 @@
+<html>
+  <head>
+    <title>(ms) About</title>
+   
+    
+
+    <script src="jquery-1.11.2.min.js"></script>
+    <script src="jquery.scrollTo.min.js"></script>
+    <script src="jquery.localScroll.min.js"></script>
+    <script src="hljs-ms.js"></script>
+    <script src="default.js"></script>
+
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="hljs-railcasts.css">
+    <link rel="stylesheet" href="default.css">
+  </head>
+  <body>
+
+    <div id="sidenav">
+      <ul id="thenav">
+        <li id="bigtop">(ms)</li>
+        <a href="#top"  class="smoothScroll active"><li id="subtitle">m i c r o s c h e m e . o r g</li></a>
+        <a href="#top"  class="smoothScroll active"><li>About</li></a>
+        <a href="#download" class="smoothScroll"><li>Download</li></a>
+        <a href="#examples" class="smoothScroll"><li>Examples</li></a>
+        <a href="#literature" class="smoothScroll"><li>Literature</li></a>
+        <a href="documentation.html"><li>Documentation</li></a>
+        <a href="https://github.com/ryansuchocki/microscheme"><li>GitHub <img src="img/GitHub-Mark-Light-32px.png" class="small-logo"/> </li></a>
+        
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" id="donateform"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="A2833ZL8QDFJW">
+          <a href="#" onclick="document.getElementById('donateform').submit();">
+            <li>
+              Donate <img class="small-logo" src="img/heart.png" />
+            </li>
+          </a>
+          <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+        </form>
+
+      </ul>
+
+      <div id="copy">&copy; 2015 Ryan Suchocki <em>et al.</em></div>
+    </div>
+
+    <a name="top" id="top" style="position:absolute; top:0px;"></a>
+    <div id="content">
+      <h1>About Microscheme</h1>
+
+      <p class="prose">
+        Microscheme, or (ms) for brevity, is a functional programming language for the Arduino, and for Atmel 8-bit AVR microcontrollers in general. Microscheme is a subset of Scheme, in the sense that every valid (ms) program is also a valid Scheme program (with the exception of Arduino hardware-specific primitives). The (ms) compiler performs function inlining, and features an aggressive tree-shaker, eliminating unused top-level definitions. Microscheme has a robust FFI (Foreign Function Interface) meaning that C code may be invoked directly from (ms) programs. Therefore, the power of the existing wealth of Arduino libraries is available within Microscheme.
+      </p>
+
+      <div class="leftbox">
+        <img src="img/hello.png" />
+      </div>
+      <div class="rightfill">
+        <pre><code class="hljs microscheme" style="min-width: 400px;">
+  ;; Hello World in Microscheme!
+
+  (include "libraries/lcd.ms")
+  (lcd-init)
+
+  (define foo "Hi, ")
+  (define bar "from Scheme!")
+
+  (for-each-vector write (vector-concat foo bar))
+        </code></pre>
+      </div>
+
+      <br class="newrow" />
+
+      <hr />
+
+      <a name="download" id="download"></a>
+      <h3>Download</h3>
+
+      <p class="prose">
+        The most up-to-date version of microscheme is always available via <a href="https://github.com/ryansuchocki/microscheme">GitHub</a>. Users should compile microscheme from source wherever possible. Since microscheme is in a state of ongoing development, it is not appropriate to provide installers or repository packages. For users who would not like to compile microscheme from source, standalone Linux and Windows binaries are uploaded periodically (also available via <a href="https://github.com/ryansuchocki/microscheme/releases">GitHub</a>).
+      </p>
+
+  
+
+      <div class="row">
+        <div class="box3">
+          <div class="internal">
+            <h3 class="uk-panel-title">Source Code</h3>
+            Clone (or download) the sorce code repository
+            <br />
+            <i>Latest, via GitHub</i>
+
+            <div class="butns">
+              <a href="#" onclick="copyToClipboard('git@github.com:ryansuchocki/microscheme.git');" class="butn l">
+                Clone
+              </a>
+              <a href="https://github.com/ryansuchocki/microscheme/archive/master.zip" class="butn">
+                Download 
+              </a>
+            </div>
+            <br class="newrow" />
+          </div>
+        </div>
+        <div class="box3">
+          <div class="internal">
+            <h3 class="uk-panel-title">Linux Binary</h3>
+            A pre-compiled binary for Linux (.tar.gz)
+            <br />
+            <i>From 23 Jan 2014</i>
+
+            <div class="butns">
+              <a href="https://github.com/ryansuchocki/microscheme/releases/download/stable-850/microscheme_0.8_BUILD850_linux_32.tar.gz" class="butn l">
+                32-Bit (.tar.gz)
+              </a>
+              <a href="https://github.com/ryansuchocki/microscheme/releases/download/stable-850/microscheme_0.8_BUILD850_linux_64.tar.gz" class="butn">
+                64-Bit (.tar.gz)
+              </a>
+            </div>
+            <br class="newrow" />
+          </div>
+        </div>
+        <div class="box3">
+          <div class="internal">
+            <h3 class="uk-panel-title">Windows Binary</h3>
+            A pre-compiled binary for MS Windows (.zip)
+            <br />
+            <i>(From 23 Jan 2014)</i>
+
+            <div class="butns">
+              <a href="https://github.com/ryansuchocki/microscheme/releases/download/stable-850/microscheme_0.8_BUILD850_win_32.zip" class="butn l">
+                32-Bit (.zip)
+              </a>
+              <a href="https://github.com/ryansuchocki/microscheme/releases/download/stable-850/microscheme_0.8_BUILD850_win_64.zip" class="butn">
+                64-Bit (.zip)
+              </a>
+            </div>
+            <br class="newrow" />
+          </div>
+        </div>
+      </div>
+
+      <br class="newrow" />
+
+      <hr />
+
+      <a name="examples" id="examples"></a>
+      <h3>Examples</h3>
+
+      <p class="prose">
+        GERALD&mdash;the fractal drawing robot&mdash;is a great example of why the functional programming paradigm is relevant to microcontroller platforms. The <i>algorithm</i> for tracing fractals (such as the Koch snowflake shown here) is intuitively expressed as a recursive procedure. GERALD is driven by stepper motors, which can be controlled acurately in software by sending sequences of high and low voltage signals to the microcontroller's <i>General Purpose Input/Output</i> pins. The low-level code to generate such sequences (which is essentially imperative) is also easily expressed in Scheme code, as sequences of side-effects are easily expressed as lists of (impure) procedures. For the full code, see 'examples/GERALD.ms' in the source code repository.
+      </p>
+
+      <div class="leftbox">
+        <iframe src="http://player.vimeo.com/video/116113844?byline=0&amp;portrait=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <p>Note: This footage is speeded up by 10x!</p>
+      </div>
+      <div class="rightfill">
+        <pre><code class="hljs microscheme" style="min-width: 300px;">
+;; Snippet from examples/GERALD.ms
+
+(define (segment level)
+  (if (zero? level)
+    (forward 3)
+    (begin
+      (segment (- level 1))
+      (left 60)
+      (segment (- level 1))
+      (right 120)
+      (segment (- level 1))
+      (left 60)
+      (segment (- level 1)))))
+
+(define (snowflake level)
+  (segment level)
+  (right 120)
+  (segment level)
+  (right 120)
+  (segment level)
+  (right 120))
+
+(snowflake 2)
+        </code></pre>
+      </div>
+
+      <br class="newrow" />
+
+      
+
+      <hr />
+
+      <a name="literature" id="literature"></a>
+      <a name="lastanchor" id="lastanchor"></a>
+
+      <h3>Literature</h3>
+
+      <p class="prose">
+        Microscheme was originally a final-year undergraduate project, and had to be closed-source for examination purposes. The project has changed since then, and there have been rapid improvements since it was made open-source. However, much of the information in the original dissertation is still relevant.
+      </p>
+
+      <p class="prose">
+        More recently, a short paper was prepared for the Scheme and Functional Programming workshop, containing a concise exposition of the Microscheme runtime system, and some of the considerations necessary for very resource-constrained platforms such as the ATMega controllers. This paper was very kindly presented by <a href="http://webyrd.net/">Will Byrd</a>.
+      </p>
+
+      <div class="row">
+        <div class="box2">
+          <div class="internal">
+            <h3 class="uk-panel-title">Original Dissertation</h3>
+            An extensive account of the project motivations and development.
+            <br />
+            <i>From June 2014</i>
+
+            <div class="butns1">
+              <a href="static/dissertation.pdf" class="butn">
+                Download (PDF)
+              </a>
+            </div>
+            <br class="newrow" />
+          </div>
+        </div>
+        <div class="box2">
+          <div class="internal">
+            <h3 class="uk-panel-title">SFP paper</h3>
+            A condensed technical exposition of the project.
+            <br />
+            <i>From October 2014</i>
+
+            <div class="butns">
+              <a href="http://homes.soic.indiana.edu/jhemann/scheme-14/" class="butn l">
+                SFP 2014
+              </a>
+              <a href="static/suchocki2014.pdf" class="butn">
+                Download (PDF)
+              </a>
+            </div>
+            <br class="newrow" />
+          </div>
+        </div>
+      </div>
+
+      <br class="newrow" />
+
+
+      <div id="endspace">
+        &nbsp;
+      </div>
+
+    </div>
+  </body>
+</html>
