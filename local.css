@@ -178,6 +178,15 @@ a:hover, a:active {
   
   font-family: monospace;
   font-size: 13px;
+
+  white-space: pre;
+
+  background-color: #dadef3;
+  color: #00092a;
+}
+
+.msform:hover {
+  background-color: #cacee3;
 }
 
 .msform strong {
@@ -196,22 +205,6 @@ il {
   font-size: 13px;
   color: #000065
 }
-
-.fundement {
-  background-color: #dadef3;
-  color: #00092a;
-}
-
-.libraryfo {
-  background-color: #dadef3;
-  color: #00092a;
-}
-
-.primitive {
-  background-color: #dadef3;
-  color: #00092a;
-}
-
 
 
 

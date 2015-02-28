@@ -212,239 +212,90 @@
 
 				<p>Primitive procedures are built-in to the language, and have efficient assembly-code implementations. The compiler performs <em>function inlining</em> on calls to these procedures, and they are available as first-class values at runtime.</p>
 
-				<div class="row">
-					<div class="lefthalf">
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>eq?</strong> x y)</span>
-					    tests for (shallow) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>=</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>&gt;</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>&gt;&equals;</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>&lt;</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>&lt;&equals;</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>not</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>¬</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  &nbsp;
-
-
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>number?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>pair?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>vector?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>procedure?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>char?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>boolean?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>null?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  &nbsp;
-
-
-					  
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>assert</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>error</strong>)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>stacksize</strong>)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>heapsize</strong>)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>pause</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>micropause</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-
-					</div>
-
-					<div class="righthalf">
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>+</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>*</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>-</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>div</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>mod</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>zero?</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  &nbsp;
-
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>cons</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>car</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>cdr</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>set-car!</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>set-cdr!</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  &nbsp;
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>vector-length</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>vector-ref</strong></strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>vector-set!</strong> x y z)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>make-vector</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  &nbsp;
-
-
-					 
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>digital-state</strong> x y)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>set-digital-state</strong> x y z)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>char->number</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>arity</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-
-					  &nbsp;
-
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>apply</strong> proc lst)</span>
-					    applies <il>proc</il> to arguments in <il>lst</il>.
-					  </p>
-					</div>
-				</div>
-
-				<br class="newrow" />
+				<p>
+					
+					<span class="msform libraryfo">(<strong>eq?</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>=</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>&gt;</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>&gt;&equals;</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>&lt;</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>&lt;&equals;</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>not</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>¬</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>number?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>pair?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>vector?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>procedure?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>char?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>boolean?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>null?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>assert</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>error</strong>)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>stacksize</strong>)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>heapsize</strong>)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>pause</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>micropause</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>+</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>*</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>-</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>div</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>mod</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>zero?</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>cons</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>car</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>cdr</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>set-car!</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>set-cdr!</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>vector-length</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>vector-ref</strong></strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>vector-set!</strong> x y z)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>make-vector</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>digital-state</strong> x y)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>set-digital-state</strong> x y z)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>char->number</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>arity</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>apply</strong> proc lst)</span>
+				</p>
 
 				<hr />
 
@@ -452,231 +303,141 @@
 				<h3>Library Procedures:<a href="#top" class="button icon arrowup" style="float:right;">Top</a></h3>
 
 				<p>
-				Library Procedures are written in microscheme, and are included automatically by the compiler. (Note: There is no unnecessary memory penalty, because all unused definitions are eliminated by the tree-shaker.) Library Procedures are not <em>inlined</em> by the compiler, and do not have hand-optimized assembly implementations, but they generally represent much richer computations than primitives.
+				Library Procedures are written in microscheme, and are included automatically by the compiler. (There is no unnecessary memory penalty, because all unused definitions are eliminated by the tree-shaker.) Library Procedures are not <em>inlined</em> by the compiler, and do not have hand-optimized assembly implementations, but they generally represent much richer computations than primitives.
 				</p>
 
-				<div class="row">
-					<div class="lefthalf">
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>equal?</strong> x y)</span>
-					    tests for (deep) structural equivalence.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>list?</strong> x)</span>
-					    returns <il>#t</il> if <il>x</il> is a list.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>string?</strong> x)</span>
-					    returns <il>#t</il> if <il>x</il> is a string.
-					  </p>
-
-					  &nbsp;
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>forever</strong> x)</span>
-					    applies <il>x</il> forever.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>for</strong> x y z)</span>
-					    applies <il>z</il> with a single argument, ranging from <il>x</il> to <il>y</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>for-both</strong> x y)</span>
-					    apply <il>y</il> to the car and cdr of <il>x</il>.
-					  </p>
-
-					  &nbsp;
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>set-ddr</strong> x y)</span>
-					    set the Data Direction Register for pin <il>x</il> to <il>y</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>set-pin</strong> x y)</span>
-					    set the state of pin <il>x</il> to <il>y</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>output?</strong> x)</span>
-					    return <il>#t</il> if pin <il>x</il> is an output.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>input?</strong> x)</span>
-					    return <il>#t</il> if pin <il>x</il> is an input.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>high?</strong> x)</span>
-					    return <il>#t</il> if pin <il>x</il> is high.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>low?</strong> x)</span>
-					    return <il>#t</il> if pin <il>x</il> is low.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>output</strong> x)</span>
-					    make pin <il>x</il> an output.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>input</strong> x)</span>
-					    make pin <il>x</il> an input.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>high</strong> x)</span>
-					    make pin <il>x</il> high.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>low</strong> x)</span>
-					    make pin <il>x</il> low.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>toggle</strong> x)</span>
-					    toggle the state of pin <il>x</il>.
-					  </p>
-
-					  &nbsp;
-
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>serial-init</strong>)</span>
-					    tests for (numeric) equality.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>serial-write</strong> x)</span>
-					    tests for (numeric) equality.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>serial-read</strong>)</span>
-					    tests for (numeric) equality.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform libraryfo">(<strong>serial-available</strong>)</span>
-					    tests for (numeric) equality.
-					  </p>
-					</div>
-
-					<div class="righthalf">
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>reverse</strong> x)</span>
-					    evaluates to a list which is the reverse of <il>x</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>length</strong> x)</span>
-					    evaluates to the length of <il>x</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>for-each</strong> fnc lst)</span>
-					    applies <il>fnc</il> to each of <il>lst</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>fold</strong> x y z)</span>
-					    folding from the left.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>fold-right</strong> x y z)</span>
-					    folding from the right.
-					  </p>
-					  
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>map</strong> x y)</span>
-					    map.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>map-2</strong> x y z)</span>
-					    map over two lists.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>zip</strong> x y)</span>
-					    zip two lists.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>all</strong> test lst)</span>
-					    evaluates to <il>#t</il> if <il>(test x)</il> is true for all of <il>lst</il>.
-					  </p>
-					  
-					  &nbsp;
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>for-each-vector</strong> x y)</span>
-					    vector version of for-each.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>for-each-vector-reverse</strong> x y)</span>
-					    reversed vector version of for-each.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>all-vector</strong> x y)</span>
-					    vector version of all.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>vector-concat</strong> x y)</span>
-					    produces the concatenation of <il>x</il> and <il>y</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>vector-copy</strong> x y)</span>
-					    copies vectors. TODO
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>vector-last</strong> x)</span>
-					    gives the index of the last element in <il>x</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>sub-vector</strong> x a b)</span>
-					    produces a sub-vector of <il>x</il> between <il>a</il> and <il>b</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>vector-first</strong> x y)</span>
-					    gives the index of the first occurrence of <il>y</il> in <il>x</il>.
-					  </p>
-
-					  &nbsp;
-					  
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>vector-&gt;list</strong> x)</span>
-					    produces a list equivalent to <il>x</il>.
-					  </p>
-
-					  <p class="msinfo">
-					    <span class="msform primitive">(<strong>list-&gt;vector</strong> x)</span>
-					    produces a vector equivalent to <il>x</il>.
-					  </p>
-					</div>
-				</div>
-
-				<br class="newrow" />
+				<p>
+					<span class="msform primitive">(<strong>equal?</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>list?</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>string?</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>forever</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>for</strong> x y z)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>for-both</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>set-ddr</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>set-pin</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>output?</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>input?</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>high?</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>low?</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>output</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>input</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>high</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>low</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>toggle</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo\">(<strong>serial-init</strong>)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>serial-write</strong> x)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>serial-read</strong>)</span>
+					&nbsp;
+					<span class="msform libraryfo">(<strong>serial-available</strong>)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>reverse</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>length</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>for-each</strong> fnc lst)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>fold</strong> x y z)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>fold-right</strong> x y z)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>map</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>map-2</strong> x y z)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>zip</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>all</strong> test lst)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>for-each-vector</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>for-each-vector-reverse</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>all-vector</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>vector-concat</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>vector-copy</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>vector-last</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>sub-vector</strong> x a b)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>vector-first</strong> x y)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>vector-&gt;list</strong> x)</span>
+					&nbsp;
+					<span class="msform primitive">(<strong>list-&gt;vector</strong> x)</span>
+				</p>
 
 				<hr />
 
 				<a name="memman" id="memman" ></a>
 				<h3>Memory Management<a href="#top" class="button icon arrowup" style="float:right;">Top</a></h3>
+
+				<p>
+					Since microscheme has no garbage collector, it is important to program in a memory-conservative style. The most significant part of that process is identifying memory-thirsty constructs, and keeping them out of any loops, so they will be evaluated as few times as possible.
+				</p>
+
+				<p>
+					The fundamental forms which allocate new heap space during their evaluation are <il>lambda</il>, <il>cons</il>, <il>list</il> and <il>vector</il>. It is easy to keep list and vector allocation out of loops by thinking of them as mutable data structures which are allocated in some outer context, and only mutated inside loops. It is tempting to use <il>lambda</il> to produce a simple function, perhaps to pass as an argument to some higher-order function. Though this is an elegant use of the functional paradigm, some heap space is required for a new 'closure' object every time the <il>lambda</il> is evaluated. In these cases, one must manually perform 'lambda lifting', by turning those anonymous procedures into named global procedures, which are allocated only once. Here is an example:
+				</p>
+
+				<pre><code class="hljs microscheme">
+  ; Unlifted version
+  ; (Heap space used every time (loop) is evaluated)
+
+  (define (loop)
+    (for 0 1
+      (lambda (i)
+        (print (vector-ref my-data i)))))
+
+  ; Lifted version
+  ; (No heap space used every time (loop) is evaluated)
+
+  (define (print-my-data i)
+    (print (vector-ref my-data i)))
+
+  (define (loop)
+    (for 0 1 print-my-data))
+				</code></pre>
+
+				<p>
+					In the unlifted version of the above code, some heap space is used (allocated) every time <il>(loop)</il> is evaluated. If this loop is evaluated regularly, the program will eventually run out of memory, and behave unpredictably. If the program is working at a high frequency, it may appear to crash straight away. The lifted version, however, may be evaluated indefinitely with no memory usage.
+				</p>
+
+				<p>
+					Another way of curtailing memory usage is the <span class="msform fundement">(<strong>free!</strong> exprs &hellip;)</span> construct. Using <il>free!</il>, the subexpressions are simply evaluated in order, but any heap space used is recovered afterwards. This must be used with great care, because it may lead to <a href="http://en.wikipedia.org/wiki/Dangling_pointer">dangling pointers</a>. It must be used in cases where the subexpressions are intended to be run <i>in a sandbox</i>, with no new data structures persisting outside of the <il>free!</il> block. (Using <il>free!</il> may be described as avoiding garbage collection by occasionally setting fire to the trash can!). In the following example, <il>free!</il> is used to eliminate the runaway heap usage in the same way as the previous example:
+				</p>
+
+							<pre><code class="hljs microscheme">
+  ; free! version
+  ; (No heap space used every time (loop) is evaluated)
+
+  (define (loop)
+    (free!
+      (for 0 1
+        (lambda (i)
+          (print (vector-ref my-data i))))))
+          					</code></pre>
 
 				<hr />
 

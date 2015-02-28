@@ -1,11 +1,80 @@
-<h1>microscheme.org</h1>
+<!doctype html>
 
-<p>The (ms) supporting materials are currently being rewritten, due to 
-some recent major changes in the compiler.</p>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
 
-<p>The project is now open source, and the most up-to-date version can 
-be found via GitHub <a 
-href="http://github.com/ryansuchocki/microscheme/">here.</a></p>
+		<title>Microscheme</title>
+		<meta name="description" content="A functional programming language for the Arduino">
+		<meta name="keywords" content="Microscheme,Scheme,Arduino,Programming,Functional,Micro-controller,Electronics,LISP,Compilers,Educational,Robotics">
+		<meta name="author" content="Ryan Suchocki">
 
-<p>For now, you can access the old website content <a 
-href="old/index.html">here</a>.</p>
+		<!--<base href="http://microscheme.org">-->
+
+		<link rel="stylesheet" href="local.css">
+		<link rel="stylesheet" href="hljs-railcasts.css">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700">
+		<link rel="stylesheet" href="css3-github-buttons/gh-buttons.css">
+
+    	<script src="jquery-1.11.2.min.js"></script>
+		<script src="hljs-ms.js"></script>
+
+		<script type="text/javascript">
+			hljs.initHighlightingOnLoad();
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="container">
+			<div class="nav">
+				<ul class="side-nav">
+						<li style="text-align: center;"><img src="img/logosmall.png"</li>
+						<li class="active"><a>About</a></li>
+						<li><a href="download">Download</a></li>
+						<li><a href="examples">Examples</a></li>
+						<li><a href="documentation">Documentation</a></li>
+						<li><a href="literature">Literature</a></li>
+						<li><a href="https://github.com/ryansuchocki/microscheme">GitHub <img src="img/GitHub-Mark-32px.png" class="small-logo"/></a></li>
+						<li class="last">&copy; Ryan Suchocki <i>et al.</i></li>
+					</ul>
+			</div>
+
+			<div class="content">
+
+				<h1>microscheme.org</h1>
+				<h2>A functional programming language for the Arduino</h2>
+
+				<div style="margin-bottom: 20px; overflow: hidden;">
+					<div style="width: 340px; float: left;">
+						<img src="img/hello.png" style="width: 100%;" />
+					</div>
+					<div style="width: 430px; margin-left: 30px; float: left; ">
+						<pre style="margin: 0px;" ><code class="hljs microscheme">
+  ;; Hello World in Microscheme!
+
+  (include "libraries/lcd.ms")
+  (lcd-init)
+
+  (define foo "Hi, ")
+  (define bar "from Scheme!")
+
+  (for-each-vector write (vector-concat foo bar))
+  
+</code></pre>
+					</div>
+				</div>
+				
+				<p>
+			        Microscheme, or (ms) for short, is a functional programming language for the Arduino, and for Atmel 8-bit AVR microcontrollers in general. Microscheme is a subset of Scheme, in the sense that every valid (ms) program is also a valid Scheme program (with the exception of Arduino hardware-specific primitives). The (ms) compiler performs function inlining, and features an aggressive tree-shaker, eliminating unused top-level definitions. Microscheme has a robust FFI (Foreign Function Interface) meaning that C code may be invoked directly from (ms) programs. Therefore, the power of the existing wealth of Arduino libraries is available within Microscheme.
+				</p>
+			</div>
+		</div>
+
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','http://www.google-analytics.com/analytics.js','ga'); ga('create', 'UA-48355896-1', 'auto');ga('send', 'pageview');
+		</script>
+	</body>
+</html>

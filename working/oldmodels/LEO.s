@@ -1,0 +1,102 @@
+;; Boilerplate stuff for the Arduino Leonardo
+;; CPU: ATMega32u4
+
+.EQU	IS_MODEL_UNO,	0
+.EQU	IS_MODEL_MEGA,	0
+.EQU	IS_MODEL_LEO,	1
+
+;; Stack Pointers:
+
+.EQU	SPl,	0x3D
+.EQU	SPh,	0x3E
+
+;; RAM Helpers
+.EQU	RAM,	0x100
+.EQU	RAMEND,	0x0AFF
+
+;; Short-Range Data Ports:
+
+.EQU	PINB,	0x03
+.EQU	DDRB,	0x04
+.EQU	PORTB,	0x05
+.EQU	PINC,	0x06
+.EQU	DDRC,	0x07
+.EQU	PORTC,	0x08
+.EQU	PIND,	0x09
+.EQU	DDRD,	0x0A
+.EQU	PORTD,	0x0B
+.EQU	PINE,	0x0C
+.EQU	DDRE,	0x0D
+.EQU	PORTE,	0x0E
+.EQU	PINF,	0x0F
+.EQU	DDRF,	0x10
+.EQU	PORTF,	0x11
+
+;; Data-Port Memory Map Addresses
+.EQU	mPINB,	0x23
+.EQU	mDDRB,	0x24
+.EQU	mPORTB,	0x25
+.EQU	mPINC,	0x26
+.EQU	mDDRC,	0x27
+.EQU	mPORTC,	0x28
+.EQU	mPIND,	0x29
+.EQU	mDDRD,	0x2A
+.EQU	mPORTD,	0x2B
+.EQU	mPINE,	0x2C
+.EQU	mDDRE,	0x2D
+.EQU	mPORTE,	0x2E
+.EQU	mPINF,	0x2F
+.EQU	mDDRF,	0x30
+.EQU	mPORTF,	0x31
+
+
+;; 16-bit counting registers, of which XYZ are
+;; are memory address registers.
+.EQU	WL,	0x18
+.EQU	WH,	0x19
+.EQU	XL,	0x1A
+.EQU	XH,	0x1B
+.EQU	YL,	0x1C
+.EQU	YH,	0x1D
+.EQU 	ZL,	0x1E
+.EQU	ZH,	0x1F
+
+
+
+
+
+
+
+.EQU	PORT13,	PORTC
+.EQU	DDR13,	DDRC
+.EQU	PIN13,	PINC
+.EQU	P13,	7
+
+.EQU	mPORT13,	mPORTC
+.EQU	mDDR13,	mDDRC
+.EQU	mPIN13,	mPINC
+.EQU	mP13,	0b10000000
+
+
+
+
+
+
+.EQU	UDR0,	0xCE
+.EQU	UBRR0H,	0xCD
+.EQU	UBRR0L,	0xCC
+.EQU	UCSR0C,	0xCA
+.EQU	UCSR0B,	0xC9
+.EQU	UCSR0A,	0xC8
+
+.EQU	UDRE0,	5		; Transmit Buffer Empty
+.EQU	TXC0,	6		; TX Complete
+.EQU	RXC0,	7		; RX Complete
+
+.EQU	TXENm,	0b00001000;
+.EQU	RXENm,	0b00010000;
+
+.EQU	BAUD_9600, 103
+
+
+

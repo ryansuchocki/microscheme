@@ -1,0 +1,36 @@
+# Object files
+*.o
+*.ko
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+src/*_hex.c
+bin/
+release/
+examples/*.s
+examples/*.elf
+examples/*.hex
+*.s
+*.elf
+*.hex
+
+working
+working/*
+
+production
+production/*
+
+microscheme
