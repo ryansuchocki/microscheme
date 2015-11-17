@@ -90,7 +90,7 @@ Microscheme currently supports the ATMega168/328 (used on the Arduino UNO), the 
 
 Note: An Arduino Pro Mini with a 168/328 chip (programmed via an UNO board with its chip removed) can be treated as an UNO, because it uses the same chip.
 
-Other chips could be supported by writing header files to match [MEGA.s](src/MEGA.s) and [UNO.s](src/UNO.s), which contain values derived from the relevant Atmel datasheet. You will also need to add extra cases to the makefile, codegen.c and main.c to accommodate the new model.
+Other chips can be supported by writing model definitions in [models.c](src/models.c), containing values derived from the relevant Atmel datasheet.
 
 Compiler pipeline
 -----------------
