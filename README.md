@@ -55,10 +55,11 @@ Option flags:
   -h    Show this help message
 
 Configuration flags:
-  -m model     Specify a model (UNO/MEGA/LEO...)
-  -d device    Specify a physical device
-  -w files     'Link' with external C or assembly files
-  -t rounds    Specify the maximum number of tree-shaker rounds
+  -m model       Specify a model (UNO/MEGA/LEO...)
+  -d device      Specify a physical device
+  -p programmer  Tell avrdude to use a particular programmer
+  -w files       'Link' with external C or assembly files
+  -t rounds      Specify the maximum number of tree-shaker rounds
 ```
 
 Prerequisites

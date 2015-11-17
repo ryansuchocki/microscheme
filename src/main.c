@@ -33,6 +33,7 @@ int opt_includeonce = true, opt_assemble = false,
 char* model = "MEGA";
 char* device = "";
 char* linkwith = "";
+char* programmer = "";
 
 int treeshaker_max_rounds = 10;
 
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]) {
 
 	fprintf(stdout, "Microscheme 0.9.2, (C) Ryan Suchocki\n");
 
-	char *helpmsg = "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]\n\n"
+	char *helpmsg = "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-p programmer] [-w filename] [-t rounds] program[.ms]\n\n"
 			"Option flags:\n"
 			"  -a    Assemble (implied by -u) (requires -m)\n"
 			"  -u    Upload (requires -d)\n"
@@ -75,12 +76,13 @@ int main(int argc, char *argv[]) {
 			"  -o    Disable optimisations  \n"
 			"  -h    Show this help message \n\n"
 			"Configuration flags:\n"
-			"  -m model     Specify a model (UNO/MEGA/LEO...)\n"
-			"  -d device    Specify a physical device\n"
-			"  -w files     'Link' with external C or assembly files\n"
-			"  -t rounds    Specify the maximum number of tree-shaker rounds\n";
+			"  -m model       Specify a model (UNO/MEGA/LEO...)\n"
+			"  -d device      Specify a physical device\n"
+			"  -p programmer  Tell avrdude to use a particular programmer\n"
+			"  -w files       'Link' with external C or assembly files\n"
+			"  -t rounds      Specify the maximum number of tree-shaker rounds\n";
 
-	while ((c = getopt(argc, argv, "hiaucovrm:d:t:w:")) != -1)
+	while ((c = getopt(argc, argv, "hiaucovrm:d:p:t:w:")) != -1)
 	switch (c)	{
 		case 'h':	fprintf(stdout, "%s", helpmsg); exit(EXIT_SUCCESS); break;
 		case 'i':	opt_includeonce = false;	break;
@@ -93,6 +95,7 @@ int main(int argc, char *argv[]) {
 		case 'r':	opt_verify = true;			break;
 		case 'm':	model = optarg;				break;
 		case 'd':	device = optarg;			break;
+		case 'p':   programmer = optarg;		break;
 		case 'w':	linkwith = optarg;			break;
 		case 't':	treeshaker_max_rounds = atoi(optarg);	break;
 		case '?':
@@ -317,13 +320,17 @@ int main(int argc, char *argv[]) {
 			return EXIT_FAILURE;
 		}
 
+		if (strcmp(programmer, "") == 0) {
+			programmer = theModel.STR_PROG;
+		}
+
 		fprintf(stderr, ">> Uploading...\n");
 
 		char *opt1, *opt2;
 		if (opt_verbose) opt1 = "-v"; else opt1 = "";
 		if (opt_verify) opt2 = ""; else opt2 = "-V";
 
-		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, theModel.STR_TARGET, theModel.STR_PROG, device, theModel.STR_BAUD, shortbase);
+		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, theModel.STR_TARGET, programmer, device, theModel.STR_BAUD, shortbase);
 		
 		try_execute(cmd);
 	}
