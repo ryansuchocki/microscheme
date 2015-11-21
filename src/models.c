@@ -84,6 +84,33 @@ model_info models[] = {
 		".EQU	P13,	7		\n"
 
 		".EQU	_ms_stack,	__stack\n"
+	},
+	{
+		"ATmega32",
+
+		"atmega32",
+		"avrispmkii",
+		"115200",
+
+		false,
+
+		// diagnostic output is PORTC7
+		".EQU	PORT13,	0x15	\n"
+		".EQU	DDR13,	0x14	\n"
+		".EQU	P13,	7		\n"
+
+		".EQU	_ms_stack,	__stack\n"
+
+		".EQU	UDR0,	0x2C	\n"
+		".EQU	UBRR0H,	0x40	\n"
+		".EQU	UBRR0L,	0x29	\n"
+		".EQU	UCSR0B,	0x2A	\n"
+		".EQU	UCSR0A,	0x2B	\n"
+		".EQU	TXEN0,	3		\n"
+		".EQU	RXEN0,	4		\n"
+		".EQU	UDRE0,	5		\n"
+		".EQU	TXC0,	6		\n"
+		".EQU	RXC0,	7		\n"
 	}
 };
 
