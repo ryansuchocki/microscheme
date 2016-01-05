@@ -21,7 +21,8 @@ char* primwords[] = {	"=", ">", ">=", "<", "<=", "not", "¬", "eq?",
 								"cons", "car", "cdr", "set-car!", "set-cdr!", 
 								"vector-length", "vector-ref", "vector-set!", "make-vector",
 								"assert", "error", "stacksize", "heapsize", "pause", "micropause",
-								"digital-state", "set-digital-state", "char->number", "arity"
+								"digital-state", "set-digital-state", "char->number", "arity",
+								">>", "<<", "|", "&"
 								};
 int primwordsi = sizeof(primwords) / sizeof(char*);
 
@@ -107,6 +108,12 @@ void classify(char *acc, int acci, lexer_tokenNode *parent) {
 		matched = 1;
 	}
 
+	if (strcmp(newRaw, "λ") == 0) {
+		new->type = Keyword;
+		new->keyword = lambda;
+		matched = 1;
+	}
+
 	for (i = 0; i < keywordsi; i++) {
 		if (strcmp(newRaw, keywords[i]) == 0) {
 			new->type = Keyword;
@@ -135,7 +142,7 @@ void classify(char *acc, int acci, lexer_tokenNode *parent) {
 				matched = 1;
 
 				if (newRaw[0] >= '0' && newRaw[0] <= '9') {
-					printf("%i: ERROR 10 Identifier cannot start with a digit.", fileLine);
+					printf("%i: ERROR 10 Identifier \"%s\" cannot start with a digit. \n", fileLine, newRaw);
 					exit(EXIT_FAILURE);
 				}
 			}

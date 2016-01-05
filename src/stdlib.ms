@@ -63,10 +63,18 @@
 		(and (pair? x) 
 			(list? (cdr x)))))
 
+
+
+;;Iterate:
+
+(define ($ p n x)
+	(or (zero? n)
+		($ p n (p x))))
+
 ;; Serial communications
 
 (define (serial-init baud)
-	(- (div 10000 baud) 1)
+	(div (- 10000 (>> baud)) baud)
 
 	; Set Baud Rate registers
 	(asm "STS	UBRR0H,	CRSh"

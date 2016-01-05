@@ -616,6 +616,30 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tMOV GP1, CRSh\n\tANDI GP1, 224\n\tLDI GP2, 192\n\tCPSE GP1, GP2\n\tJMP error_notproc\n\tANDI CRSh, 31\n\tLD GP1, Y;CRS\n\tMOV CRSl, GP1\n\tMOV CRSh, zeroReg\n");
 			}
 
+			else if (strcmp(expr->primproc, ">>") == 0 && expr->numBody == 1) {
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tLSR CRSh\n\tROR CRSl\n");
+			}
+
+			else if (strcmp(expr->primproc, "<<") == 0 && expr->numBody == 1) {
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tLSL CRSl\n\tROL CRSh\n");
+			}
+
+			else if (strcmp(expr->primproc, "|") == 0 && expr->numBody == 2) {
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tPUSH CRSl\n\tPUSH CRSh\n");
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tPOP GP2\n\tPOP GP1\n\tOR CRSl, GP1\n\tOR CRSh, GP2\n");
+			}
+
+			else if (strcmp(expr->primproc, "&") == 0 && expr->numBody == 2) {
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tMOVW GP1, CRSl\n");
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tAND CRSl, GP1\n\tAND CRSh, GP2\n");
+			}
+
 			else {
 				fprintf(stderr, "ERROR 26: No primitive '%s' taking %i arguments.\n", expr->primproc, expr->numBody);
 				exit(1);

@@ -1,4 +1,4 @@
-/*	microScheme Compiler version 0.8
+/*	microScheme Compiler version 0.9.3
 	by Ryan Suchocki.
 	University of Warwick, UK
 	November 2013
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
 	char *inname, *outname, *basename, *shortbase;
 	int c;
 
-	fprintf(stdout, "Microscheme 0.9.2, (C) Ryan Suchocki\n");
+	fprintf(stdout, "Microscheme 0.9.3, (C) Ryan Suchocki\n");
 
 	char *helpmsg = "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-p programmer] [-w filename] [-t rounds] program[.ms]\n\n"
 			"Option flags:\n"
@@ -330,7 +330,7 @@ int main(int argc, char *argv[]) {
 		if (opt_verbose) opt1 = "-v"; else opt1 = "";
 		if (opt_verify) opt2 = ""; else opt2 = "-V";
 
-		sprintf(cmd, "avrdude %s %s -p %s -c %s -P %s -b %s -D -U flash:w:%s.hex:i", opt1, opt2, theModel.STR_TARGET, programmer, device, theModel.STR_BAUD, shortbase);
+		sprintf(cmd, "avrdude %s %s -p %s -P %s -b %s -c %s -D -U flash:w:%s.hex:i", opt1, opt2, theModel.STR_TARGET, device, theModel.STR_BAUD, programmer, shortbase);
 		
 		try_execute(cmd);
 	}

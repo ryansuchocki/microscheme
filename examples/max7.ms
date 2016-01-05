@@ -6,16 +6,13 @@
 ;;             (These should not be called directly)
 
 (define (shift-out-bits data-pin clock-pin data n)
-	(set-pin data-pin (begin data (asm "ROL CRSh" "ROL CRSh")))
+	(set-pin data-pin (¬ (number? data)))
 	(low (high clock-pin))
-	(if (zero? n)
-		#t
-		(begin
-			(shift-out-bits data-pin clock-pin (begin data (asm "LSL CRSl" "ROL CRSh")) (- n 1)))))
+	(or (zero? n)
+		(shift-out-bits data-pin clock-pin (<< data) (- n 1))))
 
 (define (noops data-pin clock-pin n)
-	(if (zero? n)
-		#t
+	(or (zero? n)
 		(begin
 			(shift-out-bits data-pin clock-pin #x0000 15)
 			(noops data-pin clock-pin (- n 1)))))
@@ -60,41 +57,41 @@
 ; (include "working/max7.ms")
 
 ; We have 2 max7219 chips cascaded together, on pins 10, 11 and 12
-; (define lcd (def-max7 10 11 12 2))
+; (define led (def-max7 10 11 12 2))
 ; ... connected to a 16-digit 7-segment display!
 
 ; We set both chips to decode-mode on all digits:
 ; So that we can send numeric characters directly (in BCD)
-; (decode lcd 0 #xFF)
-; (decode lcd 1 #xFF)
+; (decode led 0 #xFF)
+; (decode led 1 #xFF)
 
 ; Set the intensity to maximum on both chips:
-; (intensity lcd 0 #x0F)
-; (intensity lcd 1 #x0F)
+; (intensity led 0 #x0F)
+; (intensity led 1 #x0F)
 
 ; Enable all digits on both chips:
-; (scan-limit lcd 0 #x07)
-; (scan-limit lcd 1 #x07)
+; (scan-limit led 0 #x07)
+; (scan-limit led 1 #x07)
 
 ; Make sure both chips are out of 'shutdown' mode:
-; (show lcd 0 #t)
-; (show lcd 1 #t)
+; (show led 0 #t)
+; (show led 1 #t)
 
 ; Now we display the number '0102030405060708'
 
-; (digit lcd 0 1 0)
-; (digit lcd 0 2 1)
-; (digit lcd 0 3 0)
-; (digit lcd 0 4 2)
-; (digit lcd 0 5 0)
-; (digit lcd 0 6 3)
-; (digit lcd 0 7 0)
-; (digit lcd 0 8 4)
-; (digit lcd 1 1 0)
-; (digit lcd 1 2 5)
-; (digit lcd 1 3 0)
-; (digit lcd 1 4 6)
-; (digit lcd 1 5 0)
-; (digit lcd 1 6 7)
-; (digit lcd 1 7 0)
-; (digit lcd 1 8 8)
+; (digit led 0 1 0)
+; (digit led 0 2 1)
+; (digit led 0 3 0)
+; (digit led 0 4 2)
+; (digit led 0 5 0)
+; (digit led 0 6 3)
+; (digit led 0 7 0)
+; (digit led 0 8 4)
+; (digit led 1 1 0)
+; (digit led 1 2 5)
+; (digit led 1 3 0)
+; (digit led 1 4 6)
+; (digit led 1 5 0)
+; (digit led 1 6 7)
+; (digit led 1 7 0)
+; (digit led 1 8 8)

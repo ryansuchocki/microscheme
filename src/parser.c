@@ -100,16 +100,9 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 				result->value=c;
 				break;
 
-			case Primword:
-				// if(strcmp(token[0]->raw, "list") == 0 || strcmp(token[0]->raw, "vector") == 0) {
-				// 	fprintf(stderr, ">> ERROR 6a: Procedure '%s' is variadic-primitive, and cannot be used as a value\n", token[0]->raw);
-				// 	exit(EXIT_FAILURE);
-				// } else {
-					//fprintf(stderr, ">> ERROR 6: Procedure '%s' is primitive, and cannot be used as a value\n", token[0]->raw);
-					//exit(EXIT_FAILURE);					
-					result->type = Variable;
-					result->variable = str_clone(token[0]->raw);
-				//}
+			case Primword:			
+				result->type = Variable;
+				result->variable = str_clone(token[0]->raw);
 				
 				break;
 
