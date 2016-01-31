@@ -95,7 +95,7 @@ Other chips can be supported by writing model definitions in [models.c](src/mode
 Compiler pipeline
 -----------------
 
-The entire compiler pipeline, as orchistrated by main.c, is:
+The entire compiler pipeline, as orchestrated by main.c, is:
 
 > [source code] → lexer.c → [token tree] → parser.c → [abstract syntax tree] → scoper.c → [(scoped) AST] → treeshaker.c → [(reduced) AST] → codegen.c → [assembly code]  ...
 
