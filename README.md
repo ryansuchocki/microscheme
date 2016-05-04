@@ -39,20 +39,21 @@ from other files in this repository. On linux systems, invoke `$ sudo make insta
 Usage
 -----
 
-As of version 0.9.3, the usage is:
+As of the latest commit, the usage is:
 
 ```
-Usage: microscheme [-aucvrio] [-m model] [-d device] [-w filename] [-t rounds] program[.ms]
+Usage: microscheme [-auscvrio] [-m model] [-d device] [-p programmer] [-w filename] [-t rounds] program[.ms]
 
 Option flags:
-  -a    Assemble (implied by -u) (requires -m)
+  -a    Assemble (implied by -u or -s) (requires -m)
   -u    Upload (requires -d)
+  -s    Disassemble (to inspect final binary)
   -c    Cleanup (removes intermediate files)
   -v    Verbose
   -r    Verify (Uploading takes longer)
   -i    Allow the same file to be included more than once
   -o    Disable optimisations  
-  -h    Show this help message
+  -h    Show this help message 
 
 Configuration flags:
   -m model       Specify a model (UNO/MEGA/LEO...)
@@ -60,6 +61,7 @@ Configuration flags:
   -p programmer  Tell avrdude to use a particular programmer
   -w files       'Link' with external C or assembly files
   -t rounds      Specify the maximum number of tree-shaker rounds
+
 ```
 
 Prerequisites
