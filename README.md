@@ -70,17 +70,16 @@ Prerequisites
 In order to compile microscheme, you will need some implementation of GCC and the unix utility XXD. (Readily 
 available on Linux/OSX.)
 
-In order to assemble programs and upload them to real Arduinos, you will need some implementation of *avr-gcc*
-and *avrdude*. Microscheme will try to invoke these tools directly, if the -a or -u options are used.
+In order to assemble programs and upload them to real Arduinos, you will need some implementation of *avr-gcc*, *avr-libc* and *avrdude*. Microscheme will try to invoke these tools directly, if the -a or -u options are used.
 Packages are available on all good linux distro's:
 
 For example, on Arch linux:
 
-`$ sudo pacman -S avr-gcc avrdude`
+`$ sudo pacman -S avr-gcc avr-libc avrdude`
 
 Or, on Ubuntu or Debian:
 
-`$ sudo apt-get install gcc-avr avrdude`
+`$ sudo apt-get install gcc-avr avr-libc avrdude`
 
 These tools are available via the [Homebrew](http://brew.sh/) and [MacPorts](https://www.macports.org/) package
 managers on Mac OS X and the [winavr](http://winavr.sourceforge.net/) project on Windows.
