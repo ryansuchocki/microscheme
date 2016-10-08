@@ -18,6 +18,11 @@
 			(f a)
 			(for (+ a 1) z f))))
 
+(define (fold f init l)
+	(if (null? l)
+		init
+		(fold f (f init (car l)) (cdr l))))
+
 ;; Rich equivalence predicate
 
 (define equal? #f)
