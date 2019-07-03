@@ -323,7 +323,16 @@
 				(for-each-vector writer right)
 				destination))))
 
+;; for backwards-compatibility, this is the old version
 (define (vector-copy src dest src-start src-finish dest-start)
+	(if (> src-start src-finish)
+		dest
+		(begin
+			(vector-set! dest dest-start (vector-ref src src-start))
+			(vector-copy src dest (+ src-start 1) src-finish (+ dest-start 1)))))
+
+;; this is the SRFI-43-compliant version
+(define (vector-copy! dest dest-start src src-start src-finish)
 	(if (> src-start src-finish)
 		dest
 		(begin
