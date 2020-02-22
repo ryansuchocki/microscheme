@@ -247,8 +247,12 @@
 	(p (car x))
 	(p (cdr x)))
 
-
-
+(define (member v lst)
+	(if (null? lst)
+		#f
+		(if (equal? v (car lst))
+			lst
+			(member v (cdr lst)))))
 
 
 ;; Apply!
