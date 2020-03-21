@@ -6,7 +6,7 @@
 // Type definitions
 	enum AST_constType { Booleanconst, Charconst, Stringconst, Numconst, Emptylistconst };
 	typedef struct AST_const { enum AST_constType type;	int value; char *strvalue;} AST_const;
-	enum AST_exprType { Constant, Variable, Lambda, Branch, Definition, Assignment, Sequence, ProcCall, And, Or, PrimCall, TailCall, OtherFundemental};
+	enum AST_exprType { Constant, Variable, Lambda, Branch, When, Definition, Assignment, Sequence, ProcCall, And, Or, PrimCall, TailCall, OtherFundemental};
 	enum AST_varRefType { Local, Free, Global };
 	typedef struct AST_expr { enum AST_exprType type; struct AST_const *value; char *variable; char **formal; int numFormals;
 		struct AST_expr **body; int numBody; char *primproc; struct AST_expr *proc; enum AST_varRefType varRefType; int varRefHop;

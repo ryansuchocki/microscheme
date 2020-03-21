@@ -12,7 +12,7 @@ extern bool opt_verbose;
 
 int fileLine = 1;
 
-char* keywords[] = {"lambda", "if", "let", "set!", "define", "begin", "and", "or", "include", "free!", "@if-model", "list","vector", "call-c-func", "include-asm", "asm"};
+char* keywords[] = {"lambda", "if", "when", "let", "set!", "define", "begin", "and", "or", "include", "free!", "@if-model", "list","vector", "call-c-func", "include-asm", "asm"};
 int keywordsi = sizeof(keywords) / sizeof(char*);
 
 char* primwords[] = {	"=", ">", ">=", "<", "<=", "not", "¬", "eq?",

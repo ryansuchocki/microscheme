@@ -42,7 +42,8 @@ AST_expr *scoper_scopeExpr(AST_expr *expr) {
 		case Constant: return expr;
 		case ProcCall:
 		case TailCall: expr->proc = scoper_scopeExpr(expr->proc); 
-		case Branch: 	
+		case Branch:
+		case When:
 		case Sequence: 	
 		case PrimCall: 	
 		case OtherFundemental:
