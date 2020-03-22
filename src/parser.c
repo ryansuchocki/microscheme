@@ -172,6 +172,22 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 								//DEBUG printf("Conditional Branch"); 
 								break;
 
+							case when:
+							    result->type = When;
+								if (innerNumTokens > 2) {
+									result->numBody = innerNumTokens-1;
+									result->body = try_malloc(sizeof(AST_expr*) * (innerNumTokens-1));
+									for (i=1; i<innerNumTokens - 1; i++) {
+									    result->body[i-1] = parser_parseExpr(&innerTokens[i], 1, false, false);
+									}
+
+									result->body[innerNumTokens-2] = parser_parseExpr(&innerTokens[innerNumTokens-1], 1, false, tailPosition);
+								} else {
+									fprintf(stderr, ">> ERROR 9: Wrong number of operands to WHEN form");
+									exit(EXIT_FAILURE);
+								}
+								break;
+
 							case andword:
 								if (innerNumTokens == 1) {
 									c = try_malloc(sizeof(AST_const)); 
