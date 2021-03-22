@@ -665,22 +665,21 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 	}
 }
 
-void copyIn(char *filename, FILE *outputFile) {
-	char a;
+// void copyIn(char *filename, FILE *outputFile) {
+// 	char a;
 
-	FILE *fp = fopen(filename, "r");
-	if (fp == NULL) {
-		fprintf(stderr, "Internal error. Can't open file '%s'.\n", filename);
-		fclose(fp);
-		exit(EXIT_FAILURE);
-	}
+// 	FILE *fp = fopen(filename, "r");
+// 	if (fp == NULL) {
+// 		fprintf(stderr, "Internal error. Can't open file '%s'.\n", filename);
+// 		exit(EXIT_FAILURE);
+// 	}
  
-	while ((a = fgetc(fp)) != EOF) {
-		fputc(a, outputFile);
-	}
+// 	while ((a = fgetc(fp)) != EOF) {
+// 		fputc(a, outputFile);
+// 	}
 
-	fclose(fp);
-}
+// 	fclose(fp);
+// }
 
 void copyHex(unsigned char* data, unsigned int length, FILE *outputFile) { 
 	unsigned int i;

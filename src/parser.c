@@ -35,13 +35,11 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 	AST_expr *result = try_malloc(sizeof(AST_expr)); //{ Constant, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 0, 0};
 	parser_initExpr(result);
 
-	lexer_tokenNode **innerTokens = NULL;
-	int innerNumTokens = 0;
-	int i = 0, j = 0;
-	AST_const *c;
-	lexer_tokenNode *innerFile;
-
 	if ((numTokens) == 1) {
+		lexer_tokenNode **innerTokens = NULL;
+		int innerNumTokens = 0;
+		int i = 0;
+		AST_const *c;
 		
 		switch(token[0]->type) {
 			case Numerictoken:
@@ -381,7 +379,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 										for (i=0; i<currentLambda->numFormals; i++) {
 											char* candidate = currentLambda->formal[i];
 											bool needed = true;
-											for (j=0; j<result->proc->numFormals; j++) {
+											for (int j=0; j<result->proc->numFormals; j++) {
 												if (strcmp(result->proc->formal[j], candidate) == 0)
 													needed = false;
 											}
@@ -438,7 +436,8 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
 
 											if (opt_verbose) fprintf(stderr, ">> Including file '%s' ", innerTokens[1]->raw);
 											fileLine++;
-											innerFile = lexer_lexFile(innerTokens[1]->raw, NULL);
+											
+											lexer_tokenNode *innerFile = lexer_lexFile(innerTokens[1]->raw, NULL);
 											free(result);
 											result = parser_parseFile(innerFile->children, innerFile->numChildren);
 											// Pass on topLevel. So if an (include x) is at the top level, then defines are allowed within it.s

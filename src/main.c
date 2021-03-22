@@ -211,9 +211,9 @@ int main(int argc, char *argv[]) {
 
 	if (opt_aggressive) {
 		globalEnv->realAddress = try_malloc(sizeof(int) * globalEnv->numBinds);
-		int i;
-		for (i = 0; i < globalEnv->numBinds; i++) {
-			globalEnv->realAddress[i] = 0;
+		int j;
+		for (j = 0; j < globalEnv->numBinds; j++) {
+			globalEnv->realAddress[j] = 0;
 		}
 
 		while ((numPurgedGlobals > latestpurge) && (rounds < treeshaker_max_rounds)) {
@@ -231,10 +231,10 @@ int main(int argc, char *argv[]) {
 
 		if (opt_verbose) {
 			fprintf(stdout, ">> Remaining globals: [");
-			int i;
-			for (i = 0; i < globalEnv->numBinds; i++) {
-				if (globalEnv->realAddress[i] >= 0)
-					fprintf(stdout, "%s ", globalEnv->binding[i]);
+			int k;
+			for (k = 0; k < globalEnv->numBinds; k++) {
+				if (globalEnv->realAddress[k] >= 0)
+					fprintf(stdout, "%s ", globalEnv->binding[k]);
 			}
 			fprintf(stdout, "]\n");
 		}
