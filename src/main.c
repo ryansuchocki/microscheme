@@ -205,11 +205,12 @@ int main(int argc, char *argv[]) {
 	// 3) Scope the file:
 	ASTroot = scoper_scopeExpr(ASTroot);
 
-	numPurgedGlobals = -1;
-	int latestpurge = -2;
-	int rounds = 0;
-
 	if (opt_aggressive) {
+
+		numPurgedGlobals = -1;
+		int latestpurge = -2;
+		int rounds = 0;
+
 		globalEnv->realAddress = try_malloc(sizeof(int) * globalEnv->numBinds);
 		int j;
 		for (j = 0; j < globalEnv->numBinds; j++) {

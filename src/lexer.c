@@ -283,7 +283,7 @@ void lexer_freeTokenTree(lexer_tokenNode* tree) {
 }
 
 lexer_tokenNode *lexer_lexFile(char *filename, lexer_tokenNode *root) {
-	char ch;
+	int ch;
 	FILE *fp;
 
 	fileLine = 1;
