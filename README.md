@@ -1,6 +1,8 @@
 Microscheme 
 ===========
 
+[![pipeline status](https://gitlab.com/ryansuchocki/microscheme/badges/master/pipeline.svg)](https://gitlab.com/ryansuchocki/microscheme/-/commits/master)
+
 Microscheme is a Scheme subset designed for Atmel microcontrollers, especially as found on Arduino boards.
 
 Recent Changes
