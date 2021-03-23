@@ -136,13 +136,20 @@
 		(set! arduino-pins	(vector 1 2 4 8 16 32 64 128 1 2 4 8 16 32))))
 
 (@if-model "LEO"
-	;; D2 D3 D1 D0 D4 C6 D7 E6 B4 B5 B6 B7 D6 C7 B3 B1 B2 B3 F7 F6 F5 F4 F1 F0
+	;; D2 D3 D1 D0 D4 C6 D7 E6 B4 B5 B6 B7 D6 C7 B3 B1 B2 B0 F7 F6 F5 F4 F1 F0
 	(begin
 		(set! arduino-ports	(vector #x29 #x29 #x29 #x29 #x29 #x26 #x29 #x2C
 									#x23 #x23 #x23 #x23 #x29 #x26 #x23 #x23
 									#x23 #x23 #x2f #x2f #x2f #x2f #x2f #x2f))
 		(set! arduino-pins	(vector 4 8 2 1 16 64 128 64 16 32 64 128 64 128
 									8 2 4 1 128 64 32 16 2 1))))
+(@if-model "KEYBOARDIO-ATREUS"
+	;; [- rows --] [----------- columns -------------]
+	;; F6 F5 F4 F1 F7 E2 C7 C6 B6 B5 D7 D6 D4 D5 D3 D2
+	;;  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+	(begin
+		(set! arduino-ports	(vector #x2f #x2f #x2f #x2f #x2f #x2c #x26 #x26 #x23 #x23 #x29 #x29 #x29 #x29 #x29 #x29))
+		(set! arduino-pins	(vector   64   32   16    2  128    4  128   64   64   32  128   64   16   32    8    4))))
 
 (define (set-ddr apin val)
 	(set-digital-state (+ 1 (vector-ref arduino-ports apin)) (vector-ref arduino-pins apin) val)
