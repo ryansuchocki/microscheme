@@ -117,6 +117,18 @@
 (define arduino-ports)
 (define arduino-pins)
 
+;; A = #x39, B = #x36, C = #x33, D = #x30
+(@if-model "ATmega32"
+	(begin
+		(set! arduino-ports	(vector #x39	#x39	#x39	#x39	#x39	#x39	#x39	#x39
+									#x36	#x36	#x36	#x36	#x36	#x36	#x36	#x36
+									#x33	#x33	#x33	#x33	#x33	#x33	#x33	#x33
+									#x30	#x30	#x30	#x30	#x30	#x30	#x30	#x30))
+		(set! arduino-pins	(vector 1 2 4 8 16 32 64 128
+									1 2 4 8 16 32 64 128
+									1 2 4 8 16 32 64 128
+									1 2 4 8 16 32 64 128))))
+
 (@if-model "MEGA"
 	(begin
 		(set! arduino-ports	(vector #x2C	#x2C	#x2C	#x2C	#x32	#x2C	#x100	#x100
