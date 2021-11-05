@@ -621,6 +621,11 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tCLR CRSh\n");
 			}
 
+			else if (strcmp(expr->primproc, "number->char") == 0 && expr->numBody == 1) {
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tLDI CRSh, 224\n");
+			}
+
 			else if (strcmp(expr->primproc, "arity") == 0 && expr->numBody == 1) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tMOV GP1, CRSh\n\tANDI GP1, 224\n\tLDI GP2, 192\n\tCPSE GP1, GP2\n\tJMP error_notproc\n\tANDI CRSh, 31\n\tLD GP1, Y;CRS\n\tMOV CRSl, GP1\n\tMOV CRSh, zeroReg\n");
