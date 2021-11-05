@@ -606,6 +606,11 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tPOP GP4\n\tPOP GP3\n\tLD GP5, Y\n\tOR GP5, GP3\n\tCOM GP3\n\tSBRS GP4, 0\n\tAND GP5, GP3\n\tST Y, GP5\n");					
 			}
 
+			else if (strcmp(expr->primproc, "register-state") == 0 && expr->numBody == 1) {
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tLD CRSl, Y\n\tCLR CRSh\n");
+			}
+
 			else if (strcmp(expr->primproc, "set-register-state") == 0 && expr->numBody == 2) {
 				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tPUSH CRSl\n");
@@ -660,6 +665,18 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				fprintf(outputFile, "\tMOVW GP1, CRSl\n");
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tAND CRSl, GP1\n\tAND CRSh, GP2\n");
+			}
+
+			else if (strcmp(expr->primproc, "~") == 0 && expr->numBody == 1) {
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tCOM CRSl\n\tCOM CRSh\n\tCBR CRSh, 128\n");
+			}
+
+			else if (strcmp(expr->primproc, "^") == 0 && expr->numBody == 2) {
+				codegen_emit(expr->body[1], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tMOVW GP1, CRSl\n");
+				codegen_emit(expr->body[0], parent_numArgs, outputFile);
+				fprintf(outputFile, "\tEOR CRSl, GP1\n\tEOR CRSh, GP2\n");
 			}
 
 			else {
