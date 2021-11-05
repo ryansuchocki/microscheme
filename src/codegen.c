@@ -413,21 +413,21 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
 				codegen_emit(expr->body[1], parent_numArgs, outputFile);
-				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tADD CRSl, GP1\n\tADC CRSh, GP2\n");
+				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tADD CRSl, GP1\n\tADC CRSh, GP2\n\tCBR CRSh, 128\n");
 			}
 
 			else if (strcmp(expr->primproc, "-") == 0 && expr->numBody == 2) {
 				codegen_emit(expr->body[1], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
-				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tSUB CRSl, GP1\n\tSBC CRSh, GP2\n");
+				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tSUB CRSl, GP1\n\tSBC CRSh, GP2\n\tCBR CRSh, 128\n");
 			}
 
 			else if (strcmp(expr->primproc, "*") == 0 && expr->numBody == 2) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
 				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPUSH CRSh\n\tPUSH CRSl\n");
 				codegen_emit(expr->body[1], parent_numArgs, outputFile);
-				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tMOV GP3, CRSh\n\tMOV GP4, CRSl\n\tMUL GP1, GP4\n\tMOV CRSl, MLX1\n\tMOV CRSh, MLX2\n\tMUL GP2, GP4\n\tADD CRSh, MLX1\n\tMUL GP1, GP3\n\tADD CRSh, MLX1\n");
+				fprintf(outputFile, "\tSBRC CRSh, 7\n\tJMP error_notnum\n\tPOP GP1\n\tPOP GP2\n\tMOV GP3, CRSh\n\tMOV GP4, CRSl\n\tMUL GP1, GP4\n\tMOV CRSl, MLX1\n\tMOV CRSh, MLX2\n\tMUL GP2, GP4\n\tADD CRSh, MLX1\n\tMUL GP1, GP3\n\tADD CRSh, MLX1\n\tCBR CRSh, 128\n");
 			}
 
 			else if (strcmp(expr->primproc, "div") == 0 && expr->numBody == 2) {
