@@ -633,7 +633,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 
 			else if (strcmp(expr->primproc, "<<") == 0 && expr->numBody == 1) {
 				codegen_emit(expr->body[0], parent_numArgs, outputFile);
-				fprintf(outputFile, "\tLSL CRSl\n\tROL CRSh\n");
+				fprintf(outputFile, "\tLSL CRSl\n\tROL CRSh\n\tCBR CRSh, 128\n");
 			}
 
 			else if (strcmp(expr->primproc, "|") == 0 && expr->numBody == 2) {
