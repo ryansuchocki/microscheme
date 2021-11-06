@@ -1,0 +1,25 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: get build dependencies
+      run: |
+        sudo apt update
+        sudo apt -y install make avr-libc xxd cppcheck
+    - name: static analysis
+      run: cppcheck --enable=all --inconclusive --std=c11 --error-exitcode=2 src
+    - name: generate source
+      run: make hexify
+    - name: build
+      run: make build
+    - name: test
+      run: ./microscheme examples/BLINK.ms
