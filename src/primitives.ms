@@ -48,6 +48,7 @@
 (define (digital-state x y) (digital-state x y))
 (define (set-digital-state x y z) (set-digital-state x y z))
 (define (char->number x) (char->number x))
+(define (number->char x) (number->char x))
 (define (arity x) (arity x))
 
 (define (>> x) (>> x))

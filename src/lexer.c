@@ -21,7 +21,7 @@ char* primwords[] = {	"=", ">", ">=", "<", "<=", "not", "¬", "eq?",
 								"cons", "car", "cdr", "set-car!", "set-cdr!", 
 								"vector-length", "vector-ref", "vector-set!", "make-vector",
 								"assert", "error", "stacksize", "heapsize", "pause", "micropause",
-								"digital-state", "set-digital-state", "char->number", "arity",
+								"digital-state", "set-digital-state", "char->number", "number->char", "arity",
 								">>", "<<", "|", "&"
 								};
 int primwordsi = sizeof(primwords) / sizeof(char*);
