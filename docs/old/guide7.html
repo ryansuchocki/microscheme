@@ -1,0 +1,111 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="../css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="../local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Language Guide: Page 7</h2>
+								<h4 class="subheader">A crash course in the particular workings of microscheme</h4>
+
+
+<h5>Runtime Exceptions</h5>
+							
+
+   	<p>Like Scheme, microscheme is strongly, dynamically typed. Exceptions are semmantic errors that arise at runtime. Microscheme makes use of the Arduino's built-in LED on digital pin 13 to give on-device indications of these situations. Generally, exceptions are not recoverable, and the device will need to be reset if an exception is raised. While it is possible to use digital pin 13 for general input and output, it is highly recommended to leave it free for exception indication.</p>
+
+
+<table><tr><th>Status</th><th>Meaning</th><th>Indication</th></tr>
+<tr><td>RUN</td><td>Program Running</td><td>No Light</td></tr>
+<tr><td>NVP</td><td>Not a Valued Procedure</td><td>Single Flashes</td></tr>
+<tr><td>NAR</td><td>Number of ARguments</td><td>2 Flashes</td></tr>
+<tr><td>NAN</td><td>Not A Number</td><td>3 Flashes</td></tr>
+<tr><td>NAP</td><td>Not A Pair</td><td>4 Flashes</td></tr>
+<tr><td>NAV</td><td>Not A Vector</td><td>5 Flashes</td></tr>
+<tr><td>OOB</td><td>Out Of Bounds</td><td>6 Flashes</td></tr>
+<tr><td>DBZ</td><td>Divide By Zero</td><td>7 Flashes</td></tr>
+<tr><td>ERR</td><td>Custom Exception</td><td>Continuous Flashes</td></tr>
+<tr><td>HALT</td><td>Program Completed</td><td>Continuous Light</td></tr></table>
+
+							<h5>Exception Details</h5>
+							<p><strong>NVP</strong>: A procedure application takes the form (proc X1 X2 ... Xn) where proc is an expression. At the time of application, if proc does not evaluate to a (valued) procedure, such as the result of a (lambda &hellip;) form, or a variable bound to a procedure, then NVP will be raised.</p>
+							<p><strong>NAR</strong>: A procedure application takes the form (proc X1 X2 ... Xn) where X1 X2 ... Xn are arguments. At the time of application, if proc evaluates to a procedure taking m arguments, but m &ne; n, then NAR will be raised.</p>
+							<p><strong>NAN</strong>: Indicates that an arithmetic operator (+, -, *, /, div, mod) received an argument that did not evaluate to a number.</p>
+							<p><strong>NAP</strong>: Indicates that a pair operator (car, cdr, set-car!, set-cdr!) received an argument that did not evaluate to a pair.</p>
+							<p><strong>NAV</strong>: Indicates that a vector operator (vector-ref, vector-set!) received an argument that did not evaluate to a vector.</p>
+							<p><strong>OOB</strong>: Indicates that a vector operator (vector-ref, vector-set!) received an index that was outside the dimensions of the vector given.</p>
+							<p><strong>DBZ</strong>: Indicates an attempt to divide by zero.</p>
+							<p><strong>ERR</strong>: This exception is raised manually by the programmer. See (error) and (assert expr) in the language guide.</p>
+
+
+<hr />
+
+<ul class="pagination" style="float: right;">
+          <li class="arrow"><a href="6">&laquo;</a></li>
+          <li><a href="../guide">1</a></li>
+          <li><a href="2">2</a></li>
+          <li><a href="3">3</a></li>
+          <li><a href="4">4</a></li>
+          <li><a href="5">5</a></li>
+	  <li><a href="6">6</a></li>
+	  <li class="current"><a>7</a></li>
+          <li class="arrow unavailable"><a >&raquo;</a></li>
+        </ul>
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="../logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="../">About</a></li>
+						<li class="divider"></li>
+						<li><a href="../download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="../workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="../examples">Examples</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="../guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="../caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="../help">Help</a></li>
+						<li class="divider" ></li>
+
+	<li style="color: #BBB">&copy; Ryan Suchocki</li>
+					</ul>
+				<div>
+			</section>
+		</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+	</body>
+</html>

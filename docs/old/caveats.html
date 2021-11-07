@@ -1,0 +1,83 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Caveats</h2>
+								<h4 class="subheader">The current state of the project</h4>
+
+							<p>The compiler is being released now because it is at a stage where substantial, useful programs can be compiled. It is still, however, a work-in-progress: and that's why the current version is 0.6. The key deficiencies, that are stopping it from being version 1.0, are explained here.</p>
+
+<ul><li><strong>Garbage Collection</strong>: is not currently implemented. Garbage collection is an important feature because several primitive procedures silently use memory without warning, which is never given back. For example, calling &lsquo;(reverse &hellip;)&rsquo; on a list creates a new, reversed list in memory. If you call such procedures enough, the Arduino will eventually run out of RAM and start behaving unpredictably.</li>
+
+<br />
+
+<li><strong>The numeric stack</strong> is fairly limited. There are no signed numbers, and no floating-point support. On the other hand, the <em>long.ms</em> and <em>fixedpoint</em> libraries have shown how richer numeric types can easily be built using pairs and numbers.</li>
+
+<br />
+
+<li><strong>Arduino Input/Output</strong> functionalities are not complete. There is full support for digital I/O and sending of serial data. However, receiving of serial data is not complete. Input and output via the analog pins is not supported yet. </li>
+
+<br />
+
+<li><p><strong>The compiled programs are large and slow</strong>. The number of instructions generated for a given microscheme program is ~10 times more than an <em>equivalent</em> C program. (This is not surprising because the GCC compiler has been around for a long time, and has had millions of man-hours spent on its optimisations.) However, the increased number of instructions is the price paid for the massively richer runtime semmantics of a dynamically typed, functional language like Scheme. Also, the arduino has plenty (~128K) of ROM, and I have not yet seen a microscheme program that even half fills it.</p><p>Microscheme will probably never beat GCC on performance, but the main motivation for it is to give people the choice of using the functional style on the Arduino.</p></li>
+
+</ul>
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="index">About</a></li>
+						<li class="divider"></li>
+						<li><a href="download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="examples">Examples</a></li>
+						<li class="divider"></li>
+						<li><a href="guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="help">Help</a></li>
+						<li class="divider" ></li>
+
+	<li style="color: #BBB">&copy; Ryan Suchocki</li>
+					</ul>
+				<div>
+			</section>
+		</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+	</body>
+</html>

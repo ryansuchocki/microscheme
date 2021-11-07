@@ -1,0 +1,88 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>microscheme.org</h2>
+								<h4 class="subheader">A functional programming language for the Arduino</h4>
+
+<div class="alert-box"><strong>Update Alert</strong> Version 0.8 now available, featuring arbitrary lambda nesting and multiple-include protection.</div>
+
+
+
+<div class="row">				
+<div class="large-6 columns"><img src="img/hello.png" /></p></div>
+<div class="large-6 columns"><pre><code>
+
+(include "libraries/list.ms")
+(include "libraries/io.ms")
+(include "libraries/lcd.ms")
+
+(lcd_init)
+
+(for-each-vector write "Hi, from Scheme!")
+
+ 
+</code></pre></div>
+</div>
+
+
+							<p>Microscheme is a Scheme-like functional programming language, specifically targeting the Atmel 8-bit AVR microcontrollers, and designed to be used with the Arduino UNO and MEGA development boards. Microscheme is a &lsquo;subset&rsquo; of Scheme in the sense that every valid microscheme program is also a valid Scheme program (with minor syntax substitutions). It can be characterised as <em>compiled Scheme</em> without the following features: first-class continuations, a macro system, variadic functions and full closures. These are deliberate shortcomings, and arise from the fact that the AVR-based Arduinos only have up to 8KB &mdash;Yes, Kilobytes!&mdash; of RAM. The overhead spared by leaving out those features means that the programmer is left with a useful amount of RAM to work with. The microscheme compiler is a hand-written recursive descent compiler, written in C, relying only on the C standard library. It is (slightly) novel among microcontroller-targeting Scheme implementations in that it compiles directly to assembly, rather than generating equivalent C code. Microscheme supports more than 80 fundemental forms, primitive and library functions out-of-the-box.</p>
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="logosmall.png"</li>
+						<li class="divider" ></li>
+						<li class="active"><a href="/">About</a></li>
+						<li class="divider"></li>
+						<li><a href="download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="examples">Examples</a></li>
+						<li class="divider"></li>
+						<li><a href="guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="help">Help</a></li>
+						<li class="divider" ></li>
+						<li style="color: #BBB">&copy; Ryan Suchocki</li>
+					</ul>
+				<div>
+			</section>
+		</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+	</body>
+</html>

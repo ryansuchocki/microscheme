@@ -1,0 +1,77 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>microscheme Workflow</h2>
+								<h4 class="subheader">From source code to the Arduino</h4>
+
+								<p style="text-align: justify;">The basic workflow is as follows:</p>
+								<ol><li>Write your program and save it as myprogram.ms</li>
+								<li>Compile it using microscheme, resulting in myprogram.s</li>
+								<li>Assemble it using avr-gcc, resulting in myprogram.elf</li>
+								<li>Convert it to HEX format using avr-objcopy, resulting in myprogram.hex</li>
+								<li>Upload it to the arduino using avrdude</li></ol>
+
+								<p style="text-align: justify;">However, this process is quite laborious, and the combination of arguments given to each tool can be complicated. Therefore, microscheme comes with a Makefile designed to automate this process. The simplified workflow is:</p>							
+<ol><li>Write your program, and save it as myprogram.ms</li>
+<li>Determine the path of the special device file allocated to the Arduino. This will be something like /dev/ttyACM0 or /dev/ttyUSB0.</li>
+<li>Execute &nbsp; <code> $ make upload MODEL=&hellip; DEV=&hellip;</code><br />Filling in either MEGA or UNO for model, and the DEV path from step 2</li></ol>
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="index">About</a></li>
+						<li class="divider"></li>
+						<li><a href="download">Download</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li><a href="examples">Examples</a></li>
+						<li class="divider"></li>
+						<li><a href="guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="help">Help</a></li>
+						<li class="divider" ></li>
+	<li style="color: #BBB">&copy; Ryan Suchocki</li>
+					</ul>
+				<div>
+			</section>
+		</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+	</body>
+</html>

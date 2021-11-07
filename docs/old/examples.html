@@ -1,0 +1,128 @@
+
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<!--[if IE 10]><html class="ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>microscheme.org</title>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+		<link type="text/css" rel="stylesheet" href="css/foundation.css" />
+		<link type="text/css" rel="stylesheet" href="local.css" />
+		<script src="http://foundation.zurb.com/assets/js/modernizr.js"></script>
+	</head>
+	<body>
+		<div class="inner-wrap">
+			<section id="main-content">
+				<div class="row">
+					<div class="large-10 medium-10 columns push-2">
+						<div class="row">
+							<div class="large-12 medium-12 columns">
+								<h2>Examples</h2>
+
+<h5>Hello, world!</h5>
+<p>Firstly, the canonical &lsquo;Hello World&rsquo; example: (If you would like to see the output, it might be a good idea to have a 16&times;2 LCD shield such as <a href="http://www.dfrobot.com/index.php?route=product/product&product_id=51#.UwdQ33U4IUE">this</a> is connected.)</p>
+
+<pre><code>(include "libraries/list.ms")
+(include "libraries/io.ms")
+(include "libraries/lcd.ms")
+
+(lcd_init)
+
+(for-each-vector print "Hello, World!")</code></pre>
+
+<h5>Interacting with the world</h5>
+<p>Using the general purpose digital input/output pins on the arduino is simple. Assuming you are using an Arduino MEGA, and have an LED connected to digital pin 20, you can make it blink like so:</p>
+
+<pre><code>(include "libraries/io.ms")
+
+(set-ddr 20 #t)         ; Set direction register for pin 20 to 'output'
+
+(define (blink_forever)
+  (set-pin 20 #t)       ; Set pin 20 high
+  (pause 500)           ; Wait half a second
+  (set-pin 20 #f)       ; Set pin 20 low
+  (pause 500)           ; Wait half a second
+  (blink_forever))      ; Repeat...
+
+(blink_forever)</pre></code>
+
+<h5>Fibonacci Sequence</h5>
+<p>In the next example, we build a list of numbers from the Fibnacci sequence. This time, rather than producing output on an LCD screen, we send each of the values to some external device via the serial interface.</p>
+
+<pre><code>(include "libraries/list.ms")
+
+(define (fibstep i acc n2 n1)
+  (if (= 0 i)
+    acc
+    (fibstep (- i 1) (cons (+ n2 n1) acc) n1 (+ n2 n1))))
+
+(define (fib n)
+    (reverse (fibstep n () 0 1)))
+
+(for-each serial-send (fib 10))</code></pre>
+
+<h5>Factorial</h5>
+<p>Here we see two approaches to writing a factorial function; the second of which is tail-recursive. In each function, the value of <code>(stacksize)</code>, which returns the number of bytes occupied at the moment of evaluation, is reported at the <em>deepest</em> part of the recursion. This demonstrates the importance of the tail-recursive style in environments such as microcontrollers.</p>
+
+<pre><code>(include "libraries/list.ms")
+
+(define (factorial n)
+  (if (zero? n)
+    (begin (serial-send (stacksize)) 1)
+    (* (factorial (- n 1)) n)))
+
+(serial-send (factorial 7))
+
+(define (tail-factorial n acc)
+  (if (zero? n)
+    (begin (serial-send (stacksize)) acc)
+    (tail-factorial (- n 1) (* acc n))))
+
+(serial-send (tail-factorial 7 1))</pre></code>
+
+							
+
+
+								
+							</div>
+						</div>
+					</div>
+
+				<div class="large-2 medium-2 columns pull-10">
+					<ul class="side-nav">
+						<li style="text-align: center;"><img src="logosmall.png"</li>
+						<li class="divider" ></li>
+						<li><a href="index">About</a></li>
+						<li class="divider"></li>
+						<li><a href="download">Download</a></li>
+						<li class="divider"></li>
+						<li><a href="workflow">Workflow</a></li>
+						<li class="divider"></li>
+						<li class="active"><a href="examples">Examples</a></li>
+						<li class="divider"></li>
+						<li><a href="guide">Language Guide</a></li>
+						<li class="divider"></li>
+						<li><a href="caveats">Caveats</a></li>
+						<li class="divider"></li>
+						<li><a href="help">Help</a></li>
+						<li class="divider" ></li>
+	<li style="color: #BBB">&copy; Ryan Suchocki</li>
+					</ul>
+				<div>
+			</section>
+		</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48355896-1', 'microscheme.org');
+  ga('send', 'pageview');
+
+</script>
+	</body>
+</html>
