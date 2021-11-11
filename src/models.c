@@ -84,6 +84,21 @@ model_info models[] = {
 		".EQU	P13,	7		\n"
 
 		".EQU	_ms_stack,	__stack\n"
+	},
+	{
+		"KEYBOARDIO-ATREUS",
+
+		"atmega32u4",
+		"avr109",
+		"57600",
+
+		true,
+
+		".EQU	PORT13,	0x08	\n"
+		".EQU	DDR13,	0x07	\n"
+		".EQU	P13,	7		\n"
+
+		".EQU	_ms_stack,	__stack\n"
 	}
 };
 
