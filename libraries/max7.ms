@@ -54,7 +54,7 @@
 
 ;; ======================= Example Usage ======================= 
 
-; (include "working/max7.ms")
+; (include "libraries/max7.ms")
 
 ; We have 2 max7219 chips cascaded together, on pins 10, 11 and 12
 ; (define led (def-max7 10 11 12 2))

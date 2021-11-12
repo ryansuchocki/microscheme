@@ -1,7 +1,7 @@
 ;; Arduino LCD Library
 ;; microscheme.org
 
-(include "examples/ascii.ms")
+(include "libraries/ascii.ms")
 
 (define lcdpins (vector 4 5 6 7 8 9))
 ;; lcdpins: d0 d1 d2 d3 rs en

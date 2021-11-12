@@ -2,9 +2,7 @@
 ;; Ryan Suchocki
 ;; microscheme.org
 
-(include "examples/lcd.ms")
+(include "libraries/lcd.ms")
 (lcd-init)
 
 (print "Hello World!")
-
-

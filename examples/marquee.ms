@@ -1,5 +1,5 @@
 
-(include "examples/lcd.ms")
+(include "libraries/lcd.ms")
 
 (lcd-init)
 
