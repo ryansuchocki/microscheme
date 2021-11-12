@@ -84,7 +84,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
         case When:
 			label1 = if_end_unique++;
 			codegen_emit(expr->body[0], parent_numArgs, outputFile);
-			fprintf(outputFile, "\tCP CRSh, falseReg\n\tBREQ if_end%i\n", label1);
+			fprintf(outputFile, "\tCPSE CRSh, falseReg\n\tRJMP 1f\n\tJMP if_end%i\n1:", label1);
 			for (i=1; i<expr->numBody; i++) {
 				codegen_emit(expr->body[i], parent_numArgs, outputFile);
 			}
