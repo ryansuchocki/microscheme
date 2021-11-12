@@ -39,16 +39,27 @@ AST_expr *scoper_scopeExpr(AST_expr *expr) {
 	
 	switch(expr->type) {
 		// The simple ones (recursion only):
-		case Constant: return expr;
+		case Constant:
+			return expr;
 		case ProcCall:
-		case TailCall: expr->proc = scoper_scopeExpr(expr->proc); 
+			// fall through
+		case TailCall: expr->proc = scoper_scopeExpr(expr->proc);
+			// fall through
 		case Branch:
+			// fall through
 		case When:
-		case Sequence: 	
-		case PrimCall: 	
+			// fall through
+		case Sequence:
+			// fall through
+		case PrimCall:
+			// fall through
 		case OtherFundemental:
-		case And: 		
-		case Or: 		for (i=0; i<expr->numBody; i++) {expr->body[i] = scoper_scopeExpr(expr->body[i]);} return expr;
+			// fall through
+		case And:
+			// fall through
+		case Or:
+			for (i=0; i<expr->numBody; i++) {expr->body[i] = scoper_scopeExpr(expr->body[i]);}
+			return expr;
 		
 		// Environment-altering expressions:
 		case Definition:
@@ -116,8 +127,7 @@ AST_expr *scoper_scopeExpr(AST_expr *expr) {
 		// Environment-dependant expressions:
 		case Assignment:
 			expr->body[0] = scoper_scopeExpr(expr->body[0]);
-
-			// IMPORTANT: No break here, so assignment falls through to var case:
+			// fall through
 		
 		case Variable:
 			tmpEnv = currentEnvironment;

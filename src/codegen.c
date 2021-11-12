@@ -145,6 +145,7 @@ void codegen_emit(AST_expr *expr, int parent_numArgs, FILE *outputFile) {
 				// Nothing to do
 				return;
 			}
+			break;
 
 		case Assignment:
 			switch(expr->varRefType) {

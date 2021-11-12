@@ -87,6 +87,7 @@ int main(int argc, char *argv[]) {
 		case 'h':	fprintf(stdout, "%s", helpmsg); exit(EXIT_SUCCESS); break;
 		case 'i':	opt_includeonce = false;	break;
 		case 'u':	opt_upload = true;			
+			// fall through
 		case 'a':	opt_assemble = true;		break;
 		case 'c':	opt_cleanup = true;			break;
 		//case 's':	opt_softreset = true;		break;

@@ -19,19 +19,28 @@ extern Environment *globalEnv;
 void treeshaker_shakeExpr(AST_expr *expr) {
 
 	int i;
-	
+
 	switch(expr->type) {
 		// The simple ones (recursion only):
 		case Constant: break;
 		case ProcCall:
-		case TailCall: treeshaker_shakeExpr(expr->proc); 
+			// fall through
+		case TailCall: treeshaker_shakeExpr(expr->proc);
+			// fall through
 		case Branch:
+			// fall through
 		case When:
-		case Sequence: 	
-		case PrimCall: 
-		case OtherFundemental:	
-		case And: 		
-		case Or: 		
+			// fall through
+		case Sequence:
+			// fall through
+		case PrimCall:
+			// fall through
+		case OtherFundemental:
+			// fall through
+		case And:
+			// fall through
+		case Or:
+			// fall through
 		case Lambda:	for (i=0; i<expr->numBody; i++) {treeshaker_shakeExpr(expr->body[i]);} break;
 		case Assignment: treeshaker_shakeExpr(expr->body[0]); break;
 

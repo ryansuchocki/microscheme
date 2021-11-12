@@ -205,7 +205,9 @@ void lexer_lex(char ch) {
 						break;
 			case ' ':
 			case '\n':	fileLine++;
+				// fall through
 			case '\r':
+				// fall through
 			case '\t':	if (acci > 0) {
 							classify(acc, acci, lexer_openNode);
 							acci = 0;

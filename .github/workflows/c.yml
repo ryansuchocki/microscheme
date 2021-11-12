@@ -16,7 +16,7 @@ jobs:
         sudo apt update
         sudo apt -y install make avr-libc xxd cppcheck
     - name: static analysis
-      run: cppcheck --enable=all --inconclusive --std=c11 --error-exitcode=2 src
+      run: make check
     - name: generate source
       run: make hexify
     - name: build

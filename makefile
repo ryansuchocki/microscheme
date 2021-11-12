@@ -4,7 +4,9 @@
 
 PREFIX?=/usr/local
 
-all: build
+all: check build
+hexify: src/assembly_hex.c src/microscheme_hex.c
+build: microscheme
 
 src/assembly_hex.c: src/*.s
 	echo "// Hexified internal microscheme files." > src/assembly_hex.c
@@ -16,11 +18,11 @@ src/microscheme_hex.c: src/*.ms
 	xxd -i src/stdlib.ms >> src/microscheme_hex.c
 	xxd -i src/avr_core.ms >> src/microscheme_hex.c
 
-microscheme: src/*.h src/*.c
-	gcc -ggdb -std=gnu99 -Wall -Wextra -o microscheme src/*.c
+microscheme: hexify src/*.h src/*.c
+	gcc -ggdb -std=gnu99 -Wall -Wextra -Werror -o microscheme src/*.c
 
-hexify: src/assembly_hex.c src/microscheme_hex.c
-build: microscheme
+check:
+	cppcheck --enable=all --inconclusive --std=c11 --error-exitcode=2 src
 
 install:
 	install -d $(PREFIX)/bin/
