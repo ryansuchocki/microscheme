@@ -1,5 +1,8 @@
-;; The Microscheme Standard Library
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; The Standard Library
+;; (C) 2014-2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 
 ;; Looping constructs

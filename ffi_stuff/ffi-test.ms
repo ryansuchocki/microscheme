@@ -1,11 +1,14 @@
-;; FFI Demo
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; Microscheme-C FFI demo
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 ;; README:
 ;; To run this test, use the -w option to compile this file *with*
 ;; the C source file.
 ;;
-;; $ microscheme -m ... -d ... -au -w ffi_stuff/ffitest.c ffi_stuff/ffi-test.ms 
+;; $ microscheme -m ... -d ... -au -w ffi_stuff/ffitest.c ffi_stuff/ffi-test.ms
 
 ;; Define a scheme wrapper around each of our external functions...
 (define (pow x y)

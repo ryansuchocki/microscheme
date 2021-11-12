@@ -1,5 +1,8 @@
-;; ASCII String Library
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; ASCII library
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (define zerocode (char->number #\0))
 

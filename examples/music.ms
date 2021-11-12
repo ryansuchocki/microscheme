@@ -1,6 +1,8 @@
-;; Ryan Suchocki
-;; microscheme.org
-
+;; ======================= Microscheme =======================
+;; Musical stepper motor example
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (define mleft	(list 4 5 6 7))
 (for-each output mleft)
@@ -12,7 +14,7 @@
 			(micropause x)
 			(low (car m1))
 			(cycle (cdr m1) x))))
-			
+
 ;; In theory, this is an A# scale:
 (define scale (vector 1480 1319 1175 1109 988 880 784 740))
 (define period (* 100 (vector-ref scale 0)))

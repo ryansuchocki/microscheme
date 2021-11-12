@@ -1,5 +1,8 @@
-;; Ryan Suchocki
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; Clock example
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (define anodes (vector 2 3 4 5))
 (define cathodes (vector 22 26 24 28 32 36 30 34))

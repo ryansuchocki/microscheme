@@ -1,5 +1,8 @@
-;; Serial Communications Examples
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; Serial comms examples
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 ;; The available methods
 

@@ -1,5 +1,8 @@
-;; Arduino LCD Library
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; LCD Library
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (include "libraries/ascii.ms")
 

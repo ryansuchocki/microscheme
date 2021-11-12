@@ -1,8 +1,13 @@
-;; A microscheme library for controlling MAX7219 and MAX7221 chips.
-;; These are serially-interfaced 8x8 multiplex drivers, commonly used
-;; for LED arrays and 7-segment displays.
+;; ======================= Microscheme =======================
+;; Library for MAX7219/MAX7221 chips
+;; (C) 2014-2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
-;; ==================== Internal procedures ==================== 
+;; These are serially-interfaced 8x8 multiplex drivers, commonly
+;; used for LED arrays and 7-segment displays.
+
+;; ==================== Internal procedures ====================
 ;;             (These should not be called directly)
 
 (define (shift-out-bits data-pin clock-pin data n)
@@ -28,7 +33,7 @@
 			(noops data-pin clock-pin index)
 		(high latch-pin)))
 
-;; ==================== External procedures ==================== 
+;; ==================== External procedures ====================
 ;;              (These should be called directly)
 
 ;; Each chip features one data-in pin and one data-out pin, so that
@@ -38,7 +43,7 @@
 ;; comes to sending data.
 
 (define (def-max7 data-pin clock-pin latch-pin num)
-	(vector 
+	(vector
 		(low (output data-pin))
 		(low (output clock-pin))
 		(high (output latch-pin))
@@ -52,7 +57,7 @@
 (define (test chip index state)		(shift-out chip index (if state #x0F01 #x0F00)))
 
 
-;; ======================= Example Usage ======================= 
+;; ======================= Example Usage =======================
 
 ; (include "libraries/max7.ms")
 

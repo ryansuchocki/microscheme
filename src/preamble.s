@@ -1,3 +1,9 @@
+/* ======================= Microscheme =======================
+ * Runtime startup code for AVR
+ * (C) 2014-2021 Ryan Suchocki, et al.
+ * http://github.com/ryansuchocki/microscheme
+ */
+
 .text
 .global main
 main:

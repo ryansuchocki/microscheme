@@ -1,5 +1,8 @@
-;; The Microscheme AVR Core Library
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; AVR Core Library
+;; (C) 2014-2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 
 ;; Serial communications

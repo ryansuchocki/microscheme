@@ -1,5 +1,8 @@
-;; Ryan Suchocki
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; LED blinking example
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (define led-pin (output 13))
 

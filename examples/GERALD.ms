@@ -1,5 +1,8 @@
-;; Ryan Suchocki
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; Fractal-drawing robot example
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (define mleft	(list 4 5 6 7))
 (define mright	(list 8 9 10 11))

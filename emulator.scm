@@ -1,5 +1,8 @@
-;; Microscheme primitives for other scheme implementations...
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; Primitives for other scheme implementations
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 ;; This file defines microscheme-specific syntax/primitives, 
 ;; and emulates a set of digital I/O registers, so that you

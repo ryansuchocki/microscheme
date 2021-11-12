@@ -1,5 +1,9 @@
+;; =============================== Microscheme ===============================
 ;; Fading LED example for the Arduino UNO (or NANO)
 ;; See https://docs.arduino.cc/built-in-examples/basics/Fade
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 ;; Initialization to use the analog pins
 (analog-init)

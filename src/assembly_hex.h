@@ -1,4 +1,9 @@
-// Hexified internal microscheme files, build no 673.
+/* ======================= Microscheme =======================
+ * Header for hexified internal assembly source files
+ * (C) 2014-2021 Ryan Suchocki, et al.
+ * http://github.com/ryansuchocki/microscheme
+ */
+
 #ifndef _ASHEXIFIED_H_GUARD
 #define _ASHEXIFIED_H_GUARD
 

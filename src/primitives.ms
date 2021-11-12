@@ -1,5 +1,8 @@
-;; 
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; Primitive Values Library
+;; (C) 2014-2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 ;; Primitives
 

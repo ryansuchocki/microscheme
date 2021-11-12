@@ -1,5 +1,8 @@
-;; @ardumont
-;; microscheme.org
+;; ======================= Microscheme =======================
+;; Morse-code-blinking LED example
+;; (C) 2021 Ryan Suchocki, @ardumont et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (define led-pin (output 13))
 

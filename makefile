@@ -1,6 +1,8 @@
-# Microscheme makefile
-# (C) 2014 Ryan Suchocki
-# microscheme.org
+## ======================= Microscheme =======================
+## Makefile
+## (C) 2021 Ryan Suchocki, et al.
+## http://github.com/ryansuchocki/microscheme
+##
 
 PREFIX?=/usr/local
 
@@ -23,6 +25,10 @@ microscheme: hexify src/*.h src/*.c
 
 check:
 	cppcheck --enable=all --inconclusive --std=c11 --error-exitcode=2 src
+	find src -type f -name '*.[c|h]' ! -name '*_hex.c' | xargs clang-format --dry-run --verbose --style=file
+
+format:
+	find src -type f -name '*.[c|h]' ! -name '*_hex.c' | xargs clang-format -i --verbose --style=file
 
 install:
 	install -d $(PREFIX)/bin/

@@ -1,3 +1,8 @@
+;; ======================= Microscheme =======================
+;; Marquee example
+;; (C) 2021 Ryan Suchocki, et al.
+;; http://github.com/ryansuchocki/microscheme
+;;
 
 (include "libraries/lcd.ms")
 
