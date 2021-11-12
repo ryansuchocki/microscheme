@@ -41,6 +41,13 @@ model_info models[] = {
 		".EQU	TXC0,	6		\n"
 		".EQU	RXC0,	7		\n"
 		".EQU	BAUD_9600, 103	\n"
+
+		".EQU	ADMUX,	0x7C	\n"
+		".EQU	ADCSRA,	0x7A	\n"
+		".EQU	ADCH,	0x79	\n"
+		".EQU	ADCL,	0x78	\n"
+		".EQU	REFS0,	6	\n"
+		".EQU	ADSC,	6	\n"
 	},
 	{
 		"UNO",
@@ -69,6 +76,13 @@ model_info models[] = {
 		".EQU	TXC0,	6		\n"
 		".EQU	RXC0,	7		\n"
 		".EQU	BAUD_9600, 103	\n"
+
+		".EQU	ADMUX,	0x7C	\n"
+		".EQU	ADCSRA,	0x7A	\n"
+		".EQU	ADCH,	0x79	\n"
+		".EQU	ADCL,	0x78	\n"
+		".EQU	REFS0,	6	\n"
+		".EQU	ADSC,	6	\n"
 	},
 	{
 		"LEO",
@@ -84,6 +98,13 @@ model_info models[] = {
 		".EQU	P13,	7		\n"
 
 		".EQU	_ms_stack,	__stack\n"
+
+		".EQU	ADMUX,	0x7C	\n"
+		".EQU	ADCSRA,	0x7A	\n"
+		".EQU	ADCH,	0x79	\n"
+		".EQU	ADCL,	0x78	\n"
+		".EQU	REFS0,	6	\n"
+		".EQU	ADSC,	6	\n"
 	}
 };
 
