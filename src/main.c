@@ -180,6 +180,8 @@ int main(int argc, char *argv[]) {
 
 	root = lexer_lexBlob(src_stdlib_ms, src_stdlib_ms_len, root);
 
+	root = lexer_lexBlob(src_avr_core_ms, src_avr_core_ms_len, root);
+
 	root = lexer_lexFile(inname, root);
 
 	globalIncludeList = try_malloc(sizeof(char*));

@@ -8,4 +8,7 @@ extern unsigned int src_primitives_ms_len;
 extern unsigned char src_stdlib_ms[];
 extern unsigned int src_stdlib_ms_len;
 
+extern unsigned char src_avr_core_ms[];
+extern unsigned int src_avr_core_ms_len;
+
 #endif
