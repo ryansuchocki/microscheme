@@ -48,6 +48,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
         int innerNumTokens = 0;
         int i = 0;
         AST_const *c;
+        AST_expr *tmpLambda = NULL;
 
         switch (token[0]->type)
         {
@@ -158,7 +159,7 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
                                     exit(EXIT_FAILURE);
                                 }
 
-                                AST_expr *tmpLambda = currentLambda;
+                                tmpLambda = currentLambda;
                                 currentLambda = result;
                                 result->numBody = innerNumTokens - 2;
                                 result->body = try_malloc(sizeof(AST_expr *) * (innerNumTokens - 2));
@@ -474,6 +475,101 @@ AST_expr *parser_parseExpr(lexer_tokenNode **token, int numTokens, bool topLevel
                                     exit(EXIT_FAILURE);
                                 }
                                 //DEBUG printf("Local Variable Block");
+                                break;
+
+                            case letstar:
+                                if (innerNumTokens >= 3 && innerTokens[1]->type == Parens)
+                                {
+                                    AST_expr *currentResult;
+
+                                    if (tailPosition)
+                                        result->type = TailCall;
+                                    else
+                                        result->type = ProcCall;
+                                    result->numBody = 1;
+                                    result->body = try_malloc(sizeof(AST_expr *));
+
+                                    tmpLambda = currentLambda;
+                                    currentResult = result;
+                                    for (i = 0; i < innerTokens[1]->numChildren; i++)
+                                    {
+                                        currentResult->proc = try_malloc(sizeof(AST_expr));
+                                        parser_initExpr(currentResult->proc);
+                                        currentResult->proc->type = Lambda;
+                                        currentResult->proc->numFormals = 1;
+                                        currentResult->proc->formal = try_malloc(sizeof(char *));
+                                        currentResult->proc->stack_allocate = true;
+                                        if (innerTokens[1]->children[i]->type == Parens &&
+                                            innerTokens[1]->children[i]->numChildren == 2 &&
+                                            innerTokens[1]->children[i]->children[0]->type == Identifier)
+                                        {
+                                            currentResult->proc->formal[0] = str_clone(innerTokens[1]->children[i]->children[0]->raw);
+                                            currentResult->body[0] = parser_parseExpr(&innerTokens[1]->children[i]->children[1], 1, false, false);
+                                        }
+                                        else
+                                        {
+                                            fprintf(stderr, ">> ERROR 16: Malformed Binding");
+                                            exit(EXIT_FAILURE);
+                                        }
+
+                                        // Build currentResult->proc->body
+                                        if (i == innerTokens[1]->numChildren - 1)
+                                        {
+                                            // Last lambda with the original body
+                                            currentResult->proc->numBody = innerNumTokens - 2;
+                                            currentResult->proc->body = try_malloc(sizeof(AST_expr *) * (innerNumTokens - 2));
+                                            for (int j = 0; j < innerNumTokens - 3; j++)
+                                            {
+                                                currentResult->proc->body[j] = parser_parseExpr(&innerTokens[j + 2], 1, false, false);
+                                            }
+                                            currentResult->proc->body[innerNumTokens - 3] = parser_parseExpr(&innerTokens[innerNumTokens - 1], 1, false, true);
+                                        }
+                                        else
+                                        {
+                                            // Body is just a call to the next lambda
+                                            currentResult->proc->numBody = 1;
+                                            currentResult->proc->body = try_malloc(sizeof(AST_expr *));
+                                            currentResult->proc->body[0] = try_malloc(sizeof(AST_expr));
+                                            parser_initExpr(currentResult->proc->body[0]);
+                                            currentResult->proc->body[0]->type = TailCall;
+                                            currentResult->proc->body[0]->numBody = 1;
+                                            currentResult->proc->body[0]->body = try_malloc(sizeof(AST_expr *));
+                                        }
+
+                                        // Merge current lambda environment with new environment
+                                        if (currentLambda)
+                                        {
+                                            for (int j = 0; j < currentLambda->numFormals; j++)
+                                            {
+                                                char *candidate = currentLambda->formal[j];
+                                                bool needed = true;
+                                                if (strcmp(currentResult->proc->formal[0], candidate) == 0)
+                                                    needed = false;
+                                                if (needed)
+                                                {
+                                                    currentResult->proc->numFormals++;
+                                                    currentResult->proc->formal = try_realloc(currentResult->proc->formal, sizeof(char *) * currentResult->proc->numFormals);
+                                                    currentResult->proc->formal[currentResult->proc->numFormals - 1] = str_clone(candidate);
+                                                    currentResult->numBody++;
+                                                    currentResult->body = try_realloc(currentResult->body, sizeof(AST_expr *) * currentResult->numBody);
+                                                    currentResult->body[currentResult->numBody - 1] = try_malloc(sizeof(AST_expr));
+                                                    parser_initExpr(currentResult->body[currentResult->numBody - 1]);
+                                                    currentResult->body[currentResult->numBody - 1]->type = Variable;
+                                                    currentResult->body[currentResult->numBody - 1]->variable = str_clone(candidate);
+                                                }
+                                            }
+                                        }
+
+                                        currentLambda = currentResult;
+                                        currentResult = currentResult->proc->body[0];
+                                    }
+                                    currentLambda = tmpLambda;
+                                }
+                                else
+                                {
+                                    fprintf(stderr, ">> ERROR 17: Malformed LET*");
+                                    exit(EXIT_FAILURE);
+                                }
                                 break;
 
                             case includeword:
