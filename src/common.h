@@ -9,11 +9,13 @@
 
 #include <stdlib.h>
 
+#define eprintf(...) fprintf(stderr, __VA_ARGS__)
+
 // Shared function declarations
 extern void *try_malloc(size_t size) __attribute__((returns_nonnull));
-;
+
 extern void *try_realloc(void *ptr, size_t size) __attribute__((returns_nonnull));
-;
+
 extern void try_free(void *ptr);
 extern char *str_clone(char *src);
 extern char *str_clone_more(char *src, int more);
