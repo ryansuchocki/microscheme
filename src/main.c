@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     char *inname, *outname, *basename, *shortbase;
     int c;
 
-    fprintf(stdout, "Microscheme 0.9.3, (C) Ryan Suchocki\n");
+    fprintf(stdout, "Microscheme 0.9.4, (C) Ryan Suchocki\n");
 
     char *helpmsg =
         "\nUsage: microscheme [-aucvrio] [-m model] [-d device] [-p programmer] [-w filename] [-t rounds] program[.ms]\n\n"
