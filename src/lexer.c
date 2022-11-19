@@ -17,7 +17,7 @@ extern bool opt_verbose;
 
 int fileLine = 1;
 
-char *keywords[] = {"lambda", "if", "when", "let", "set!", "define", "begin", "and", "or", "include", "free!", "@if-model", "list", "vector", "call-c-func", "include-asm", "asm"};
+char *keywords[] = {"lambda", "if", "when", "let", "let*", "set!", "define", "begin", "and", "or", "include", "free!", "@if-model", "list", "vector", "call-c-func", "include-asm", "asm"};
 int keywordsi = sizeof(keywords) / sizeof(char *);
 
 char *primwords[] = {"=", ">", ">=", "<", "<=", "not", "¬", "eq?", "+", "-", "*", "div", "mod", "zero?", "number?", "pair?", "vector?", "procedure?", "char?", "boolean?", "null?", "cons", "car", "cdr", "set-car!", "set-cdr!", "vector-length", "vector-ref", "vector-set!", "make-vector", "assert", "error", "stacksize", "heapsize", "pause", "micropause", "digital-state", "set-digital-state", "register-state", "set-register-state", "char->number", "number->char", "arity", ">>", "<<", "|", "&", "~", "^"};

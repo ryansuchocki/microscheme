@@ -26,6 +26,7 @@ enum keywordtype
     ifword,
     when,
     let,
+    letstar,
     set,
     define,
     begin,

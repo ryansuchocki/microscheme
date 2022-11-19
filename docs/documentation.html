@@ -151,6 +151,11 @@
 				</p>
 
 				<p class="msinfo">
+				<span class="msform fundement">(<strong>let*</strong> ((var val) &hellip;) exprs &hellip;)</span>
+				represents a series of lambda abstractions. The second binding is done in an environment where the first binding is visible, and so on.
+				</p>
+
+				<p class="msinfo">
 				<span class="msform fundement">(<strong>if</strong> cond conseq <em>else</em>)</span>
 				represents a control branch. If cond evaluates to <il>#t</il> then this expression will evaluate to <il>conseq</il>, otherwise it will evaluate to <il>else</il>, or <il>#f</il> if no alternative is given.
 				</p>
